@@ -3,5 +3,5 @@ export const LINK = {
     CART: '/cart',
     SHOP: '/shop',
     LOGIN: "/login",
-    REGISTER:"/register"
+    REGISTER:"/register",
 }

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Link from "next/link";
 import React, { useState } from "react";
 import { LINK, NAME } from "~/lib/constants/routes";
@@ -19,11 +19,15 @@ export default function Header() {
 
   return (
     <nav
-      className="custom-navbar navbar  navbar navbar-expand-md navbar-dark bg-dark"
+      className="fixed-top custom-navbar navbar  navbar navbar-expand-md navbar-dark bg-dark"
       arial-label="Furni navigation bar"
     >
       <div className="container">
-        <Link onClick={() => setActive(0)} className="navbar-brand" href={navItems[0].href}>
+        <Link
+          onClick={() => setActive(0)}
+          className="navbar-brand"
+          href={navItems[0].href}
+        >
           Furni<span>.</span>
         </Link>
         <button

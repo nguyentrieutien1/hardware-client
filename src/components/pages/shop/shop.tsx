@@ -12,7 +12,9 @@ export default function ShopPage() {
                 <h1>Shop</h1>
               </div>
             </div>
-            <div className="col-lg-7"></div>
+            <div className="col-lg-7">
+              <h1>Hay di mua sam di !</h1>
+            </div>
           </div>
         </div>
       </div>

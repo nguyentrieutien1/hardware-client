@@ -4,7 +4,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import Header from "~/components/header/header";
 import Footer from "~/components/footer/footer";
-import Head from "next/head";
+import ScriptClient from "../../components/script/script-client"
 config.autoAddCss = false;
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,12 +18,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
   return (
     <html lang="en" suppressContentEditableWarning={true}>
-      <Head>
-        <script src="../../public/js/index.js"></script>
-      </Head>
       <body className={inter.className}>
+        <ScriptClient />
         <Header />
         {children}
         <Footer />
