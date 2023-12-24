@@ -1,5 +1,2 @@
-export type IAuthLogin =  {
-    email: string,
-    password: string
-}
-
+export * from "./login"
+export * from "./register"

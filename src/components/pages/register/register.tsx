@@ -1,70 +1,250 @@
+"use client";
 import Link from "next/link";
-import React from "react";
-import "../login/login.css"
+import React, { ChangeEvent, FormEvent, useState } from "react";
+import "../login/login.css";
 import { LINK } from "~/lib/constants/routes";
+import { IAuthRegister } from "~/types";
+import { toastConfig } from "~/lib";
+import { TOAST_MESSAGE } from "~/lib/constants/routes/toast-message";
+import { useRouter } from "next/navigation";
+import { useAuthRegisterMutation } from "~/mutations";
 export default function RegisterPage() {
+  const router = useRouter()
+
+  const [registerInfo, setRegisterInfo] = useState<IAuthRegister>({
+    fullName: "",
+    email: "",
+    address: "",
+    sex: "female",
+    phone: "",
+    birthday: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
+  ) => {
+    const { value, name } = e.target;
+    setRegisterInfo((prev) => {
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
+  };
+  const { mutateAsync } = useAuthRegisterMutation();
+  const convertInfoRegisterName = (name: string) => {
+    switch (name) {
+      case "fullName":
+        return "Họ và tên";
+      case "email":
+        return "Email";
+      case "address":
+        return "Địa chỉ";
+      case "phone":
+        return "Số điện thoại";
+      case "birthday":
+        return "Ngày sinh";
+      case "password":
+        return "Mật khẩu";
+      case "confirmPassword":
+        return "Nhập lại mật khẩu";
+      default:
+        break;
+    }
+  };
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault();
+      for (const key in registerInfo) {
+        if (Object.prototype.hasOwnProperty.call(registerInfo, key)) {
+          if (!registerInfo[key]) {
+            toastConfig(
+              `Ô ${convertInfoRegisterName(key)} không được trống !`,
+              { status: "warning" }
+            );
+            return;
+          }
+        }
+      }
+      mutateAsync(registerInfo)
+        .then((res) => {
+          if (res.status === 201) {
+            toastConfig(TOAST_MESSAGE.REGISTER_ACCOUNT_SUCCESSFUL, {
+              status: "success",
+            });
+            router.push(LINK.LOGIN)
+          }
+        })
+        .catch((error: any) => {
+          const { message } = error.response.data;
+          if (Array.isArray(message) && message.length > 0) {
+            toastConfig(message[0], { status: "error" });
+          } else {
+            toastConfig(message, { status: "error" });
+          }
+        });
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
   return (
     <>
-        <section className="ftco-section">
-      <div className="container">
-        <div className="row justify-content-center">
-          <div className="col-md-6 text-center mb-5">
-            <h2 className="heading-section">Đăng kí</h2>
+      <section className="ftco-section">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-md-6 text-center mb-5">
+              <h2 className="heading-section">Đăng kí</h2>
+            </div>
           </div>
-        </div>
-        <div className="row justify-content-center">
-          <div className="col-md-12 col-lg-10">
-            <div className="wrap d-md-flex">
-              <div className="text-wrap p-4 p-lg-5 text-center d-flex align-items-center order-md-last">
-                <div className="text w-100">
-                  <h2>Chào mừng bạn đăng kí</h2>
-                  <Link href={LINK.LOGIN} className="btn btn-white btn-outline-white">
-                    Đăng nhập
-                  </Link>
-                </div>
-              </div>
-              <div className="login-wrap p-4 p-lg-5">
-                <div className="d-flex">
-                  <div className="w-100">
-                    <h3 className="mb-4">Đăng kí</h3>
-                  </div>
-                </div>
-                <form action="#" className="signin-form">
-                  <div className="form-group mb-3">
-                    <label className="label" htmlFor="name">
-                      Email
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Email"
-                    />
-                  </div>
-                  <div className="form-group mb-3">
-                    <label className="label" htmlFor="password">
-                      Mật khẩu
-                    </label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      placeholder="Password"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <button
-                      type="submit"
-                      className="form-control btn btn-primary submit px-3"
+          <div className="row justify-content-center">
+            <div className="col-md-12 col-lg-10">
+              <div className="wrap d-md-flex">
+                <div className="text-wrap p-4 p-lg-5 text-center d-flex align-items-center order-md-last">
+                  <div className="text w-100">
+                    <h2>Chào mừng bạn đăng kí</h2>
+                    <Link
+                      href={LINK.LOGIN}
+                      className="login-wrap btn btn-outline-danger"
                     >
-                      Đăng kí
-                    </button>
+                      Đăng nhập
+                    </Link>
                   </div>
-                </form>
+                </div>
+                <div className="login-wrap p-4 p-lg-5">
+                  <div className="d-flex">
+                    <div className="w-100">
+                      <h3 className="mb-4">Đăng kí</h3>
+                    </div>
+                  </div>
+                  <form
+                    action="#"
+                    className="signin-form"
+                    onSubmit={handleSubmit}
+                  >
+                    <div className="row">
+                      <div className="form-group mb-3 col-6">
+                        <label className="label" htmlFor="fullName">
+                          Họ và tên
+                        </label>
+                        <input
+                          onChange={handleChange}
+                          id="fullName"
+                          name="fullName"
+                          className="form-control"
+                          placeholder="Họ và tên"
+                        />
+                      </div>
+                      <div className="form-group mb-3 col-6">
+                        <label className="label" htmlFor="email">
+                          Email
+                        </label>
+                        <input
+                          onChange={handleChange}
+                          id="email"
+                          type="text"
+                          className="form-control"
+                          placeholder="Email"
+                          name="email"
+                        />
+                      </div>
+
+                      <div className="form-group mb-3 col-6">
+                        <label className="label" htmlFor="address">
+                          Địa chỉ
+                        </label>
+                        <input
+                          onChange={handleChange}
+                          name="address"
+                          id="address"
+                          className="form-control"
+                          placeholder="Địa chỉ"
+                        />
+                      </div>
+                      <div className="form-group mb-3 col-6">
+                        <label className="label" htmlFor="sex">
+                          Giới tính
+                        </label>
+                        <div className="mb-3">
+                          <select
+                            onChange={handleChange}
+                            className="form-select border-1"
+                            id="sex"
+                            name="sex"
+                            value={registerInfo.sex}
+                          >
+                            <option value="male">Nam</option>
+                            <option value="female">Nữ</option>
+                            <option value="other">Khác</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="form-group mb-3 col-6">
+                        <label className="label" htmlFor="phone">
+                          Số điện thoại
+                        </label>
+                        <input
+                          onChange={handleChange}
+                          type="number"
+                          className="form-control"
+                          placeholder="Số điện thoại"
+                          name="phone"
+                          id="phone"
+                        />
+                      </div>
+                      <div className="form-group mb-3 col-6">
+                        <label className="label" htmlFor="birthday">
+                          Ngày sinh
+                        </label>
+                        <input
+                          onChange={handleChange}
+                          className="form-control"
+                          type="date"
+                          name="birthday"
+                          id="birthday"
+                        />
+                      </div>
+                      <div className="form-group mb-3 col-6">
+                        <label className="label" htmlFor="password">
+                          Mật khẩu
+                        </label>
+                        <input
+                          onChange={handleChange}
+                          className="form-control"
+                          placeholder="mật khẩu"
+                          name="password"
+                          id="password"
+                          type="password"
+                        />
+                      </div>
+                      <div className="form-group mb-3 col-6">
+                        <label className="label" htmlFor="confirmPassword">
+                          Nhập lại mật khẩu
+                        </label>
+                        <input
+                          onChange={handleChange}
+                          className="form-control"
+                          placeholder="Nhập lại mật khẩu"
+                          name="confirmPassword"
+                          id="confirmPassword"
+                        />
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <button
+                        type="submit"
+                        className="form-control btn btn-primary  px-3"
+                      >
+                        Đăng kí
+                      </button>
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
     </>
   );
 }

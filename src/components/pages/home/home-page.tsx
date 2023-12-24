@@ -1,6 +1,8 @@
-"use client"
+"use client";
 import React from "react";
 import Product from "../product/product";
+import Link from "next/link";
+import { LINK } from "~/lib/constants/routes";
 export default function HomePage() {
   return (
     <>
@@ -10,26 +12,25 @@ export default function HomePage() {
             <div className="col-lg-5">
               <div className="intro-excerpt">
                 <h1>
-                  Modern Interior <span className="d-block">Design Studio</span>
+                  TechFix:
+                  <span className="d-block">
+                    Nơi giải quyết vấn đề phần cứng
+                  </span>
                 </h1>
                 <p className="mb-4">
-                  Donec vitae odio quis nisl dapibus malesuada. Nullam ac
-                  aliquet velit. Aliquam vulputate velit imperdiet dolor tempor
-                  tristique.
+                  TechFix: Đối tác tin cậy cho mua sắm và sửa chữa phần cứng
+                  chất lượng cao.
                 </p>
                 <p>
-                  <a href="" className="btn btn-secondary me-2">
+                  <Link href={LINK.SHOP} className="btn btn-secondary me-2">
                     Shop Now
-                  </a>
-                  <a href="#" className="btn btn-white-outline">
-                    Explore
-                  </a>
+                  </Link>
                 </p>
               </div>
             </div>
             <div className="col-lg-7">
               <div className="hero-img-wrap">
-                <img src="images/couch.png" className="img-fluid" />
+                <img src="images/Hardware.png" className="img-fluid" />
               </div>
             </div>
           </div>
@@ -43,16 +44,19 @@ export default function HomePage() {
             {/* Start Column 1 */}
             <div className="col-md-12 col-lg-3 mb-5 mb-lg-0">
               <h2 className="mb-4 section-title">
-                Crafted with excellent material.
+                Chế tác với chất liệu tuyệt vời
               </h2>
               <p className="mb-4">
-                Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet
-                velit. Aliquam vulputate velit imperdiet dolor tempor tristique.{" "}
+                Chúng tôi tìm kiếm và lựa chọn các vật liệu xuất sắc để đảm bảo
+                rằng sản phẩm của chúng tôi có độ bền cao và đáng tin cậy. Chúng
+                tôi chỉ sử dụng các chất liệu chất lượng cao, đảm bảo rằng sản
+                phẩm của chúng tôi không chỉ đẹp mắt mà còn có khả năng chịu
+                được sự sử dụng hàng ngày.
               </p>
               <p>
-                <a href="shop.html" className="btn">
+                <Link href={LINK.SHOP} className="btn">
                   Explore
-                </a>
+                </Link>
               </p>
             </div>
             {/* End Column 1 */}
@@ -68,10 +72,12 @@ export default function HomePage() {
         <div className="container">
           <div className="row justify-content-between">
             <div className="col-lg-6">
-              <h2 className="section-title">Why Choose Us</h2>
+              <h2 className="section-title">Bạn nên chọn chúng tôi bởi vì ?</h2>
               <p>
-                Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet
-                velit. Aliquam vulputate velit imperdiet dolor tempor tristique.
+                TechFix là một địa chỉ đáng tin cậy cho các dịch vụ mua bán và
+                sửa chữa phần cứng. Với kinh nghiệm lâu năm và đội ngũ kỹ thuật
+                viên chuyên nghiệp, chúng tôi cam kết mang đến cho khách hàng
+                những giải pháp phần cứng tốt nhất.
               </p>
               <div className="row my-5">
                 <div className="col-6 col-md-6">
@@ -83,10 +89,12 @@ export default function HomePage() {
                         className="imf-fluid"
                       />
                     </div>
-                    <h3>Fast &amp; Free Shipping</h3>
+                    <h3>Nhanh &amp; Miễn phí vận chuyển</h3>
                     <p>
-                      Donec vitae odio quis nisl dapibus malesuada. Nullam ac
-                      aliquet velit. Aliquam vulputate.
+                      Chúng tôi hiểu rằng thời gian là quan trọng và bạn mong
+                      muốn nhận được sản phẩm nhanh chóng. Vì vậy, chúng tôi
+                      cung cấp dịch vụ giao hàng nhanh và miễn phí cho khách
+                      hàng của chúng tôi.
                     </p>
                   </div>
                 </div>
@@ -99,10 +107,13 @@ export default function HomePage() {
                         className="imf-fluid"
                       />
                     </div>
-                    <h3>Easy to Shop</h3>
+                    <h3>Dễ dàng mua sắm</h3>
                     <p>
-                      Donec vitae odio quis nisl dapibus malesuada. Nullam ac
-                      aliquet velit. Aliquam vulputate.
+                      Trang web của chúng tôi được thiết kế đơn giản và dễ sử
+                      dụng, giúp bạn dễ dàng tìm kiếm và chọn lựa các sản phẩm
+                      phần cứng mà bạn cần. Chúng tôi cung cấp mô tả chi tiết và
+                      hình ảnh sản phẩm để bạn có thể hiểu rõ hơn về chúng trước
+                      khi quyết định mua.
                     </p>
                   </div>
                 </div>
@@ -115,10 +126,12 @@ export default function HomePage() {
                         className="imf-fluid"
                       />
                     </div>
-                    <h3>24/7 Support</h3>
+                    <h3>Hỗ trợ 24/7 </h3>
                     <p>
-                      Donec vitae odio quis nisl dapibus malesuada. Nullam ac
-                      aliquet velit. Aliquam vulputate.
+                      Chúng tôi hiểu rằng sự hỗ trợ liên tục là rất quan trọng
+                      khi gặp vấn đề với sản phẩm phần cứng. Vì vậy, chúng tôi
+                      cung cấp dịch vụ hỗ trợ 24/7 để đáp ứng mọi nhu cầu của
+                      khách hàng.
                     </p>
                   </div>
                 </div>
@@ -131,10 +144,12 @@ export default function HomePage() {
                         className="imf-fluid"
                       />
                     </div>
-                    <h3>Hassle Free Returns</h3>
+                    <h3>Trả lại miễn phí các vấn đề</h3>
                     <p>
-                      Donec vitae odio quis nisl dapibus malesuada. Nullam ac
-                      aliquet velit. Aliquam vulputate.
+                      Chúng tôi hiểu rằng có thể có những trường hợp bạn cần trả
+                      lại sản phẩm vì nhiều lý do khác nhau. Vì vậy, chúng tôi
+                      cam kết cung cấp quy trình trả hàng dễ dàng và không gây
+                      phiền toái cho khách hàng.
                     </p>
                   </div>
                 </div>
@@ -143,7 +158,7 @@ export default function HomePage() {
             <div className="col-lg-5">
               <div className="img-wrap">
                 <img
-                  src="images/why-choose-us-img.jpg"
+                  src="https://img.etimg.com/thumb/width-640,height-480,imgsize-72454,resizemode-75,msid-104448970/tech/technology/it-hardware-firms-with-build-plans-may-get-extra-year-of-curb-free-imports/it-hardware-deadline.jpg"
                   alt="Image"
                   className="img-fluid"
                 />
@@ -160,36 +175,36 @@ export default function HomePage() {
             <div className="col-lg-7 mb-5 mb-lg-0">
               <div className="imgs-grid">
                 <div className="grid grid-1">
-                  <img src="images/img-grid-1.jpg" alt="Untree.co" />
+                  <img
+                    src="https://img.freepik.com/premium-photo/man-is-assembling-components-build-computer-he-is-putting-cpu-socket-motherboardcreated-with-generative-ai-technology_132358-8489.jpg"
+                    alt="Untree.co"
+                  />
                 </div>
                 <div className="grid grid-2">
-                  <img src="images/img-grid-2.jpg" alt="Untree.co" />
+                  <img
+                    src="https://previews.123rf.com/images/scofano/scofano2305/scofano230501906/204341692-representaci%C3%B3n-3d-del-concepto-de-hardware-de-inteligencia-artificial-circuito-cerebral-azul.jpg"
+                    alt="Untree.co"
+                  />
                 </div>
                 <div className="grid grid-3">
-                  <img src="images/img-grid-3.jpg" alt="Untree.co" />
+                  <img
+                    src="https://png.pngtree.com/thumb_back/fw800/background/20230630/pngtree-3d-render-of-a-computer-with-a-question-mark-image_3700309.jpg"
+                    alt="Untree.co"
+                  />
                 </div>
               </div>
             </div>
             <div className="col-lg-5 ps-lg-5">
               <h2 className="section-title mb-4">
-                We Help You Make Modern Interior Design
+                Điểm đến của bạn cho các giải pháp thiết kế nội thất hiện đại và
+                dịch vụ phần cứng chuyên nghiệp.
               </h2>
               <p>
-                Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio
-                quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam
-                vulputate velit imperdiet dolor tempor tristique. Pellentesque
-                habitant morbi tristique senectus et netus et malesuada
-              </p>
-              <ul className="list-unstyled custom-list my-4">
-                <li>Donec vitae odio quis nisl dapibus malesuada</li>
-                <li>Donec vitae odio quis nisl dapibus malesuada</li>
-                <li>Donec vitae odio quis nisl dapibus malesuada</li>
-                <li>Donec vitae odio quis nisl dapibus malesuada</li>
-              </ul>
-              <p>
-                <a href="#" className="btn">
-                  Explore
-                </a>
+                Cung cấp giải pháp thiết kế nội thất hiện đại và dịch vụ phần
+                cứng chuyên nghiệp. Với chúng tôi, việc tạo ra không gian sống
+                đẹp và tiện nghi trở nên dễ dàng. Chúng tôi cam kết mang đến cho
+                bạn trải nghiệm tuyệt vời và chất lượng cao. Hãy để chúng tôi
+                giúp bạn biến ý tưởng thành hiện thực.
               </p>
             </div>
           </div>
@@ -199,11 +214,11 @@ export default function HomePage() {
         <div className="container">
           <div className="row mb-5">
             <div className="col-md-6">
-              <h2 className="section-title">Recent Blog</h2>
+              <h2 className="section-title">Bài viết gần đây</h2>
             </div>
             <div className="col-md-6 text-start text-md-end">
               <a href="#" className="more">
-                View All Posts
+                Hiển thị tất cả
               </a>
             </div>
           </div>
@@ -212,7 +227,7 @@ export default function HomePage() {
               <div className="post-entry">
                 <a href="#" className="post-thumbnail">
                   <img
-                    src="images/post-1.jpg"
+                    src="https://as2.ftcdn.net/v2/jpg/03/24/19/23/1000_F_324192340_jeRwwjYDERsD4NLbxH1psrSWucg85xFf.jpg"
                     alt="Image"
                     className="img-fluid"
                   />
@@ -236,7 +251,7 @@ export default function HomePage() {
               <div className="post-entry">
                 <a href="#" className="post-thumbnail">
                   <img
-                    src="images/post-2.jpg"
+                    src="https://www.cgdirector.com/wp-content/uploads/media/2020/05/MSI-MEG-X570-Unify-Hero.jpg"
                     alt="Image"
                     className="img-fluid"
                   />
@@ -260,7 +275,7 @@ export default function HomePage() {
               <div className="post-entry">
                 <a href="#" className="post-thumbnail">
                   <img
-                    src="images/post-3.jpg"
+                    src="https://png.pngtree.com/thumb_back/fw800/background/20230521/pngtree-the-computer-hardware-is-illuminated-with-electricity-image_2662792.jpg"
                     alt="Image"
                     className="img-fluid"
                   />

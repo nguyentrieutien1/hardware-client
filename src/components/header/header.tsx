@@ -28,7 +28,7 @@ export default function Header() {
           className="navbar-brand"
           href={navItems[0].href}
         >
-          Furni<span>.</span>
+          TN<span>.</span>
         </Link>
         <button
           className="navbar-toggler"

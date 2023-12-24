@@ -4,7 +4,7 @@ export default function Footer() {
     <footer className="footer-section">
     <div className="container relative">
       <div className="sofa-img">
-        <img src="images/sofa.png" alt="Image" className="img-fluid" />
+        <img src="https://png.pngtree.com/thumb_back/fw800/background/20230713/pngtree-3d-render-of-computer-care-and-maintenance-image_3855114.jpg" alt="Image" className="img-fluid" />
       </div>
       <div className="row">
         <div className="col-lg-8">

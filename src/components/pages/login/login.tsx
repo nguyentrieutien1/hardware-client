@@ -1,10 +1,61 @@
-import React from "react";
-import "./login.css"
+"use client";
+import React, { ChangeEvent, FormEvent, useState } from "react";
+import "./login.css";
 import Link from "next/link";
 import { LINK } from "~/lib/constants/routes";
+import { IAuthLogin } from "~/types";
+import { COOKIE_NAME, setCookieConfig, toastConfig } from "~/lib";
+import { useAuthLoginMutation } from "~/mutations";
+import { useRouter } from "next/navigation";
 export default function LoginPage() {
+  const [loginInfo, setLoginInfo] = useState<IAuthLogin>({
+    email: "",
+    password: "",
+  });
+  const { mutateAsync, isLoading } = useAuthLoginMutation();
+  console.log(isLoading);
+  const router = useRouter();
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLoginInfo((prev) => {
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
+  };
 
-
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault();
+      for (const key in loginInfo) {
+        if (Object.prototype.hasOwnProperty.call(loginInfo, key)) {
+          if (!loginInfo[key]) {
+            toastConfig(`${key} không được trống !`);
+            return;
+          }
+        }
+      }
+      mutateAsync(loginInfo)
+        .then((res) => {
+          const { status, data } = res;
+          const { access_token } = data;
+          if (status === 201) {
+            setCookieConfig(COOKIE_NAME.ACCESS_TOKEN, access_token);
+              toastConfig("Đăng nhập thành công !", { status: "success" });
+              router.push(LINK.HOME);
+          }
+        })
+        .catch(() => {
+          toastConfig(
+            "Email hoặc mật khẩu không chính xác, vui lòng nhập lại !",
+            { status: "error" }
+          );
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <section className="ftco-section">
       <div className="container">
@@ -20,7 +71,10 @@ export default function LoginPage() {
                 <div className="text w-100">
                   <h2>Chào mừng bạn đăng nhập</h2>
                   <p>Bạn có tài khoản chưa ?</p>
-                  <Link href={LINK.REGISTER} className="btn btn-white btn-outline-white">
+                  <Link
+                    href={LINK.REGISTER}
+                    className="login-wrap btn btn-outline-danger"
+                  >
                     Đăng kí
                   </Link>
                 </div>
@@ -30,7 +84,7 @@ export default function LoginPage() {
                   <div className="w-100">
                     <h3 className="mb-4">Đăng nhập</h3>
                   </div>
-                  <div className="w-100">
+                  {/* <div className="w-100">
                     <p className="social-media d-flex justify-content-end">
                       <a
                         href="#"
@@ -45,9 +99,13 @@ export default function LoginPage() {
                         <span className="fa fa-twitter" />
                       </a>
                     </p>
-                  </div>
+                  </div> */}
                 </div>
-                <form action="#" className="signin-form">
+                <form
+                  action="#"
+                  className="signin-form"
+                  onSubmit={handleSubmit}
+                >
                   <div className="form-group mb-3">
                     <label className="label" htmlFor="name">
                       Email
@@ -56,6 +114,8 @@ export default function LoginPage() {
                       type="text"
                       className="form-control"
                       placeholder="Email"
+                      name="email"
+                      onChange={handleChange}
                     />
                   </div>
                   <div className="form-group mb-3">
@@ -64,8 +124,10 @@ export default function LoginPage() {
                     </label>
                     <input
                       type="password"
-                      className="form-control"
+                      className="form-control border-1"
                       placeholder="Mật khẩu"
+                      name="password"
+                      onChange={handleChange}
                     />
                   </div>
                   <div className="form-group">
@@ -73,7 +135,18 @@ export default function LoginPage() {
                       type="submit"
                       className="form-control btn btn-primary submit px-3"
                     >
-                      Đăng nhập
+                      {isLoading ? (
+                        <>
+                          <div
+                            className="spinner-border spinner-border-sm text-primary"
+                            role="status"
+                          >
+                            <span className="sr-only">Loading...</span>
+                          </div>
+                        </>
+                      ) : (
+                        "Đăng nhập"
+                      )}
                     </button>
                   </div>
                   <div className="form-group d-md-flex">
