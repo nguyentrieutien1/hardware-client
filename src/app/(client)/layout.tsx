@@ -16,7 +16,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const { isLoading, data, status, error } = useIsUserLogined();
-  console.log(data);
   const router = useRouter();
   const pathname = usePathname()
   const pathNeedVerify = [LINK.SHOP, LINK.CART]
