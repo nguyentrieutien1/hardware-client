@@ -1,25 +1,28 @@
 "use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import { LINK, NAME } from "~/lib/constants/routes";
+
 interface LinkItem {
   text: string;
   href: string;
 }
 export default function Header() {
   const [active, setActive] = useState<number>(0);
+  const pathname = usePathname();
   const navItems: LinkItem[] = [
     { text: NAME.HOME, href: LINK.HOME },
     { text: NAME.SHOP, href: LINK.SHOP },
+    { text: NAME.CART, href: LINK.CART },
     // { text: "About us", href: "about-us" },
     // { text: "Service", href: "service" },
     // { text: "Blog", href: "blog" },
     // { text: "Contact us", href: "contact-us" },
   ];
-
   return (
     <nav
-      className="fixed-top custom-navbar navbar  navbar navbar-expand-md navbar-dark bg-dark"
+      className=" custom-navbar navbar  navbar navbar-expand-md navbar-dark bg-dark"
       arial-label="Furni navigation bar"
     >
       <div className="container">
@@ -47,7 +50,11 @@ export default function Header() {
               <li
                 key={index}
                 onClick={() => setActive(index)}
-                className={`nav-item ${index === active ? "active" : ""}`}
+                className={`nav-item ${
+                  navItems.findIndex((item) => item.href === pathname) === index
+                    ? "active"
+                    : ""
+                }`}
               >
                 <Link className="nav-link" href={item.href}>
                   {item.text}

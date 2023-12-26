@@ -1,0 +1,29 @@
+import { QueryClient, useMutation, useQueryClient } from "react-query";
+import { axiosConfig } from "~/lib";
+import { constructorIsUserLogined } from "~/queries";
+type Params = {
+  id: number;
+  data: { quantity: number };
+};
+const handleOnUpdateToCart = async ({ id, data }: Params) => {
+  return await axiosConfig.put(`/cart/${id}`, data);
+};
+export const useUpdateToCartMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(handleOnUpdateToCart, {
+    onSuccess({ data }) {
+      const key = constructorIsUserLogined();
+      queryClient.setQueryData(key, (oldData: any) => {
+        const cartUpdate = oldData?.data.cart.map((item) => {
+          if (item?.id === data?.id) {
+            return data;
+          } else {
+            return item;
+          }
+        });
+        oldData["data"]["cart"] = [...cartUpdate];
+        return { ...oldData };
+      });
+    },
+  });
+};

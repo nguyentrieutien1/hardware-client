@@ -1,52 +1,36 @@
-import Link from "next/link";
 import React from "react";
-import { LINK } from "~/lib/constants/routes/link";
-
-export default function Product() {
+import { toastConfig } from "~/lib";
+import { useAddToCartMutation } from "~/mutations";
+import { useIsUserLogined } from "~/queries";
+import { IProduct } from "~/types";
+type ProductProps = {
+  product: IProduct;
+};
+export default function Product(props: ProductProps) {
+  const { description, id, images, name, price } = props.product;
+  const { data: res } = useIsUserLogined();
+  const { mutateAsync } = useAddToCartMutation();
+  const onAddToCart = async () => {
+    mutateAsync({ productId: id, quantity: 1, accountId: res.data.id }).then(() => {
+      toastConfig(`Bạn đã thêm ${name} vào giỏ hàng thành công !`, {status: 'success'})
+    }).catch(() => {
+      toastConfig(`Bạn đã thêm ${name} vào giỏ hàng thất bại, quay trở lại sau 30 phút nữa nhé !`, {status: 'info'})
+    })
+  };
   return (
     <>
       <div className="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-        <Link className="product-item" href={LINK.CART}>
+        <div className="product-item">
           <img
-            src="images/product-1.png"
+            src={images.length > 0 ? images[0].url : "images/product-1.png"}
             className="img-fluid product-thumbnail"
           />
-          <h3 className="product-title">Nordic Chair</h3>
-          <strong className="product-price">$50.00</strong>
-          <span className="icon-cross">
+          <h3 className="product-title">{name}</h3>
+          <strong className="product-price">{`$ ${price}`}</strong>
+          <span onClick={onAddToCart} className="icon-cross">
             <img src="images/cross.svg" className="img-fluid" />
           </span>
-        </Link>
-      </div>
-      {/* End Column 2 */}
-      {/* Start Column 3 */}
-      <div className="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-        <Link className="product-item" href={LINK.CART}>
-          <img
-            src="images/product-2.png"
-            className="img-fluid product-thumbnail"
-          />
-          <h3 className="product-title">Kruzo Aero Chair</h3>
-          <strong className="product-price">$78.00</strong>
-          <span className="icon-cross">
-            <img src="images/cross.svg" className="img-fluid" />
-          </span>
-        </Link>
-      </div>
-      {/* End Column 3 */}
-      {/* Start Column 4 */}
-      <div className="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-        <a className="product-item" href="cart.html">
-          <img
-            src="images/product-3.png"
-            className="img-fluid product-thumbnail"
-          />
-          <h3 className="product-title">Ergonomic Chair</h3>
-          <strong className="product-price">$43.00</strong>
-          <span className="icon-cross">
-            <img src="images/cross.svg" className="img-fluid" />
-          </span>
-        </a>
+        </div>
       </div>
     </>
   );

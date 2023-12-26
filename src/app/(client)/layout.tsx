@@ -19,6 +19,9 @@ export default function RootLayout({
   const router = useRouter();
   const pathname = usePathname()
   const pathNeedVerify = [LINK.SHOP, LINK.CART]
+  if(isLoading) {
+    return <Loading />
+  }
    if (!isLoading && status === 'error' && pathNeedVerify.includes(pathname)) {
     return router.push(LINK.LOGIN);
   }

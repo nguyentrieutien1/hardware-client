@@ -8,4 +8,4 @@ export const axiosConfig = axios.create({
 });
 // Where you would set stuff like your 'Authorization' header, etc ...
 axios.defaults.withCredentials = true
-axiosConfig.defaults.headers.common['Authorization'] = `Bear ${getCookieConfig(COOKIE_NAME.ACCESS_TOKEN)}`
+axiosConfig.defaults.headers.common['Authorization'] = `Bearer ${getCookieConfig(COOKIE_NAME.ACCESS_TOKEN)}`

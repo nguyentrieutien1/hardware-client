@@ -3,7 +3,11 @@ import React from "react";
 import Product from "../product/product";
 import Link from "next/link";
 import { LINK } from "~/lib/constants/routes";
+import { useGetProducts } from "~/queries/index";
+import { IProduct } from "~/types";
 export default function HomePage() {
+  const { data: products } = useGetProducts();
+
   return (
     <>
       <div className="hero">
@@ -61,7 +65,10 @@ export default function HomePage() {
             </div>
             {/* End Column 1 */}
             {/* Start Column 2 */}
-            <Product />
+            {products?.data?.map((product: IProduct, index: number) => (
+              <Product key={index} product={product} />
+            ))}
+
             {/* End Column 4 */}
           </div>
         </div>

@@ -5,6 +5,7 @@ import "./../../public/css/bootstrap.min.css";
 import "./../../public/css/style.css";
 import "react-toastify/dist/ReactToastify.css";
 import Providers from "~/lib/helpers/provider";
+
 import { ToastContainer } from "react-toastify";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -18,11 +19,13 @@ export const viewport = {
   themeColor: "light",
 };
 
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+
   return (
     <html lang="vi">
       <body className={inter.className}>

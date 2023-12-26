@@ -8,6 +8,8 @@
 body {
   overflow-x: hidden;
   position: relative;
+  padding: 0;
+  margin: 0 !important;
 }
 
 body {
@@ -840,9 +842,6 @@ textarea {
 .site-blocks-table .product-thumbnail {
   width: 200px;
 }
-.site-blocks-table .btn {
-  padding: 2px 10px;
-}
 .site-blocks-table thead th {
   padding: 30px;
   text-align: center;
@@ -859,12 +858,6 @@ textarea {
 }
 .site-blocks-table tbody tr:first-child td {
   border-top: 1px solid #3b5d50 !important;
-}
-.site-blocks-table .btn {
-  background: none !important;
-  color: #000000;
-  border: none;
-  height: auto !important;
 }
 
 .site-block-order-table th {
