@@ -1,10 +1,8 @@
 "use client";
 import React from "react";
-import Product from "../product/product";
 import Link from "next/link";
 import { LINK } from "~/lib/constants/routes";
 import { useGetProducts } from "~/queries/index";
-import { IProduct } from "~/types";
 export default function HomePage() {
   const { data: products } = useGetProducts();
 
@@ -65,9 +63,9 @@ export default function HomePage() {
             </div>
             {/* End Column 1 */}
             {/* Start Column 2 */}
-            {products?.data?.map((product: IProduct, index: number) => (
+            {/* {products?.data?.map((product: IProduct, index: number) => (
               <Product key={index} product={product} />
-            ))}
+            ))} */}
 
             {/* End Column 4 */}
           </div>

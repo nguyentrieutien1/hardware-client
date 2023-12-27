@@ -1,3 +1,4 @@
+import { ReactElement } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 interface AppModalProps {
@@ -5,7 +6,7 @@ interface AppModalProps {
   closeModal: () => void;
   onConfirm: () => void;
   title: string;
-  content: string
+  content: ReactElement
 }
 export function AppModal(props: AppModalProps) {
   const { modalIsOpen, closeModal, title, content, onConfirm } = props;

@@ -1,5 +1,6 @@
 import React from "react";
 import { toastConfig } from "~/lib";
+import { toastErrorAuthen } from "~/lib/helpers";
 import { useAddToCartMutation } from "~/mutations";
 import { useIsUserLogined } from "~/queries";
 import { IProduct } from "~/types";
@@ -7,15 +8,19 @@ type ProductProps = {
   product: IProduct;
 };
 export default function Product(props: ProductProps) {
-  const { description, id, images, name, price } = props.product;
+  const { id, images, name, price } = props.product;
   const { data: res } = useIsUserLogined();
   const { mutateAsync } = useAddToCartMutation();
   const onAddToCart = async () => {
-    mutateAsync({ productId: id, quantity: 1, accountId: res.data.id }).then(() => {
-      toastConfig(`Bạn đã thêm ${name} vào giỏ hàng thành công !`, {status: 'success'})
-    }).catch(() => {
-      toastConfig(`Bạn đã thêm ${name} vào giỏ hàng thất bại, quay trở lại sau 30 phút nữa nhé !`, {status: 'info'})
-    })
+    mutateAsync({ productId: id, quantity: 1, accountId: res?.data.id })
+      .then(() => {
+        toastConfig(`Bạn đã thêm ${name} vào giỏ hàng thành công !`, {
+          status: "success",
+        });
+      })
+      .catch((err) => {
+        toastErrorAuthen(err, `Để mua hàng, trước tiên bạn phải đăng nhập đã `);
+      });
   };
   return (
     <>

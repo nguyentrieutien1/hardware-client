@@ -1,23 +1,28 @@
 "use client";
 import React, { useState } from "react";
-import Loading from "~/components/loading/loading";
 import { AppModal } from "~/components/modal/modal";
-import { CURRENCY } from "~/lib/constants";
+import { CURRENCY, LINK } from "~/lib/constants";
 import { useDeleteCartMutation, useUpdateToCartMutation } from "~/mutations";
 import { useIsUserLogined } from "~/queries";
-import Modal from "react-bootstrap/Modal";
 import Spinner from "~/components/spinner/spinner";
 import Button from "react-bootstrap/esm/Button";
+import { useCreateOrderMutation } from "~/mutations/order/create-order-mutation";
+import { IOrder } from "~/types";
+import { toastConfig } from "~/lib";
+import "../../order/order.css"
+import { useRouter } from "next/navigation";
+import { toastErrorAuthen } from "~/lib/helpers";
 export default function CartPage() {
   const [show, setShow] = useState<boolean>(false);
-  const { data: res, isLoading } = useIsUserLogined();
+  const { data: res } = useIsUserLogined();
   const cart = res?.data?.cart;
+  const router = useRouter();
   const { mutate: update, isLoading: isLoadingUpdate } =
     useUpdateToCartMutation();
   const { mutateAsync: del, isLoading: isLoadingDelelete } =
     useDeleteCartMutation();
+  const { mutateAsync: createOrder } = useCreateOrderMutation();
   const [productId, setProductId] = useState(undefined);
-
   const onUpdateQuantity = (id: number, { quantity }) => {
     if (isLoadingDelelete || isLoadingUpdate) {
       return;
@@ -37,16 +42,20 @@ export default function CartPage() {
       setShow(false);
     });
   };
-  var groupedProducts = cart?.reduce(function (acc, curr) {
-    var id = curr.product.id;
-    if (!acc[id]) {
-      acc[id] = [];
-    }
-    acc[id].push(curr);
-    return acc;
-  }, {});
-  const keys = Object.keys(groupedProducts);
-
+  const handleOrder = () => {
+    const order: IOrder[] = cart.map((item) => {
+      return {
+        cartId: item.id,
+        accountId: res?.data?.id,
+      };
+    });
+    createOrder(order).then(() => {
+      toastConfig("Đặt hàng thành công !", { status: "success" });
+      router.push(LINK.ORDER)
+    }).catch(err => {
+      toastErrorAuthen(err, 'Đặt hàng thất bại, quay trở lại sau 5 phút nữa ')
+    })
+  };
   return (
     <div>
       <Spinner isLoading={isLoadingDelelete || isLoadingUpdate} />
@@ -56,7 +65,7 @@ export default function CartPage() {
           closeModal={() => setShow(false)}
           onConfirm={() => onDeleteProduct()}
           title={`Xóa sản phẩm`}
-          content={`Bạn có chắc chắn muốn xóa sản phẩm này không ?`}
+          content={<p>Bạn có chắc chắn muốn xóa sản phẩm này không ?</p>}
         />
       )}
       <div className="hero">
@@ -75,7 +84,7 @@ export default function CartPage() {
           </div>
         </div>
       </div>
-      <div className="untree_co-section before-footer-section">
+      <div className="ftco-section before-footer-section">
         <div className="container">
           <div className="row mb-5">
             {cart?.length > 0 ? (
@@ -93,81 +102,75 @@ export default function CartPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {keys.map((key) => {
-                        const products = groupedProducts[key];
-                        if (products.length > 0) {
-                          const { id, quantity } = products[0];
-                          const { price, name } = products[0].product;
-                          return (
-                            <tr>
-                              <td className="product-thumbnail">
-                                <img
-                                  src="images/product-1.png"
-                                  alt="Image"
-                                  className="img-fluid"
-                                />
-                              </td>
-                              <td className="product-name">
-                                <h2 className="h5 text-black">{name}</h2>
-                              </td>
-                              <td>{`${price} ${CURRENCY}`}</td>
-                              <td>
-                                <div className=" mb-3 d-flex align-items-center justify-content-center">
-                                  <div className="input-group-prepend">
-                                    <button
-                                      className="btn btn-outline-black border-0 bg-transparent text-black "
-                                      type="button"
-                                      onClick={() =>
-                                        onUpdateQuantity(id, {
-                                          quantity: quantity - 1,
-                                        })
-                                      }
-                                    >
-                                      −
-                                    </button>
-                                  </div>
-                                  <div className="w-25">
-                                    <input
-                                      type="text"
-                                      className="form-control text-center "
-                                      value={quantity}
-                                      placeholder=""
-                                      aria-label="Example text with button addon"
-                                      aria-describedby="button-addon1"
-                                    />
-                                  </div>
-                                  <div className="input-group-append">
-                                    <button
-                                      className="btn btn-outline-black increase border-0 bg-transparent text-black"
-                                      type="button"
-                                      onClick={() =>
-                                        onUpdateQuantity(id, {
-                                          quantity: quantity + 1,
-                                        })
-                                      }
-                                    >
-                                      +
-                                    </button>
-                                  </div>
+                      {cart.map((item) => {
+                        const { id, quantity, product } = item;
+                        const { price, name } = product;
+                        return (
+                          <tr>
+                            <td className="product-thumbnail">
+                              <img
+                                src="images/product-1.png"
+                                alt="Image"
+                                className="img-fluid"
+                              />
+                            </td>
+                            <td className="product-name">
+                              <h2 className="h5 text-black">{name}</h2>
+                            </td>
+                            <td>{`${price} ${CURRENCY}`}</td>
+                            <td>
+                              <div className=" mb-3 d-flex align-items-center justify-content-center">
+                                <div className="input-group-prepend">
+                                  <button
+                                    className="btn btn-outline-black border-0 bg-transparent text-black "
+                                    type="button"
+                                    onClick={() =>
+                                      onUpdateQuantity(id, {
+                                        quantity: quantity - 1,
+                                      })
+                                    }
+                                  >
+                                    −
+                                  </button>
                                 </div>
-                              </td>
-                              <td>
-                                {quantity * price} {CURRENCY}
-                              </td>
-                              <td>
-                                <Button
-                                  variant="primary"
-                                  onClick={() => {
-                                    setProductId(id);
-                                    setShow(true);
-                                  }}
-                                >
-                                  Xóa
-                                </Button>
-                              </td>
-                            </tr>
-                          );
-                        }
+                                <div className="w-25">
+                                  <input
+                                    type="text"
+                                    className="form-control text-center "
+                                    value={quantity}
+                                  />
+                                </div>
+                                <div className="input-group-append">
+                                  <button
+                                    className="btn btn-outline-black increase border-0 bg-transparent text-black"
+                                    type="button"
+                                    onClick={() =>
+                                      onUpdateQuantity(id, {
+                                        quantity: quantity + 1,
+                                      })
+                                    }
+                                  >
+                                    +
+                                  </button>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              {quantity * price} {CURRENCY}
+                            </td>
+                            <td>
+                              <Button
+                                variant="primary"
+                                onClick={() => {
+                                  setProductId(id);
+                                  setShow(true);
+                                }}
+                              >
+                                Xóa
+                              </Button>
+                            </td>
+                          </tr>
+                        );
                       })}
                     </tbody>
                   </table>
@@ -236,15 +239,19 @@ export default function CartPage() {
                               return (acc +=
                                 curr?.product?.price * curr?.quantity);
                             }, 0)}
-                          VND
+                          {` ${CURRENCY}`}
                         </strong>
                       </div>
                     </div>
                     <div className="row">
                       <div className="col-md-12">
-                        <button className="btn btn-black btn-lg py-3 btn-block">
-                          Proceed To Checkout
-                        </button>
+                        <Button
+                          className="btn btn-black btn-lg py-3 btn-block float-end
+                        "
+                          onClick={() => handleOrder()}
+                        >
+                          Đặt hàng
+                        </Button>
                       </div>
                     </div>
                   </div>

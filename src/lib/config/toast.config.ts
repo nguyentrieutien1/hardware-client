@@ -15,6 +15,10 @@ export const toastConfig = (
           ? "var(--bs-warning)"
           : "var(--bs-info)",
     },
-    autoClose: 1000
+    autoClose: 2000,
+    bodyStyle: {
+      fontSize: 16,
+      fontWeight: 600
+    }
   });
 };

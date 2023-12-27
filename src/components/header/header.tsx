@@ -1,24 +1,21 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import React from "react";
 import { LINK, NAME } from "~/lib/constants/routes";
-
+import Button from "react-bootstrap/Button";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+import Dropdown from "react-bootstrap/Dropdown";
 interface LinkItem {
   text: string;
   href: string;
 }
 export default function Header() {
-  const [active, setActive] = useState<number>(0);
   const pathname = usePathname();
   const navItems: LinkItem[] = [
     { text: NAME.HOME, href: LINK.HOME },
     { text: NAME.SHOP, href: LINK.SHOP },
     { text: NAME.CART, href: LINK.CART },
-    // { text: "About us", href: "about-us" },
-    // { text: "Service", href: "service" },
-    // { text: "Blog", href: "blog" },
-    // { text: "Contact us", href: "contact-us" },
   ];
   return (
     <nav
@@ -26,11 +23,7 @@ export default function Header() {
       arial-label="Furni navigation bar"
     >
       <div className="container">
-        <Link
-          onClick={() => setActive(0)}
-          className="navbar-brand"
-          href={navItems[0].href}
-        >
+        <Link className="navbar-brand" href={navItems[0].href}>
           TN<span>.</span>
         </Link>
         <button
@@ -49,7 +42,6 @@ export default function Header() {
             {navItems.map((item: LinkItem, index: number) => (
               <li
                 key={index}
-                onClick={() => setActive(index)}
                 className={`nav-item ${
                   navItems.findIndex((item) => item.href === pathname) === index
                     ? "active"
@@ -62,16 +54,26 @@ export default function Header() {
               </li>
             ))}
           </ul>
-          <ul className="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+          <ul className="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5 d-flex align-items-center">
+            <li></li>
             <li>
-              <a className="nav-link" href="#">
-                <img src="images/user.svg" />
-              </a>
-            </li>
-            <li>
-              <Link className="nav-link" href={LINK.CART}>
-                <img src="images/cart.svg" />
-              </Link>
+              <Dropdown>
+                <Dropdown.Toggle
+                  split
+                  variant="success"
+                  className="bg-transparent border-0 border-end-0"
+                >
+                  <img src="images/user.svg" id="dropdown-split-basic" />
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu className="mt-2">
+                  <Dropdown.Item>
+                    <Link className="text-decoration-none" href={LINK.ORDER}>
+                      Lịch sử đặt hàng
+                    </Link>
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             </li>
           </ul>
         </div>

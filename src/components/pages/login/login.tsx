@@ -7,13 +7,14 @@ import { IAuthLogin } from "~/types";
 import { COOKIE_NAME, setCookieConfig, toastConfig } from "~/lib";
 import { useAuthLoginMutation } from "~/mutations";
 import { useRouter } from "next/navigation";
+import { toastErrorAuthen } from "~/lib/helpers";
 export default function LoginPage() {
   const [loginInfo, setLoginInfo] = useState<IAuthLogin>({
     email: "",
     password: "",
   });
-  const { mutateAsync, isLoading } = useAuthLoginMutation();
-  console.log(isLoading);
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const { mutateAsync } = useAuthLoginMutation();
   const router = useRouter();
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -36,6 +37,7 @@ export default function LoginPage() {
           }
         }
       }
+      setIsLoading(true)
       mutateAsync(loginInfo)
         .then((res) => {
           const { status, data } = res;
@@ -44,13 +46,11 @@ export default function LoginPage() {
             setCookieConfig(COOKIE_NAME.ACCESS_TOKEN, access_token);
               toastConfig("Đăng nhập thành công !", { status: "success" });
               router.push(LINK.HOME);
+              setIsLoading(false)
           }
         })
-        .catch(() => {
-          toastConfig(
-            "Email hoặc mật khẩu không chính xác, vui lòng nhập lại !",
-            { status: "error" }
-          );
+        .catch((err) => {
+         toastErrorAuthen(err, `Email hoặc mật khẩu không chính xác, vui lòng nhập lại !`)
         });
     } catch (error) {
       console.log(error);

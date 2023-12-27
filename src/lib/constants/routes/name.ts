@@ -1,5 +1,5 @@
 export const NAME = {
-    HOME: "Home",
-    CART: 'Cart',
-    SHOP: 'Shop',
+    HOME: "Trang chủ",
+    CART: 'Giỏ hàng',
+    SHOP: 'Mua sắm',
 }

@@ -1,12 +1,8 @@
 import { useQuery } from "react-query";
-import { COOKIE_NAME, axiosConfig, getCookieConfig } from "~/lib";
+import {  axiosConfig } from "~/lib";
 
 const getProducts = async () => {
-  return await axiosConfig.get("/product", {
-    headers: {
-      Authorization: `Bear ${getCookieConfig(COOKIE_NAME.ACCESS_TOKEN)}`,
-    },
-  });
+  return await axiosConfig.get("/product");
 };
 const constructorGetProducts = () => ["get-products"];
 export const useGetProducts = () => {
