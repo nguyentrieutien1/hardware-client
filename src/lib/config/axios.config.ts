@@ -17,7 +17,6 @@ axios.interceptors.request.use(function (config) {
     config.headers['Content-Type'] = 'application/json';
     return config;
   }, function (error) {
-    console.log('Nguyen Thanh Tung');
-    
+    console.log(error);
     return Promise.reject(error);
   });

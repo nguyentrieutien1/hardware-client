@@ -18,7 +18,7 @@ export const toastConfig = (
     autoClose: 2000,
     bodyStyle: {
       fontSize: 16,
-      fontWeight: 600
+      fontWeight: 500
     }
   });
 };

@@ -53,7 +53,6 @@ export default function LoginPage() {
          toastErrorAuthen(err, `Email hoặc mật khẩu không chính xác, vui lòng nhập lại !`)
         });
     } catch (error) {
-      console.log(error);
     }
   };
   return (

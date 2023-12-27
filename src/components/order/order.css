@@ -48,7 +48,7 @@
   .table tbody td.status span {
     position: relative;
     border-radius: 30px;
-    padding: 4px 10px 4px 25px; }
+ }
     .table tbody td.status span:after {
       position: absolute;
       top: 9px;

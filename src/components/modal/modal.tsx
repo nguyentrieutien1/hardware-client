@@ -10,7 +10,6 @@ interface AppModalProps {
 }
 export function AppModal(props: AppModalProps) {
   const { modalIsOpen, closeModal, title, content, onConfirm } = props;
-  console.log(modalIsOpen);
   return (
     <>
       <Modal show={modalIsOpen} onHide={() => closeModal()}>

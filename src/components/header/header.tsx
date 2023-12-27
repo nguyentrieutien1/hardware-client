@@ -1,22 +1,31 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import { LINK, NAME } from "~/lib/constants/routes";
-import Button from "react-bootstrap/Button";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Dropdown from "react-bootstrap/Dropdown";
+import { useIsUserLogined } from "~/queries";
+import { COOKIE_NAME, deleteCookieConfig } from "~/lib";
 interface LinkItem {
   text: string;
   href: string;
 }
 export default function Header() {
+  const { data } = useIsUserLogined();
   const pathname = usePathname();
+  const router = useRouter();
   const navItems: LinkItem[] = [
     { text: NAME.HOME, href: LINK.HOME },
     { text: NAME.SHOP, href: LINK.SHOP },
     { text: NAME.CART, href: LINK.CART },
   ];
+
+  const handleLogout = () => {
+    try {
+      deleteCookieConfig(COOKIE_NAME.ACCESS_TOKEN);
+      router.push(LINK.LOGIN);
+    } catch (error) {}
+  };
   return (
     <nav
       className=" custom-navbar navbar  navbar navbar-expand-md navbar-dark bg-dark"
@@ -61,7 +70,7 @@ export default function Header() {
                 <Dropdown.Toggle
                   split
                   variant="success"
-                  className="bg-transparent border-0 border-end-0"
+                  className="bg-transparent border-0 border-end-0 p-0"
                 >
                   <img src="images/user.svg" id="dropdown-split-basic" />
                 </Dropdown.Toggle>
@@ -72,6 +81,17 @@ export default function Header() {
                       Lịch sử đặt hàng
                     </Link>
                   </Dropdown.Item>
+                  {data ? (
+                    <Dropdown.Item onClick={() => handleLogout()}>
+                      Đăng xuất
+                    </Dropdown.Item>
+                  ) : (
+                    <Dropdown.Item>
+                      <Link className="text-decoration-none" href={LINK.LOGIN}>
+                        Đăng nhập
+                      </Link>
+                    </Dropdown.Item>
+                  )}
                 </Dropdown.Menu>
               </Dropdown>
             </li>

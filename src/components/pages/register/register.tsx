@@ -85,7 +85,6 @@ export default function RegisterPage() {
           }
         });
     } catch (error: any) {
-      console.log(error.message);
     }
   };
   return (
