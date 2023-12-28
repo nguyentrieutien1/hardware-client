@@ -8,7 +8,7 @@
 body {
   overflow-x: hidden;
   position: relative;
-  padding: 0;
+  padding: 0 !important;
   margin: 0 !important;
 }
 
@@ -234,7 +234,7 @@ a.more {
 .btn.btn-primary:hover {
   background: white;
   border-color: #314d43;
-  color: #314d43;
+  color: #314d43 !important;
 }
 .btn.btn-secondary {
   color: #2f2f2f;

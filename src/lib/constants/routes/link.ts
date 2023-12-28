@@ -5,4 +5,6 @@ export const LINK = {
     LOGIN: "/login",
     ORDER: "/order",
     REGISTER:"/register",
+    DASHBOARD: "/dashboard",
+    DASHBOARD_PRODUCT: "/dashboard/product"
 }

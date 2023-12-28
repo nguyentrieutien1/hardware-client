@@ -12,7 +12,7 @@ export function AppModal(props: AppModalProps) {
   const { modalIsOpen, closeModal, title, content, onConfirm } = props;
   return (
     <>
-      <Modal show={modalIsOpen} onHide={() => closeModal()}>
+      <Modal size="xl" backdrop="static" show={modalIsOpen} onHide={() => closeModal()}>
         <Modal.Header closeButton>
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>

@@ -15,8 +15,6 @@ export const setCookieConfig = (
 };
 
 export const getCookieConfig = (cname: string) => {
-  console.log(getCookie(cname));
-  
   return getCookie(cname)
 };
 export const deleteCookieConfig = (cname: string) => {

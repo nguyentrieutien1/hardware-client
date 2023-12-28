@@ -1,5 +1,5 @@
 export const MESSAGE_ORDER = {
-    PENDING: 'Đang chờ phê duyệt',
+    PENDING: 'Chờ phê duyệt',
 }
 export const MESSAGE_STATUS = {
     PENDING: 'PENDING'
