@@ -1,8 +1,9 @@
 import { IImage } from ".."
 export type IProduct =  {
-    id: number
+    id?: number
     name: string
     price: number
+    stock: number,
     description: string
-    images: IImage[]
+    images?: IImage[]
 }

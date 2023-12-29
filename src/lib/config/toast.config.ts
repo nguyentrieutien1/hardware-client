@@ -8,7 +8,7 @@ export const toastConfig = (
     progressStyle: {
       background:
         options?.status === "success"
-          ? "var(--bs-success)"
+          ? "var(--bs-primary)"
           : options?.status === "error"
           ? "var(--bs-danger)"
           : options?.status === "warning"

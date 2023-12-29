@@ -29,6 +29,7 @@ export default function Order() {
     <>
       {show && (
         <AppModal
+          size="lg"
           modalIsOpen={show}
           closeModal={() => setShow(false)}
           onConfirm={() => handleCancelOrder(orderId as number)}
@@ -37,7 +38,7 @@ export default function Order() {
         />
       )}
       <section className="ftco-section">
-        {orders?.length > 0 && (
+        {orders?.length > 0 ? (
           <div className="container">
             <div className="row">
               <div className="col-md-12">
@@ -107,7 +108,7 @@ export default function Order() {
               </div>
             </div>
           </div>
-        )}
+        ): <h3 className="text-center">Không có đơn hàng nào được đặt ở đây</h3>}
       </section>
     </>
   );

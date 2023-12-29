@@ -13,7 +13,7 @@ export default function LoginPage() {
     email: "",
     password: "",
   });
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { mutateAsync } = useAuthLoginMutation();
   const router = useRouter();
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -37,23 +37,26 @@ export default function LoginPage() {
           }
         }
       }
-      setIsLoading(true)
+      setIsLoading(true);
       mutateAsync(loginInfo)
         .then((res) => {
           const { status, data } = res;
           const { access_token } = data;
           if (status === 201) {
             setCookieConfig(COOKIE_NAME.ACCESS_TOKEN, access_token);
-              toastConfig("Đăng nhập thành công !", { status: "success" });
-              router.push(LINK.HOME);
-              setIsLoading(false)
+            toastConfig("Đăng nhập thành công !", { status: "success" });
+            router.push(LINK.HOME);
+            setIsLoading(false);
           }
         })
         .catch((err) => {
-         toastErrorAuthen(err, `Email hoặc mật khẩu không chính xác, vui lòng nhập lại !`)
+          setIsLoading(false);
+          toastErrorAuthen(
+            err,
+            `Email hoặc mật khẩu không chính xác, vui lòng nhập lại !`
+          );
         });
-    } catch (error) {
-    }
+    } catch (error) {}
   };
   return (
     <section className="ftco-section">
@@ -140,7 +143,6 @@ export default function LoginPage() {
                             className="spinner-border spinner-border-sm text-primary"
                             role="status"
                           >
-                            <span className="sr-only">Loading...</span>
                           </div>
                         </>
                       ) : (

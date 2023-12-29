@@ -6,26 +6,49 @@ interface AppModalProps {
   closeModal: () => void;
   onConfirm: () => void;
   title: string;
-  content: ReactElement
+  content: ReactElement;
+  size?: "sm" | "lg" | "xl";
 }
 export function AppModal(props: AppModalProps) {
-  const { modalIsOpen, closeModal, title, content, onConfirm } = props;
+  const { modalIsOpen, closeModal, title, content, onConfirm, size } = props;
   return (
     <>
-      <Modal size="xl" backdrop="static" show={modalIsOpen} onHide={() => closeModal()}>
-        <Modal.Header closeButton>
-          <Modal.Title>{title}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{content}</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => closeModal()}>
-            Đóng
-          </Button>
-          <Button variant="primary" onClick={() => onConfirm()}>
-            Xác nhận
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {size ? (
+        <Modal
+          size={size}
+          backdrop="static"
+          show={modalIsOpen}
+          onHide={() => closeModal()}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>{title}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{content}</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => closeModal()}>
+              Đóng
+            </Button>
+            <Button variant="primary" onClick={() => onConfirm()}>
+              Xác nhận
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      ) : (
+        <Modal backdrop="static" show={modalIsOpen} onHide={() => closeModal()}>
+          <Modal.Header closeButton>
+            <Modal.Title>{title}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{content}</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => closeModal()}>
+              Đóng
+            </Button>
+            <Button variant="primary" onClick={() => onConfirm()}>
+              Xác nhận
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
     </>
   );
 }

@@ -35,9 +35,6 @@ export default function Sidebar() {
         </li>
         <li className="nav-item sidebar-actions">
           <span className="nav-link">
-            <div className="border-bottom">
-              <h6 className="font-weight-normal mb-3">Projects</h6>
-            </div>
             <button className="btn btn-block btn-lg btn-gradient-primary mt-4">
               + Add a project
             </button>

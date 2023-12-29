@@ -14585,7 +14585,6 @@ h6,
 .h4,
 .h5,
 .h6 {
-  font-family: "ubuntu-medium", sans-serif;
 }
 
 p {
@@ -15607,7 +15606,6 @@ code {
   font-weight: initial;
   line-height: 1;
   padding: 0.375rem 0.5625rem;
-  font-family: "ubuntu-medium", sans-serif;
 }
 .badge.badge-pill {
   border-radius: 10rem;
@@ -17290,7 +17288,6 @@ code {
   color: #343a40;
   margin-bottom: 0.75rem;
   text-transform: capitalize;
-  font-family: "ubuntu-medium", sans-serif;
   font-size: 1.125rem;
 }
 .card .card-subtitle {
@@ -18329,7 +18326,6 @@ dl li {
 .table thead th {
   border-top: 0;
   border-bottom-width: 1px;
-  font-family: "ubuntu-medium", sans-serif;
   font-weight: initial;
 }
 .table thead th i {
@@ -19371,7 +19367,6 @@ dl li {
 }
 .sidebar .nav .nav-item.active > .nav-link .menu-title {
   color: #b66dff;
-  font-family: "ubuntu-medium", sans-serif;
 }
 .sidebar .nav .nav-item.active > .nav-link i {
   color: #b66dff;

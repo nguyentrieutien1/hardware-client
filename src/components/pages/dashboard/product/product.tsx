@@ -1,21 +1,128 @@
 "use client";
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { AppModal } from "~/components/modal/modal";
 import { CURRENCY } from "~/lib/constants";
 import { useGetProducts } from "~/queries";
-
+import ImageUploading from "react-images-uploading";
+import { IProduct } from "~/types";
+import { toastConfig } from "~/lib";
+import {
+  useCreateProductMutation,
+  useDeleteProductMutation,
+  useUpdateProductMutation,
+} from "~/mutations";
+import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
+import { toastErrorAuthen } from "~/lib/helpers";
+var currencyFormatter = require("currency-formatter");
 export default function ProductPage() {
   const [show, setShow] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+
+  const [images, setImages] = useState([]);
+  const [isUpdate, setIsUpdate] = useState<boolean>(false);
+  const [product, setProduct] = useState<IProduct>({
+    name: "",
+    stock: 0,
+    price: null,
+    description: "",
+    id: null,
+  });
   const { data: res } = useGetProducts();
   const products = res?.data;
 
+  const { mutateAsync: createProduct } = useCreateProductMutation();
+  const { mutateAsync: updateProduct } = useUpdateProductMutation();
+  const { mutateAsync: deleteProduct } = useDeleteProductMutation();
+
+  const setProductInit = () => {
+    setProduct({ name: "", stock: 0, price: null, description: "", id: null });
+  };
+  const onChangeImages = (imageList, addUpdateIndex) => {
+    setImages(imageList);
+  };
+
+  const onChangeProduct = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    if (name === "price" || name === "stock") {
+      if (value.length > 9) {
+        toastConfig(
+          `Vui lòng nhập đúng số ${name === "price" ? "tiền" : "lượng"}`
+        );
+        return;
+      }
+    }
+    setProduct((prev) => {
+      return {
+        ...prev,
+        [name]: name === "price" || name === "stock" ? +value : value,
+      };
+    });
+  };
+  const handleOnSubmit = () => {
+    for (const key in product) {
+      if (Object.prototype.hasOwnProperty.call(product, key)) {
+        if (!product[key] && key !== "id") {
+          toastConfig(`${key} không được trống !`);
+          return;
+        }
+      }
+    }
+    if (!isUpdate) {
+      delete product.id;
+      createProduct({
+        ...product,
+        images: images.map((image) => {
+          return { url: image.data_url };
+        }),
+      })
+        .then((res) => {
+          setShow(false);
+          setProductInit();
+          toastConfig("Tạo sản phẩm thành công !", { status: "success" });
+        })
+        .catch((err) => {
+          console.log(err);
+
+          toastErrorAuthen(err, "Tạo sản phẩm");
+        });
+    } else {
+      updateProduct({
+        ...product,
+        images: images.map((image) => {
+          return { url: image.data_url };
+        }),
+      }).then(() => {
+        setShow(false);
+        setIsUpdate(false);
+
+        setProductInit();
+        toastConfig("Cập nhật sản phẩm thành công !", { status: "success" });
+      });
+    }
+  };
+  const handleDeleteProduct = () => {
+    try {
+      deleteProduct({ id: product.id }).then(() => {
+        setProductInit();
+        setShowDeleteModal(false);
+        toastConfig("Xóa sản phẩm thành công !", { status: "success" });
+      });
+    } catch (error) {}
+  };
   return (
     <>
       {show && (
         <AppModal
-          title="Thêm sản phẩm"
-          onConfirm={() => {}}
-          closeModal={() => {}}
+          size="lg"
+          title={!isUpdate ? "Thêm sản phẩm" : "Cập nhật sản phẩm"}
+          onConfirm={() => handleOnSubmit()}
+          closeModal={() => {
+            setShow(false);
+            setProductInit();
+            setIsUpdate(false);
+          }}
           modalIsOpen={show}
           content={
             <div className="col-12">
@@ -25,95 +132,169 @@ export default function ProductPage() {
                     <div className="row">
                       <div className="col-lg-6 col-sm-12">
                         <div className="form-group">
-                          <label htmlFor="exampleInputName1">Name</label>
+                          <label htmlFor="exampleInputName1">
+                            Tên sản phẩm
+                          </label>
                           <input
+                            onChange={onChangeProduct}
                             type="text"
                             className="form-control"
                             id="exampleInputName1"
-                            placeholder="Name"
+                            placeholder="Tên sản phẩm"
+                            name="name"
+                            value={product?.name}
                           />
                         </div>
                         <div className="form-group">
                           <label htmlFor="exampleInputEmail3">
-                            Email address
+                            Số lượng sản phẩm
                           </label>
                           <input
-                            type="email"
+                            onChange={onChangeProduct}
+                            type="number"
+                            name="stock"
                             className="form-control"
                             id="exampleInputEmail3"
-                            placeholder="Email"
+                            placeholder="Số lượng sản phẩm"
+                            value={product?.stock}
                           />
                         </div>
                         <div className="form-group">
-                          <label htmlFor="exampleInputPassword4">
-                            Password
-                          </label>
+                          <label htmlFor="exampleInputPassword4">Giá</label>
                           <input
-                            type="password"
+                            onChange={onChangeProduct}
+                            type="number"
+                            name="price"
                             className="form-control"
                             id="exampleInputPassword4"
-                            placeholder="Password"
+                            placeholder="Giá"
+                            value={product?.price}
                           />
                         </div>
                       </div>
                       <div className="col-lg-6 col-sm-12">
-                        <div className="form-group">
-                          <label>File upload</label>
-                          <input
-                            type="file"
-                            name="img[]"
-                            className="file-upload-default"
-                          />
-                          <div className="input-group col-xs-12">
-                            <input
-                              type="text"
-                              className="form-control file-upload-info"
-                              disabled={true}
-                              placeholder="Upload Image"
-                            />
-                            <span className="input-group-append">
+                        <ImageUploading
+                          multiple
+                          value={images}
+                          onChange={onChangeImages}
+                          maxNumber={69}
+                          dataURLKey="data_url"
+                        >
+                          {({
+                            imageList,
+                            onImageUpload,
+                            onImageRemoveAll,
+                            onImageUpdate,
+                            onImageRemove,
+                            isDragging,
+                            dragProps,
+                          }) => (
+                            // write your building UI
+                            <div className="upload__image-wrapper">
                               <button
-                                className="file-upload-browse btn btn-gradient-primary"
+                                className="btn btn-primary btn-sm"
                                 type="button"
+                                style={
+                                  isDragging ? { color: "red" } : undefined
+                                }
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  onImageUpload();
+                                }}
+                                {...dragProps}
                               >
-                                Upload
+                                Nhấn chọn hoặc kéo thả tại đây
                               </button>
-                            </span>
-                          </div>
-                        </div>
-                        <div className="form-group">
+                              &nbsp;
+                              <button
+                                className="btn btn-danger btn-sm"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  onImageRemoveAll();
+                                }}
+                              >
+                                Xóa tất cả cá ảnh
+                              </button>
+                              <div className="my-2 d-flex align-items-center row">
+                                {imageList.map((image, index) => (
+                                  <div
+                                    key={index}
+                                    className="image-item d-flex flex-column align-items-center justify-content-between col-3 flex-md-wrap"
+                                  >
+                                    <img
+                                      src={image["data_url"]}
+                                      alt=""
+                                      width="100"
+                                      height="100"
+                                      style={{ objectFit: "cover" }}
+                                    />
+                                    <div className="image-item__btn-wrapper my-2 d-flex align-content-center">
+                                      <button
+                                        className="btn btn-sm btn-success mx-1"
+                                        onClick={(e) => {
+                                          e.preventDefault();
+                                          onImageUpdate(index);
+                                        }}
+                                      >
+                                        Đổi
+                                      </button>
+                                      <button
+                                        className="btn btn-sm btn-warning"
+                                        onClick={(e) => {
+                                          e.preventDefault();
+                                          onImageRemove(index);
+                                        }}
+                                      >
+                                        Xóa
+                                      </button>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </ImageUploading>
+                        {/* <div className="form-group">
                           <label htmlFor="exampleInputCity1">City</label>
                           <input
+                          onChange={onChangeProduct}
                             type="text"
                             className="form-control"
                             id="exampleInputCity1"
                             placeholder="Location"
                           />
-                        </div>
+                        </div> */}
                         <div className="form-group">
-                          <label htmlFor="exampleTextarea1">Textarea</label>
+                          <label htmlFor="exampleTextarea1">
+                            Mô tả sản phẩm
+                          </label>
                           <textarea
+                            onChange={onChangeProduct}
                             className="form-control"
                             id="exampleTextarea1"
+                            name="description"
                             rows={6}
                             defaultValue={""}
+                            placeholder="Mô tả sản phẩm"
+                            value={product?.description}
                           />
                         </div>
                       </div>
                     </div>
-
-                    <button
-                      type="submit"
-                      className="btn btn-gradient-primary me-2"
-                    >
-                      Submit
-                    </button>
-                    <button className="btn btn-light">Cancel</button>
                   </form>
                 </div>
               </div>
             </div>
           }
+        />
+      )}
+      {showDeleteModal && (
+        <AppModal
+          title="Xóa sản phẩm"
+          content={<p>Bạn có muốn xóa sản phẩm này không ?</p>}
+          closeModal={() => setShowDeleteModal(false)}
+          modalIsOpen={showDeleteModal}
+          onConfirm={() => handleDeleteProduct()}
         />
       )}
 
@@ -149,36 +330,70 @@ export default function ProductPage() {
                   </thead>
                   <tbody>
                     {products?.map((product) => {
-                      console.log(product);
-
                       return (
                         <tr>
                           <td>
                             <img
-                              src="images/faces/face1.jpg"
+                              src={
+                                product?.images?.length > 0 &&
+                                product?.images[0]?.url
+                              }
                               className="me-2"
                               alt="image"
                             />
                           </td>
                           <td>{product?.name}</td>
-                          <td>
-                            {product?.description}
+                          <td className="w-25">
+                            <div
+                              style={{
+                                width: "200px",
+                                whiteSpace: "break-spaces",
+                              }}
+                            >
+                              {product?.description}
+                            </div>
                             {/* <label className="badge badge-gradient-success btn-rounded">
                               DONE
                             </label> */}
                           </td>
                           <td>{product?.stock} </td>
-                          <td>
-                            {product?.price} {CURRENCY}{" "}
-                          </td>
+                          <td>{currencyFormatterConfig(product?.price)}</td>
                           <td>
                             <button
+                              onClick={() => {
+                                setShowDeleteModal(true);
+                                setProduct({
+                                  id: product?.id,
+                                  description: "",
+                                  name: "",
+                                  price: null,
+                                  stock: null,
+                                });
+                              }}
                               type="button"
                               className="btn btn-danger btn-sm"
                             >
                               Xóa
                             </button>
                             <button
+                              onClick={() => {
+                                setIsUpdate(true);
+                                setShow(true);
+                                setProduct({
+                                  description: product?.description,
+                                  name: product?.name,
+                                  price: product?.price,
+                                  stock: product?.stock,
+                                  id: product?.id,
+                                });
+                                setImages(
+                                  product?.images.map((image) => {
+                                    return {
+                                      data_url: image.url,
+                                    };
+                                  })
+                                );
+                              }}
                               type="button"
                               className="btn btn-primary btn-sm m-lg-1"
                             >

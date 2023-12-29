@@ -20,6 +20,8 @@ export const useDeleteCartMutation = () => {
           return item?.id !== data?.id;
         });
         oldData["data"]["cart"] = [...cartUpdate];
+        console.log(oldData);
+        
         return { ...oldData };
       });
     },
