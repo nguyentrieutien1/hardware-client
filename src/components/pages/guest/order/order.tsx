@@ -8,6 +8,7 @@ import { CURRENCY, MESSAGE_ORDER, MESSAGE_STATUS } from "~/lib/constants";
 import { useUpdateOrderMutation } from "~/mutations/order/update-order-mutation";
 import { AppModal } from "../../../modal/modal";
 import { toastConfig } from "~/lib";
+import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
 export default function Order() {
   const [orderId, setOrderId] = useState<number>();
   const [show, setShow] = useState<boolean>(false);
@@ -29,7 +30,6 @@ export default function Order() {
     <>
       {show && (
         <AppModal
-          size="lg"
           modalIsOpen={show}
           closeModal={() => setShow(false)}
           onConfirm={() => handleCancelOrder(orderId as number)}
@@ -72,8 +72,8 @@ export default function Order() {
                               </div>
                             </td>
                             <td>{order?.cart?.quantity}</td>
-                            <td>
-                              {order?.cart?.product?.price} {CURRENCY}
+                            <td>{
+                              currencyFormatterConfig(order?.cart?.product?.price)}
                             </td>
                             <td>{formattedDate(order?.createdAt)}</td>
                             <td className="status text-left">

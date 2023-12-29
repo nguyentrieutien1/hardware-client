@@ -7,6 +7,8 @@ import ScriptClient from "../../components/script/script-client";
 import { useIsUserLogined } from "~/queries/auth/auth-check-is-login-query";
 import { useRouter, usePathname } from "next/navigation";
 import { LINK } from "~/lib/constants/routes";
+import "../../../public/css/bootstrap.min.css";
+import "../../../public/css/style.css";
 import { COOKIE_NAME, getCookieConfig } from "~/lib";
 config.autoAddCss = false;
 
@@ -19,18 +21,14 @@ export default function RootLayout({
   const router = useRouter();
   const pathname = usePathname();
   const pathNeedVerify = [LINK.CART, LINK.ORDER];
-  const account = res?.data;
   if (
     (pathNeedVerify.includes(pathname) &&
       !getCookieConfig(COOKIE_NAME.ACCESS_TOKEN)) ||
-    (!isLoading && status === "error" && pathNeedVerify.includes(pathname))
+    (  res && status === "error")
   ) {
     router.push(LINK.LOGIN);
     return <></>;
-  } else if (account?.role?.name === "SUPER_ADMIN") {
-    router.push(LINK.DASHBOARD);
-    return <></>;
-  }
+  } 
   return (
     <>
       <ScriptClient />

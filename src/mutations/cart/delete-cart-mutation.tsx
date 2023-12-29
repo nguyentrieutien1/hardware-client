@@ -15,15 +15,7 @@ export const useDeleteCartMutation = () => {
   return useMutation(handleOnDeleteCart, {
     onSuccess({ data }) {
       const key = constructorIsUserLogined();
-      queryClient.setQueryData(key, (oldData: any) => {
-        const cartUpdate = oldData?.data.cart.filter((item) => {
-          return item?.id !== data?.id;
-        });
-        oldData["data"]["cart"] = [...cartUpdate];
-        console.log(oldData);
-        
-        return { ...oldData };
-      });
+      queryClient.fetchQuery({queryKey: key})
     },
   });
 };

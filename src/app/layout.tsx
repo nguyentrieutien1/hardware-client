@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./../../public/css/tiny-slider.css";
-import "./../../public/css/bootstrap.min.css";
-import "./../../public/css/style.css";
 import "react-toastify/dist/ReactToastify.css";
 import Providers from "~/lib/helpers/provider";
 

@@ -12,5 +12,9 @@ export const useIsUserLogined = () => {
   return useQuery({
     queryKey: constructorIsUserLogined(),
     queryFn: checkUserIsLogined,
+    enabled: true,
+    staleTime: 604800000,
+    cacheTime: 604800000,
+    
   });
 };

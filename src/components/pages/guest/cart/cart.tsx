@@ -12,6 +12,7 @@ import { toastConfig } from "~/lib";
 import "../order/order.css"
 import { useRouter } from "next/navigation";
 import { toastErrorAuthen } from "~/lib/helpers";
+import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
 export default function CartPage() {
   const [show, setShow] = useState<boolean>(false);
   const { data: res } = useIsUserLogined();
@@ -40,7 +41,9 @@ export default function CartPage() {
     }
     del({ id: productId }).then(() => {
       setShow(false);
-    });
+    }).catch(err => {
+      toastErrorAuthen(err, 'Xóa sản phẩm trong giỏ hàng thất bại')
+    })
   };
   const handleOrder = () => {
     const order: IOrder[] = cart.map((item) => {
@@ -117,7 +120,7 @@ export default function CartPage() {
                             <td className="product-name">
                               <h2 className="h5 text-black">{name}</h2>
                             </td>
-                            <td>{`${price} ${CURRENCY}`}</td>
+                            <td>{currencyFormatterConfig(price)}</td>
                             <td>
                               <div className=" mb-3 d-flex align-items-center justify-content-center">
                                 <div className="input-group-prepend">
@@ -156,7 +159,7 @@ export default function CartPage() {
                               </div>
                             </td>
                             <td>
-                              {quantity * price} {CURRENCY}
+                              {currencyFormatterConfig(quantity * price)}
                             </td>
                             <td>
                               <Button
@@ -234,12 +237,11 @@ export default function CartPage() {
                       </div>
                       <div className="col-md-6 text-right">
                         <strong className="text-black">
-                          {cart?.length > 0 &&
+                          {currencyFormatterConfig(cart?.length > 0 &&
                             cart?.reduce((acc, curr) => {
                               return (acc +=
                                 curr?.product?.price * curr?.quantity);
-                            }, 0)}
-                          {` ${CURRENCY}`}
+                            }, 0))}
                         </strong>
                       </div>
                     </div>
