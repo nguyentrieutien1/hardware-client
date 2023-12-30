@@ -40,10 +40,10 @@ export function AppModal(props: AppModalProps) {
           </Modal.Header>
           <Modal.Body>{content}</Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => closeModal()}>
+            <Button size="sm" variant="secondary" onClick={() => closeModal()}>
               Đóng
             </Button>
-            <Button variant="primary" onClick={() => onConfirm()}>
+            <Button size="sm" variant="primary" onClick={() => onConfirm()}>
               Xác nhận
             </Button>
           </Modal.Footer>

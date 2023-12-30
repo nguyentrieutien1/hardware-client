@@ -4,7 +4,7 @@ import "./order.css";
 import Button from "react-bootstrap/esm/Button";
 import { useIsUserLogined } from "~/queries";
 import { formattedDate, toastErrorAuthen } from "~/lib/helpers";
-import { CURRENCY, MESSAGE_ORDER, MESSAGE_STATUS } from "~/lib/constants";
+import { ORDER_MESSAGE, ORDER_STATUS } from "~/lib/constants";
 import { useUpdateOrderMutation } from "~/mutations/order/update-order-mutation";
 import { AppModal } from "../../../modal/modal";
 import { toastConfig } from "~/lib";
@@ -72,20 +72,21 @@ export default function Order() {
                               </div>
                             </td>
                             <td>{order?.cart?.quantity}</td>
-                            <td>{
-                              currencyFormatterConfig(order?.cart?.product?.price)}
+                            <td>
+                              {currencyFormatterConfig(
+                                order?.cart?.product?.price
+                              )}
                             </td>
                             <td>{formattedDate(order?.createdAt)}</td>
                             <td className="status text-left">
                               <span
                                 className={`${
                                   order?.status?.name ===
-                                    MESSAGE_STATUS.PENDING && "bg-warning"
+                                  ORDER_STATUS.PENDING && "bg-warning"
                                 } text-white  px-3 py-1`}
                               >
                                 {order?.status?.name ===
-                                  MESSAGE_STATUS.PENDING &&
-                                  MESSAGE_ORDER.PENDING}
+                                  ORDER_STATUS.PENDING && ORDER_MESSAGE.PENDING}
                               </span>
                             </td>
                             <td>
@@ -108,7 +109,9 @@ export default function Order() {
               </div>
             </div>
           </div>
-        ): <h3 className="text-center">Không có đơn hàng nào được đặt ở đây</h3>}
+        ) : (
+          <h3 className="text-center">Không có đơn hàng nào được đặt ở đây</h3>
+        )}
       </section>
     </>
   );

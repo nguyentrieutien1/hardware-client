@@ -1,7 +1,6 @@
 "use client";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { AppModal } from "~/components/modal/modal";
-import { CURRENCY } from "~/lib/constants";
 import { useGetProducts } from "~/queries";
 import ImageUploading from "react-images-uploading";
 import { IProduct } from "~/types";
@@ -13,13 +12,13 @@ import {
 } from "~/mutations";
 import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
 import { toastErrorAuthen } from "~/lib/helpers";
-var currencyFormatter = require("currency-formatter");
 export default function ProductPage() {
   const [show, setShow] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 
   const [images, setImages] = useState([]);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
+  const [productList, setProductList] = useState([])
   const [product, setProduct] = useState<IProduct>({
     name: "",
     stock: 0,
@@ -64,7 +63,7 @@ export default function ProductPage() {
     for (const key in product) {
       if (Object.prototype.hasOwnProperty.call(product, key)) {
         if (!product[key] && key !== "id") {
-          toastConfig(`${key} không được trống !`);
+          toastConfig(`Các trường phải đảm bảo không được trống.`);
           return;
         }
       }
@@ -111,6 +110,18 @@ export default function ProductPage() {
       });
     } catch (error) {}
   };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+          const {value} = e.target
+          const product = [...products].filter(product => product.name.includes(value))
+          setProductList([...product])
+          
+  }
+  useEffect(() => {
+    if(products) {
+      setProductList([...products])
+    }
+  }, [res])
   return (
     <>
       {show && (
@@ -122,6 +133,7 @@ export default function ProductPage() {
             setShow(false);
             setProductInit();
             setIsUpdate(false);
+            setImages([]);
           }}
           modalIsOpen={show}
           content={
@@ -219,14 +231,14 @@ export default function ProductPage() {
                                 {imageList.map((image, index) => (
                                   <div
                                     key={index}
-                                    className="image-item d-flex flex-column align-items-center justify-content-between col-3 flex-md-wrap"
+                                    className=" image-item d-flex flex-column align-items-center justify-content-between col-3 flex-md-wrap"
                                   >
                                     <img
                                       src={image["data_url"]}
-                                      alt=""
                                       width="100"
+                                      className="rounded"
                                       height="100"
-                                      style={{ objectFit: "cover" }}
+                                      style={{ objectFit: "cover"}}
                                     />
                                     <div className="image-item__btn-wrapper my-2 d-flex align-content-center">
                                       <button
@@ -254,16 +266,6 @@ export default function ProductPage() {
                             </div>
                           )}
                         </ImageUploading>
-                        {/* <div className="form-group">
-                          <label htmlFor="exampleInputCity1">City</label>
-                          <input
-                          onChange={onChangeProduct}
-                            type="text"
-                            className="form-control"
-                            id="exampleInputCity1"
-                            placeholder="Location"
-                          />
-                        </div> */}
                         <div className="form-group">
                           <label htmlFor="exampleTextarea1">
                             Mô tả sản phẩm
@@ -300,8 +302,8 @@ export default function ProductPage() {
 
       <div className="row content-wrapper">
         <div className="col-12 ">
-          <div className="row">
-            <div className="col-2 mb-2">
+          <div className="row mb-2 justify-content-between d-flex ">
+            <div className="col-2 ">
               <div className="d-grid gap-2">
                 <button
                   onClick={() => setShow(true)}
@@ -311,6 +313,15 @@ export default function ProductPage() {
                   + Thêm sản phẩm
                 </button>
               </div>
+            </div>
+            <div className="col-5">
+              <input
+                type="text"
+                className="form-control"
+                onChange={handleChange}
+                aria-describedby="helpId"
+                placeholder="Tìm kiếm sản phẩm theo tên"
+              />
             </div>
           </div>
           <div className="card">
@@ -325,11 +336,11 @@ export default function ProductPage() {
                       <th> Mô tả </th>
                       <th> Số lượng trong kho </th>
                       <th> Giá </th>
-                      <th> </th>
+                      <th>Xóa/Cập nhật</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {products?.map((product) => {
+                    {productList?.map((product) => {
                       return (
                         <tr>
                           <td>
@@ -338,7 +349,7 @@ export default function ProductPage() {
                                 product?.images?.length > 0 &&
                                 product?.images[0]?.url
                               }
-                              className="me-2"
+                              className="me-1 rounded"
                               alt="image"
                             />
                           </td>
@@ -406,6 +417,18 @@ export default function ProductPage() {
                   </tbody>
                 </table>
               </div>
+            </div>
+          </div>
+          <div className="row d-flex justify-content-end">
+            <div className="col-5 mt-2 float-end">
+              <input
+                type="text"
+                className="form-control"
+                name=""
+                id=""
+                aria-describedby="helpId"
+                placeholder="Tìm kiếm sản phẩm theo tên"
+              />
             </div>
           </div>
         </div>

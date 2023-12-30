@@ -12,6 +12,6 @@ export const useCreateOrderMutation = () => {
   const queryClient = useQueryClient()
   return useMutation(handleCreateOrder, {onSuccess(data, variables, context) {
     const key = constructorIsUserLogined();
-    queryClient.fetchQuery({queryKey: key})
+    queryClient.refetchQueries({queryKey: key})
   },});
 };

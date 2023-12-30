@@ -12,13 +12,7 @@ export const useUpdateOrderMutation = () => {
   const queryClient= useQueryClient();
   return useMutation(handleUpdateOrder, {onSuccess({data}, ) {
     const key = constructorIsUserLogined();
-    queryClient.setQueryData(key, (oldData: any) => {
-      const cartUpdate = oldData?.data.order.filter((item) => {
-        return item?.id !== data?.id;
-      });
-      oldData["data"]["order"] = [...cartUpdate];
-      return { ...oldData };
-    });
+    queryClient.refetchQueries({queryKey: key})
   },});
 
 };

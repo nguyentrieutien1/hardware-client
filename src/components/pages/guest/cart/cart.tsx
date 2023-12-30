@@ -54,7 +54,6 @@ export default function CartPage() {
     });
     createOrder(order).then(() => {
       toastConfig("Đặt hàng thành công !", { status: "success" });
-      router.push(LINK.ORDER)
     }).catch(err => {
       toastErrorAuthen(err, 'Đặt hàng thất bại, quay trở lại sau 5 phút nữa ')
     })

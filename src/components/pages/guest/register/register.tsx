@@ -9,7 +9,7 @@ import { TOAST_MESSAGE } from "~/lib/constants/routes/toast-message";
 import { useRouter } from "next/navigation";
 import { useAuthRegisterMutation } from "~/mutations";
 export default function RegisterPage() {
-  const router = useRouter()
+  const router = useRouter();
 
   const [registerInfo, setRegisterInfo] = useState<IAuthRegister>({
     fullName: "",
@@ -73,7 +73,7 @@ export default function RegisterPage() {
             toastConfig(TOAST_MESSAGE.REGISTER_ACCOUNT_SUCCESSFUL, {
               status: "success",
             });
-            router.push(LINK.LOGIN)
+            router.push(LINK.LOGIN);
           }
         })
         .catch((error: any) => {
@@ -84,8 +84,7 @@ export default function RegisterPage() {
             toastConfig(message, { status: "error" });
           }
         });
-    } catch (error: any) {
-    }
+    } catch (error: any) {}
   };
   return (
     <>
@@ -221,6 +220,7 @@ export default function RegisterPage() {
                           Nhập lại mật khẩu
                         </label>
                         <input
+                          type="password"
                           onChange={handleChange}
                           className="form-control"
                           placeholder="Nhập lại mật khẩu"

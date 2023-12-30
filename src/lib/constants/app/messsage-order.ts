@@ -1,6 +1,6 @@
-export const MESSAGE_ORDER = {
+export const ORDER_MESSAGE = {
     PENDING: 'Chờ phê duyệt',
 }
-export const MESSAGE_STATUS = {
-    PENDING: 'PENDING'
+export const ORDER_STATUS = {
+    PENDING: 'ORDER_PENDING'
 }
