@@ -24,7 +24,7 @@ export default function HomePage() {
                   chất lượng cao.
                 </p>
                 <p>
-                  <Link href={LINK.SHOP} className="btn btn-secondary me-2">
+                  <Link href={LINK.SHOP} className="btn btn-secondary me-2" prefetch>
                    Mua ngay
                   </Link>
                 </p>
@@ -56,7 +56,7 @@ export default function HomePage() {
                 được sự sử dụng hàng ngày.
               </p>
               <p>
-                <Link href={LINK.SHOP} className="btn">
+                <Link href={LINK.SHOP} className="btn" prefetch>
                   Explore
                 </Link>
               </p>

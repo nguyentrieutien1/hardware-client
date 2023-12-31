@@ -341,6 +341,8 @@ export default function ProductPage() {
                   </thead>
                   <tbody>
                     {productList?.map((product) => {
+                      console.log(product);
+                      
                       return (
                         <tr>
                           <td>

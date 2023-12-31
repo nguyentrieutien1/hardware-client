@@ -6,6 +6,7 @@ import { COOKIE_NAME, getCookieConfig } from "~/lib";
 import { LINK } from "~/lib/constants";
 import "../../../../public/css/dashboard.style.css";
 import Loading from "~/components/loading/loading";
+import 'tippy.js/dist/tippy.css'; // optional
 export default function DashboardLayout({
   children,
 }: {
@@ -14,9 +15,11 @@ export default function DashboardLayout({
   const { data: res, isLoading } = useIsUserLogined();
   if (!isLoading) {
     if (
-      getCookieConfig(COOKIE_NAME.ACCESS_TOKEN) &&
-      res.data?.role?.name === "SUPER_ADMIN"
+      !getCookieConfig(COOKIE_NAME.ACCESS_TOKEN) ||
+      res.data?.role?.name !== "SUPER_ADMIN"
     ) {
+      window.location.href = LINK.HOME;
+    } else {
       return (
         <>
           <div className="container-scroller">
@@ -28,10 +31,20 @@ export default function DashboardLayout({
           </div>
         </>
       );
-    } else {
-      window.location.href = LINK.HOME
     }
-  } else { 
-   return <><Loading /></>;
+    // if (
+    //   getCookieConfig(COOKIE_NAME.ACCESS_TOKEN) &&
+    //   res.data?.role?.name === "SUPER_ADMIN"
+    // ) {
+
+    // } else {
+    //   window.location.href = LINK.HOME
+    // }
+  } else {
+    return (
+      <>
+        <Loading />
+      </>
+    );
   }
 }

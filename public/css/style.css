@@ -262,6 +262,9 @@ a.more {
 .product-section {
   padding: 7rem 0;
 }
+.cursor-pointer {
+  cursor: pointer;
+}
 .product-section .product-item {
   text-align: center;
   text-decoration: none;

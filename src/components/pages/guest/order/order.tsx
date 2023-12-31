@@ -17,7 +17,7 @@ export default function Order() {
   const { mutateAsync } = useUpdateOrderMutation();
 
   const handleCancelOrder = (id: number) => {
-    mutateAsync({ id })
+    mutateAsync({ id, data: { statusId: 6 } })
       .then(() => {
         toastConfig("Hủy đơn hàng thành công", { status: "success" });
         setShow(false);
@@ -82,11 +82,11 @@ export default function Order() {
                               <span
                                 className={`${
                                   order?.status?.name ===
-                                  ORDER_STATUS.PENDING && "bg-warning"
+                                    ORDER_STATUS.PENDING && "bg-warning"
                                 } text-white  px-3 py-1`}
                               >
-                                {order?.status?.name ===
-                                  ORDER_STATUS.PENDING && ORDER_MESSAGE.PENDING}
+                                {order?.status?.name === ORDER_STATUS.PENDING &&
+                                  ORDER_MESSAGE.PENDING}
                               </span>
                             </td>
                             <td>

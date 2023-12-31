@@ -104,6 +104,7 @@ export default function RegisterPage() {
                     <Link
                       href={LINK.LOGIN}
                       className="login-wrap btn btn-outline-danger"
+                      prefetch
                     >
                       Đăng nhập
                     </Link>
@@ -166,14 +167,13 @@ export default function RegisterPage() {
                         <div className="mb-3">
                           <select
                             onChange={handleChange}
-                            className="form-select border-1"
+                            className="form-select border-1 rounded-pill form-control"
                             id="sex"
                             name="sex"
                             value={registerInfo.sex}
                           >
                             <option value="male">Nam</option>
                             <option value="female">Nữ</option>
-                            <option value="other">Khác</option>
                           </select>
                         </div>
                       </div>

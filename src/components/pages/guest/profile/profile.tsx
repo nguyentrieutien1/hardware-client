@@ -37,7 +37,7 @@ export default function Profile(props: ProfileProps) {
   useEffect(() => {
     if (res?.data) {
       setAccount({ ...res?.data });
-      setImages([{ data_url: res?.data?.image.url }]);
+      setImages([{ data_url: res?.data?.image?.url }]);
     }
   }, [res?.data]);
   return (
@@ -73,8 +73,8 @@ export default function Profile(props: ProfileProps) {
                             objectFit: "cover",
                           }}
                           src={
-                            images.length > 0
-                              ? images[0].data_url
+                            images?.length > 0
+                              ? images[0]?.data_url
                               : "https://japans.vn/wp-content/uploads/2023/07/avt-anh-gai-xinh-1.jpg "
                           }
                           className="img-responsive rounded-circle object-fit-contain icon-link-hover "
@@ -86,7 +86,14 @@ export default function Profile(props: ProfileProps) {
               </div>
               <div className="profile-usertitle">
                 <div className="profile-usertitle-name">
-                  {account?.fullName}
+                <input
+                      type="text"
+                      className="form-control small border-0 bg-transparent text-center "
+                      aria-describedby="helpId"
+                      value={account?.fullName}
+                      name="fullName"
+                      onChange={handleChange}
+                    />
                 </div>
                 <div className="profile-usertitle-job">Developer</div>
               </div>

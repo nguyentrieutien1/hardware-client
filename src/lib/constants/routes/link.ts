@@ -6,5 +6,6 @@ export const LINK = {
     ORDER: "/order",
     REGISTER:"/register",
     DASHBOARD: "/dashboard",
-    DASHBOARD_PRODUCT: "/dashboard/product"
+    DASHBOARD_PRODUCT: "/dashboard/product",
+    DASHBOARD_ORDER: "/dashboard/order"
 }

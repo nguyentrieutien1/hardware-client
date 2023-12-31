@@ -82,6 +82,7 @@ export default function LoginPage() {
                   <Link
                     href={LINK.REGISTER}
                     className="login-wrap btn btn-outline-danger"
+                    prefetch
                   >
                     Đăng kí
                   </Link>

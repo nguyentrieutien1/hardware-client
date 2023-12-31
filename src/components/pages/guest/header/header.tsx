@@ -21,6 +21,7 @@ export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const { mutateAsync: updateAccount } = useUpdateAccountMutation();
+  
   const navItems: LinkItem[] = [
     { text: NAME.HOME, href: LINK.HOME },
     { text: NAME.SHOP, href: LINK.SHOP },
@@ -43,6 +44,7 @@ export default function Header() {
         address: account?.address,
         sex: account?.sex,
         images: account?.images,
+        fullName: account?.fullName
       },
     })
       .then(() => {
@@ -72,7 +74,7 @@ export default function Header() {
         arial-label="Furni navigation bar"
       >
         <div className="container">
-          <Link className="navbar-brand" href={navItems[0].href}>
+          <Link className="navbar-brand" href={navItems[0].href} prefetch>
             FASTFIX TN<span>.</span>
           </Link>
           <button
@@ -98,7 +100,7 @@ export default function Header() {
                       : ""
                   }`}
                 >
-                  <Link className="nav-link" href={item.href}>
+                  <Link className="nav-link" href={item.href} prefetch>
                     {item.text}
                   </Link>
                 </li>
@@ -122,12 +124,13 @@ export default function Header() {
                         onClick={() => setShow(true)}
                         className="text-decoration-none"
                         href={"#"}
+                        prefetch
                       >
                         Tài khoản
                       </Link>
                     </Dropdown.Item>
                     <Dropdown.Item>
-                      <Link className="text-decoration-none" href={LINK.ORDER}>
+                      <Link className="text-decoration-none" href={LINK.ORDER} prefetch>
                         Lịch sử đặt hàng
                       </Link>
                     </Dropdown.Item>
@@ -140,6 +143,7 @@ export default function Header() {
                         <Link
                           className="text-decoration-none"
                           href={LINK.LOGIN}
+                          prefetch
                         >
                           Đăng nhập
                         </Link>

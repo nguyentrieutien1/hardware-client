@@ -1,36 +1,43 @@
 import Link from "next/link";
 import React from "react";
-import { CiMedicalCross,  } from "react-icons/ci";
+import { CiInboxOut, CiMedicalCross,  } from "react-icons/ci";
 import { LINK } from "~/lib/constants";
-import Avt from "../../../../../public/images/faces/face1.jpg";
 import Image from "next/image";
+import { useIsUserLogined } from "~/queries";
 export default function Sidebar() {
+  const {data:res} = useIsUserLogined()
   return (
     <nav className="sidebar sidebar-offcanvas fixed" id="sidebar">
       <ul className="nav">
         <li className="nav-item nav-profile">
           <a href="#" className="nav-link">
             <div className="nav-profile-image">
-                <Image src={Avt} alt={''}/>
+                <Image src={res?.data?.image?.url} alt={''} width={100} height={100} style={{objectFit: 'cover'}}/>
               <span className="login-status online" />
             </div>
             <div className="nav-profile-text d-flex flex-column">
-              <span className="font-weight-bold mb-2">David Grey. H</span>
-              <span className="text-secondary text-small">Project Manager</span>
+              <span className="font-weight-bold mb-2">{res?.data?.fullName}</span>
+              <span className="text-secondary text-small">{res?.data?.role?.name === 'SUPER_ADMIN' ? 'Quản trị cấp cao' : 'Nhân viên'}</span>
             </div>
             <i className="mdi mdi-bookmark-check text-success nav-profile-badge" />
           </a>
         </li>
         <li className="nav-item">
-          <Link className="nav-link" href={LINK.DASHBOARD}>
+          <Link className="nav-link" href={LINK.DASHBOARD} prefetch>
             <span className="menu-title">Trang chủ</span>
             <i className="mdi mdi-home menu-icon" />
           </Link>
         </li>
         <li className="nav-item">
-          <Link className="nav-link d-flex align-items-center justify-content-between" href={LINK.DASHBOARD_PRODUCT}>
-            <span className="menu-title">Sản phẩm</span>
+          <Link className="nav-link d-flex align-items-center justify-content-between" href={LINK.DASHBOARD_PRODUCT} prefetch>
+            <span className="menu-title">Quản lý sản phẩm</span>
             <CiMedicalCross />
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link className="nav-link d-flex align-items-center justify-content-between" href={LINK.DASHBOARD_ORDER} prefetch>
+            <span className="menu-title">Quản lý đơn đặt hàng</span>
+            <CiInboxOut />
           </Link>
         </li>
         <li className="nav-item sidebar-actions">

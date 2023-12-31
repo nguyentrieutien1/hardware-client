@@ -1,16 +1,18 @@
+"use client"
 import React from "react";
 import Image from "next/image";
 import Logo from "../../../../../public/images/logo.svg";
-import Avt from "../../../../../public/images/couch.svg";
 import Link from "next/link";
 import { LINK } from "~/lib/constants";
-import { CiBellOff, CiFolderOff } from "react-icons/ci";
+import {  CiFolderOff } from "react-icons/ci";
+import { useIsUserLogined } from "~/queries";
 
 export default function Header() {
+  const {data: res} = useIsUserLogined()
   return (
     <nav className="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div className="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <Link className="navbar-brand brand-logo" href={LINK.DASHBOARD}>
+        <Link className="navbar-brand brand-logo" href={LINK.DASHBOARD} prefetch>
           <Image width={100} height={100} src={Logo} alt="" />
         </Link>
       </div>
@@ -37,7 +39,7 @@ export default function Header() {
           </form>
         </div>
         <ul className="navbar-nav navbar-nav-right">
-          <li className="nav-item nav-profile dropdown">
+          <li className="nav-item nav-profile">
             <a
               className="nav-link dropdown-toggle"
               id="profileDropdown"
@@ -46,17 +48,12 @@ export default function Header() {
               aria-expanded="false"
             >
               <div className="nav-profile-img">
-                <img src="images/faces/face1.jpg" alt="image" />
+                <img src={res?.data?.image?.url} style={{objectFit: 'cover'}} alt="image" />
                 <span className="availability-status online" />
               </div>
               <div className="nav-profile-text">
-                <p className="mb-1 text-black">David Greymaax</p>
+                <p className="mb-1 text-black">{res?.data?.fullName}</p>
               </div>
-            </a>
-          </li>
-          <li className="nav-item d-none d-lg-block full-screen-link">
-            <a className="nav-link">
-              <i className="mdi mdi-fullscreen" id="fullscreen-button" />
             </a>
           </li>
           <li className="nav-item dropdown">
@@ -98,8 +95,7 @@ export default function Header() {
                     Event today
                   </h6>
                   <p className="text-gray ellipsis mb-0">
-                    {" "}
-                    Just a reminder that you have an event today{" "}
+                    Just a reminder that you have an event today
                   </p>
                 </div>
               </a>
