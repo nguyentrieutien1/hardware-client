@@ -129,6 +129,14 @@ export default function Header() {
                         Tài khoản
                       </Link>
                     </Dropdown.Item>
+                    {data?.data?.role?.name === 'SUPER_ADMIN' && <Dropdown.Item>
+                      <a
+                        className="text-decoration-none"
+                        onClick={() => window.location.href = LINK.DASHBOARD}
+                      >
+                        Vào trang quản trị 
+                      </a>
+                    </Dropdown.Item>}
                     <Dropdown.Item>
                       <Link className="text-decoration-none" href={LINK.ORDER} prefetch>
                         Lịch sử đặt hàng

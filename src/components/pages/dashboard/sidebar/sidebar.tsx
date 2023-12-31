@@ -40,13 +40,6 @@ export default function Sidebar() {
             <CiInboxOut />
           </Link>
         </li>
-        <li className="nav-item sidebar-actions">
-          <span className="nav-link">
-            <button className="btn btn-block btn-lg btn-gradient-primary mt-4">
-              + Add a project
-            </button>
-          </span>
-        </li>
       </ul>
     </nav>
   );

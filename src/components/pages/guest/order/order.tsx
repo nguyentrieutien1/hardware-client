@@ -82,11 +82,13 @@ export default function Order() {
                               <span
                                 className={`${
                                   order?.status?.name ===
-                                    ORDER_STATUS.PENDING && "bg-warning"
+                                    ORDER_STATUS.PENDING ? "bg-warning" :  order?.status?.name ===
+                                    ORDER_STATUS.ACCEPTED ?'bg-success': 'bg-danger'
                                 } text-white  px-3 py-1`}
                               >
-                                {order?.status?.name === ORDER_STATUS.PENDING &&
-                                  ORDER_MESSAGE.PENDING}
+                                {order?.status?.name === ORDER_STATUS.PENDING ?
+                                  ORDER_MESSAGE.PENDING : order?.status?.name === ORDER_STATUS.ACCEPTED ?
+                                  ORDER_MESSAGE.ACCEPTED : ORDER_MESSAGE.REJECT}
                               </span>
                             </td>
                             <td>
@@ -95,7 +97,8 @@ export default function Order() {
                                   setShow(true);
                                   setOrderId(order?.id);
                                 }}
-                                className="btn-sm  float-start"
+                                disabled={order?.status?.name === ORDER_STATUS.REJECT}
+                                className="btn-sm  px-4 py-2 float-start"
                               >
                                 Hủy
                               </Button>

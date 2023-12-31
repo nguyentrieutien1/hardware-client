@@ -28,6 +28,9 @@ export default function GuestLayout({
     router.push(LINK.LOGIN);
     return <></>;
   }
+  // if(res?.data?.role?.name === 'SUPER_ADMIN') {
+  //   return  router.push(LINK.DASHBOARD);
+  // }
   return (
     <>
       <ScriptClient />
