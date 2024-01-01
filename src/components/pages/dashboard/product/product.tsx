@@ -12,6 +12,7 @@ import {
 } from "~/mutations";
 import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
 import { toastErrorAuthen } from "~/lib/helpers";
+import Tippy from "@tippyjs/react";
 export default function ProductPage() {
   const [show, setShow] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
@@ -356,18 +357,17 @@ export default function ProductPage() {
                             />
                           </td>
                           <td>{product?.name}</td>
-                          <td className="w-25">
-                            <div
+                          <td className="w-25 cursor-pointer">
+                           <Tippy allowHTML={true} content={<div>{product?.description}</div>} arrow={true} placement="right">
+                           <div
                               style={{
                                 width: "200px",
                                 whiteSpace: "break-spaces",
                               }}
                             >
-                              {product?.description}
+                              {product?.description?.slice(0, 20)}...
                             </div>
-                            {/* <label className="badge badge-gradient-success btn-rounded">
-                              DONE
-                            </label> */}
+                           </Tippy>
                           </td>
                           <td>{product?.stock} </td>
                           <td>{currencyFormatterConfig(product?.price)}</td>

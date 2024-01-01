@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Providers from "~/lib/helpers/provider";
 import "./../../public/css/bootstrap.min.css";
 import '../../public/css/style.css'
+import 'tippy.js/dist/tippy.css';
 import { ToastContainer } from "react-toastify";
 
 const inter = Inter({ subsets: ["latin"] });

@@ -12,18 +12,20 @@ import { toastConfig } from "~/lib";
 import { toastErrorAuthen } from "~/lib/helpers";
 import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
 import withAuth from "~/HOCs/withAuth";
+import Loading from "~/components/loading/loading";
  function CartPage() {
   const [show, setShow] = useState<boolean>(false);
-  const { data: res } = useIsUserLogined();
+  const [showModalConfirm, setShowModalConfirm] = useState<boolean>(false);
+  const { data: res, isLoading} = useIsUserLogined();
   const cart = res?.data?.cart;
   const { mutate: update, isLoading: isLoadingUpdate } =
     useUpdateToCartMutation();
   const { mutateAsync: del, isLoading: isLoadingDelelete } =
     useDeleteCartMutation();
-  const { mutateAsync: createOrder } = useCreateOrderMutation();
+  const { mutateAsync: createOrder, isLoading: isLoadingOrder} = useCreateOrderMutation();
   const [productId, setProductId] = useState(undefined);
   const onUpdateQuantity = (id: number, { quantity }) => {
-    if (isLoadingDelelete || isLoadingUpdate) {
+    if (isLoadingDelelete || isLoadingUpdate || isLoadingOrder) {
       return;
     }
     if (quantity == 0) {
@@ -52,13 +54,15 @@ import withAuth from "~/HOCs/withAuth";
     });
     createOrder(order).then(() => {
       toastConfig("Đặt hàng thành công !", { status: "success" });
+      setShowModalConfirm(false)
     }).catch(err => {
       toastErrorAuthen(err, 'Đặt hàng thất bại, quay trở lại sau 5 phút nữa ')
     })
   };
+  if(isLoading) return <Loading />
   return (
     <div>
-      <Spinner isLoading={isLoadingDelelete || isLoadingUpdate} />
+      <Spinner isLoading={isLoadingDelelete || isLoadingUpdate || isLoadingOrder} />
       {show && (
         <AppModal
           modalIsOpen={show}
@@ -66,6 +70,15 @@ import withAuth from "~/HOCs/withAuth";
           onConfirm={() => onDeleteProduct()}
           title={`Xóa sản phẩm`}
           content={<p>Bạn có chắc chắn muốn xóa sản phẩm này không ?</p>}
+        />
+      )}
+       {showModalConfirm && (
+        <AppModal
+          modalIsOpen={showModalConfirm}
+          closeModal={() => setShowModalConfirm(false)}
+          onConfirm={() => handleOrder()}
+          title={`Đặt hàng`}
+          content={<p>Bạn có chắc chắn muốn đặt hàng không  ?</p>}
         />
       )}
       <div className="hero">
@@ -245,9 +258,9 @@ import withAuth from "~/HOCs/withAuth";
                     <div className="row">
                       <div className="col-md-12">
                         <Button
-                          className="btn btn-black btn-lg py-3 btn-block float-end
+                          className="py-3 float-end
                         "
-                          onClick={() => handleOrder()}
+                          onClick={() => setShowModalConfirm(true)}
                         >
                           Đặt hàng
                         </Button>

@@ -8,13 +8,13 @@ const withAuth = (WrappedComponent) => {
   const Wrapper = (props) => {
     const router = useRouter();
 
-    const { data: res } = useIsUserLogined();
+    const { data: res, isLoading } = useIsUserLogined();
 
     useEffect(() => {
-      if (!getCookieConfig(COOKIE_NAME.ACCESS_TOKEN) || !res?.data) {
+      if (!getCookieConfig(COOKIE_NAME.ACCESS_TOKEN) || (!isLoading && !res?.data)) {
         router.replace(LINK.LOGIN);
       }
-    }, []);
+    }, [isLoading, res?.data]);
 
     return res?.data ? <WrappedComponent {...props} /> : <></>;
   };

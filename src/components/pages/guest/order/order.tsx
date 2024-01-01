@@ -10,11 +10,12 @@ import { AppModal } from "../../../modal/modal";
 import { toastConfig } from "~/lib";
 import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
 import withAuth from "~/HOCs/withAuth";
+import Loading from "~/components/loading/loading";
 
  function Order() {
   const [orderId, setOrderId] = useState<number>();
   const [show, setShow] = useState<boolean>(false);
-  const { data: res } = useIsUserLogined();
+  const { data: res, isLoading} = useIsUserLogined();
   const orders = res?.data?.order;
   const { mutateAsync } = useUpdateOrderMutation();
 
@@ -28,6 +29,7 @@ import withAuth from "~/HOCs/withAuth";
         toastErrorAuthen(err, "Hủy đơn hàng");
       });
   };
+  if(isLoading) return <Loading />
   return (
     <>
       {show && (
