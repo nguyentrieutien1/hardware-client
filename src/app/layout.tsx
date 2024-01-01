@@ -18,15 +18,14 @@ export const viewport = {
   themeColor: "light",
 };
 
-
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-
   return (
     <html lang="vi">
+     
       <body className={inter.className}>
         <Providers>{children}</Providers>
         <ToastContainer />

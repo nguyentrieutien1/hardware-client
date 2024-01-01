@@ -1,6 +1,8 @@
 import React from "react";
-import {CiFacebook, CiInstagram, CiLaptop, CiTwitter } from "react-icons/ci";
+import { CiFacebook, CiInstagram, CiLaptop, CiTwitter } from "react-icons/ci";
 import Icon from "~/components/icon/icon";
+import MessengerCustomerChat from "react-messenger-customer-chat";
+
 export default function Footer() {
   return (
     <footer className="footer-section">
@@ -18,6 +20,7 @@ export default function Footer() {
                 FASTFIX TN<span>.</span>
               </a>
             </div>
+            <MessengerCustomerChat pageId="<PAGE_ID>" appId="108652064373898" />
             <p className="mb-4">
               Chào mừng đến với cửa hàng chuyên mua bán và sửa chữa phần cứng!
               Chúng tôi cung cấp dịch vụ sửa chữa chuyên nghiệp và mua bán các
@@ -35,18 +38,17 @@ export default function Footer() {
               </li>
               <li>
                 <a href="#">
-                <Icon IconComponent={CiTwitter} />
+                  <Icon IconComponent={CiTwitter} />
                 </a>
               </li>
               <li>
                 <a href="#">
-                  
-                <Icon IconComponent={CiInstagram} />
+                  <Icon IconComponent={CiInstagram} />
                 </a>
               </li>
               <li>
                 <a href="#">
-                <Icon IconComponent={CiLaptop} />
+                  <Icon IconComponent={CiLaptop} />
                 </a>
               </li>
             </ul>
