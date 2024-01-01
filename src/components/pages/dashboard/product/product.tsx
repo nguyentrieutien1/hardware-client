@@ -421,18 +421,6 @@ export default function ProductPage() {
               </div>
             </div>
           </div>
-          <div className="row d-flex justify-content-end">
-            <div className="col-5 mt-2 float-end">
-              <input
-                type="text"
-                className="form-control"
-                name=""
-                id=""
-                aria-describedby="helpId"
-                placeholder="Tìm kiếm sản phẩm theo tên"
-              />
-            </div>
-          </div>
         </div>
       </div>
     </>
