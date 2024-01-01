@@ -9,7 +9,9 @@ import { useUpdateOrderMutation } from "~/mutations/order/update-order-mutation"
 import { AppModal } from "../../../modal/modal";
 import { toastConfig } from "~/lib";
 import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
-export default function Order() {
+import withAuth from "~/HOCs/withAuth";
+
+ function Order() {
   const [orderId, setOrderId] = useState<number>();
   const [show, setShow] = useState<boolean>(false);
   const { data: res } = useIsUserLogined();
@@ -119,3 +121,5 @@ export default function Order() {
     </>
   );
 }
+
+export default withAuth(Order)

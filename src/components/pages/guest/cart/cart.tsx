@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
+import "../order/order.css"
 import { AppModal } from "~/components/modal/modal";
-import { CURRENCY, LINK } from "~/lib/constants";
 import { useDeleteCartMutation, useUpdateToCartMutation } from "~/mutations";
 import { useIsUserLogined } from "~/queries";
 import Spinner from "~/components/spinner/spinner";
@@ -9,15 +9,13 @@ import Button from "react-bootstrap/esm/Button";
 import { useCreateOrderMutation } from "~/mutations/order/create-order-mutation";
 import { IOrder } from "~/types";
 import { toastConfig } from "~/lib";
-import "../order/order.css"
-import { useRouter } from "next/navigation";
 import { toastErrorAuthen } from "~/lib/helpers";
 import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
-export default function CartPage() {
+import withAuth from "~/HOCs/withAuth";
+ function CartPage() {
   const [show, setShow] = useState<boolean>(false);
   const { data: res } = useIsUserLogined();
   const cart = res?.data?.cart;
-  const router = useRouter();
   const { mutate: update, isLoading: isLoadingUpdate } =
     useUpdateToCartMutation();
   const { mutateAsync: del, isLoading: isLoadingDelelete } =
@@ -265,3 +263,4 @@ export default function CartPage() {
     </div>
   );
 }
+export default withAuth(CartPage)
