@@ -15,7 +15,6 @@ export default function DashboardPage() {
               <ul className="breadcrumb">
                 <li className="breadcrumb-item active" aria-current="page">
                   <span />
-                  Overview{" "}
                   <i className="mdi mdi-alert-circle-outline icon-sm text-primary align-middle" />
                 </li>
               </ul>

@@ -9,7 +9,6 @@ import { useAuthLoginMutation } from "~/mutations";
 import { useRouter } from "next/navigation";
 import { toastErrorAuthen } from "~/lib/helpers";
 export default function LoginPage() {
-  
   const [loginInfo, setLoginInfo] = useState<IAuthLogin>({
     email: "",
     password: "",
@@ -47,12 +46,11 @@ export default function LoginPage() {
             setCookieConfig(COOKIE_NAME.ACCESS_TOKEN, access_token);
             if (data?.role?.name === "SUPER_ADMIN") {
               router.push(LINK.DASHBOARD);
+              setIsLoading(false);
             } else {
               router.push(LINK.HOME);
+              setIsLoading(false);
             }
-            
-            toastConfig("Đăng nhập thành công !", { status: "success" });
-            setIsLoading(false);
           }
         })
         .catch((err) => {
