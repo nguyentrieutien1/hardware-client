@@ -13,7 +13,11 @@ export const useDeleteProductMutation = () => {
   return useMutation(handleDeleteProduct, {
     onSuccess({ data }) {
       const key = constructorGetProducts();
-      queryClient.refetchQueries({queryKey: key})
+      queryClient.setQueriesData(key, (oldData: any) => {
+        const newData = oldData['data']?.filter(prod => prod?.id != data?.id)
+        oldData['data'] = newData;
+        return { ...oldData }
+      })
     },
   });
 };

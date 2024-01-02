@@ -5,7 +5,8 @@ const isProduction = process.env.NODE_ENV === 'production';
 console.log(isProduction);
 
 export const axiosConfig = axios.create({
-    baseURL:  'https://maytinhthunguyen.com/api' 
+    // baseURL:  'https://maytinhthunguyen.com/api' 
+    baseURL:  'http://localhost:5000/api' 
 
     
 });
