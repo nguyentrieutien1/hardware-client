@@ -14,7 +14,15 @@ export const useCreateProductMutation = () => {
   return useMutation(handleCreateProduct, {
     onSuccess({ data }) {
       const key = constructorGetProducts();
-      queryClient.refetchQueries({queryKey: key})
+      queryClient.setQueriesData(key, (oldData: any) => {
+ 
+        console.log(oldData?.data);
+        
+        // oldData['data'] = newProducts
+        // console.log(oldData.data);
+        
+        return oldData
+      })
     },
   });
 };

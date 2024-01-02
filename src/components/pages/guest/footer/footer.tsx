@@ -49,7 +49,7 @@ export default function Footer() {
               </li>
             </ul>
           </div>
-          <div className="col-lg-8">
+          <div className="col-lg-8  text-center">
             <div className="row links-wrap">
               <div className="col-6 col-sm-6 col-md-3">
                 <ul className="list-unstyled">
@@ -120,7 +120,7 @@ export default function Footer() {
               </p>
             </div>
             <div className="col-lg-6 text-center text-lg-end">
-              <ul className="list-unstyled d-inline-flex ms-auto">
+              <ul className="list-unstyled d-inline-flex ms-auto text-center">
                 <li className="me-4">
                   <a href="#">Terms &amp; Conditions</a>
                 </li>

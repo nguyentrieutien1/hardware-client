@@ -24,7 +24,7 @@ export default function DashboardLayout({
       window.location.href = LINK.LOGIN;
     }
   }
-  return res?.data ? (
+  return res?.data && !isLoading ? (
     <>
       <div className="container-scroller">
         <Header />

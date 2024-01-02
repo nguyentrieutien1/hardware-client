@@ -37,7 +37,7 @@ export default function ProductPage() {
   const setProductInit = () => {
     setProduct({ name: "", stock: 0, price: null, description: "", id: null });
   };
-  const onChangeImages = (imageList, addUpdateIndex) => {
+  const onChangeImages = (imageList) => {
     setImages(imageList);
   };
 
@@ -81,10 +81,9 @@ export default function ProductPage() {
           setShow(false);
           setProductInit();
           toastConfig("Tạo sản phẩm thành công !", { status: "success" });
+          setImages([])
         })
         .catch((err) => {
-          console.log(err);
-
           toastErrorAuthen(err, "Tạo sản phẩm");
         });
     } else {
@@ -96,7 +95,6 @@ export default function ProductPage() {
       }).then(() => {
         setShow(false);
         setIsUpdate(false);
-
         setProductInit();
         toastConfig("Cập nhật sản phẩm thành công !", { status: "success" });
       });
@@ -342,8 +340,6 @@ export default function ProductPage() {
                   </thead>
                   <tbody>
                     {productList?.map((product) => {
-                      console.log(product);
-                      
                       return (
                         <tr>
                           <td>

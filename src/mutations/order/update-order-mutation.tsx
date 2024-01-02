@@ -13,10 +13,15 @@ export const useUpdateOrderMutation = () => {
   const queryClient = useQueryClient();
   return useMutation(handleUpdateOrder, {
     onSuccess({ data }) {
-      const authKey = constructorIsUserLogined();
-      const orderKey = constructorGetOrders()
-      queryClient.refetchQueries({ queryKey: authKey });
-      queryClient.refetchQueries({ queryKey: orderKey });
+      const key = constructorIsUserLogined();
+      queryClient.setQueriesData(key, (oldData: any) => {
+          const newOrder = oldData?.data?.order?.filter(item => {
+           return item?.id != data?.id
+          })
+
+        oldData['data']['order'] = newOrder
+        return oldData;
+      })
     },
   });
 };
