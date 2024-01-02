@@ -132,9 +132,7 @@ export default function Header() {
                           <Dropdown.Item>
                             <a
                               className="text-decoration-none"
-                              onClick={() =>
-                                (window.location.href = LINK.DASHBOARD)
-                              }
+                              onClick={() => router.replace(LINK.DASHBOARD)}
                             >
                               Vào trang quản trị
                             </a>
