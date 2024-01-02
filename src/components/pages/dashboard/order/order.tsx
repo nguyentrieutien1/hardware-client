@@ -6,10 +6,11 @@ import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
 import { useGetOrders } from "~/queries/order/get-orders-query";
 import Tippy from "@tippyjs/react";
 import { useUpdateOrderMutation } from "~/mutations/order/update-order-mutation";
+import Spinner from "~/components/spinner/spinner";
 export default function OrderPage() {
   const [orders, setOrders] = useState([]);
   const { data: res } = useGetOrders();
-  const { mutateAsync } = useUpdateOrderMutation();
+const { mutateAsync, isLoading } = useUpdateOrderMutation();
   const handleAcceptOrder = (orderId, statusId) => {
     mutateAsync({ id: orderId, data: { statusId } });
   };
@@ -30,6 +31,7 @@ export default function OrderPage() {
   };
   return (
     <div className="content-wrapper">
+    {isLoading && <Spinner isLoading={isLoading} />}
       <div className="col-2 mb-3">
         <div className="">
           <label htmlFor="" className="form-label">
