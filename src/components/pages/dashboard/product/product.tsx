@@ -19,7 +19,7 @@ export default function ProductPage() {
 
   const [images, setImages] = useState([]);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
-  const [productList, setProductList] = useState([])
+  const [productList, setProductList] = useState([]);
   const [product, setProduct] = useState<IProduct>({
     name: "",
     stock: 0,
@@ -113,16 +113,17 @@ export default function ProductPage() {
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-          const {value} = e.target
-          const product = [...products].filter(product => product.name.includes(value))
-          setProductList([...product])
-          
-  }
+    const { value } = e.target;
+    const product = [...products].filter((product) =>
+      product.name.includes(value)
+    );
+    setProductList([...product]);
+  };
   useEffect(() => {
-    if(products) {
-      setProductList([...products])
+    if (products) {
+      setProductList([...products]);
     }
-  }, [res])
+  }, [res]);
   return (
     <>
       {show && (
@@ -239,7 +240,7 @@ export default function ProductPage() {
                                       width="100"
                                       className="rounded"
                                       height="100"
-                                      style={{ objectFit: "cover"}}
+                                      style={{ objectFit: "cover" }}
                                     />
                                     <div className="image-item__btn-wrapper my-2 d-flex align-content-center">
                                       <button
@@ -343,7 +344,7 @@ export default function ProductPage() {
                   <tbody>
                     {productList?.map((product) => {
                       console.log(product);
-                      
+
                       return (
                         <tr>
                           <td>
@@ -358,16 +359,21 @@ export default function ProductPage() {
                           </td>
                           <td>{product?.name}</td>
                           <td className="w-25 cursor-pointer">
-                           <Tippy allowHTML={true} content={<div>{product?.description}</div>} arrow={true} placement="right">
-                           <div
-                              style={{
-                                width: "200px",
-                                whiteSpace: "break-spaces",
-                              }}
+                            <Tippy
+                              allowHTML={true}
+                              content={<div>{product?.description}</div>}
+                              arrow={true}
+                              placement="right"
                             >
-                              {product?.description?.slice(0, 20)}...
-                            </div>
-                           </Tippy>
+                              <div
+                                style={{
+                                  width: "200px",
+                                  whiteSpace: "break-spaces",
+                                }}
+                              >
+                                {product?.description?.slice(0, 20)}...
+                              </div>
+                            </Tippy>
                           </td>
                           <td>{product?.stock} </td>
                           <td>{currencyFormatterConfig(product?.price)}</td>
