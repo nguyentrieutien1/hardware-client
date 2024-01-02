@@ -1,4 +1,4 @@
-// File: G:\computer-project\client\src\app\(dashboard)\dashboard\product\page.tsx
+// File: /etc/nginx/sites-available/hardware-client/src/app/(dashboard)/dashboard/product/page.tsx
 import * as entry from '../../../../../../src/app/(dashboard)/dashboard/product/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
