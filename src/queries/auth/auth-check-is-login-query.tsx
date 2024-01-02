@@ -12,6 +12,9 @@ export const useIsUserLogined = () => {
   return useQuery({
     queryKey: constructorIsUserLogined(),
     queryFn: checkUserIsLogined,
-    enabled: true,
+    staleTime: 0,
+    cacheTime: 0,
+    refetchIntervalInBackground: true,
+    refetchOnReconnect: true
   });
 };

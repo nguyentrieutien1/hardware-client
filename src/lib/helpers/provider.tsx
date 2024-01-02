@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Modal from "react-modal";
@@ -9,12 +8,13 @@ function Providers({ children }: React.PropsWithChildren) {
   Modal.setAppElement("body");
   useEffect(() => {
     require("./facebook-plugin.js");
+    require("../../../public/js/bootstrap.bundle.min.js")
   }, []);
   return (
     <QueryClientProvider client={client}>
       <div id="fb-root"></div>
       <div id="fb-customer-chat" className="fb-customerchat"></div>
-      {children}{" "}
+      {children}
     </QueryClientProvider>
   );
 }

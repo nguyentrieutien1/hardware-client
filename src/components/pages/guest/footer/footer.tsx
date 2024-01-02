@@ -6,10 +6,7 @@ import MessengerCustomerChat from "react-messenger-customer-chat";
 export default function Footer() {
   return (
     <footer className="footer-section">
-      <div className="container relative">
-        {/* <div className="sofa-img">
-        <img src="https://png.pngtree.com/thumb_back/fw800/background/20230713/pngtree-3d-render-of-computer-care-and-maintenance-image_3855114.jpg" alt="Image" className="img-fluid" />
-      </div> */}
+      <div className="container">
         <div className="row">
           <div className="col-lg-8"></div>
         </div>
@@ -20,7 +17,6 @@ export default function Footer() {
                 FASTFIX TN<span>.</span>
               </a>
             </div>
-            <MessengerCustomerChat pageId="<PAGE_ID>" appId="108652064373898" />
             <p className="mb-4">
               Chào mừng đến với cửa hàng chuyên mua bán và sửa chữa phần cứng!
               Chúng tôi cung cấp dịch vụ sửa chữa chuyên nghiệp và mua bán các
@@ -113,6 +109,7 @@ export default function Footer() {
             </div>
           </div>
         </div>
+
         <div className="border-top copyright">
           <div className="row pt-4">
             <div className="col-lg-6">

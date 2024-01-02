@@ -103,7 +103,7 @@ export default function RegisterPage() {
                     <h2>Chào mừng bạn đăng kí</h2>
                     <Link
                       href={LINK.LOGIN}
-                      className="login-wrap btn btn-outline-danger"
+                      className="login-wrap btn btn-primary border-white p-3 mt-4"
                       prefetch
                     >
                       Đăng nhập

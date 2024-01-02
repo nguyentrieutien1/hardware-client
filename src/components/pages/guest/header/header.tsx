@@ -21,7 +21,7 @@ export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const { mutateAsync: updateAccount } = useUpdateAccountMutation();
-  
+
   const navItems: LinkItem[] = [
     { text: NAME.HOME, href: LINK.HOME },
     { text: NAME.SHOP, href: LINK.SHOP },
@@ -44,11 +44,11 @@ export default function Header() {
         address: account?.address,
         sex: account?.sex,
         images: account?.images,
-        fullName: account?.fullName
+        fullName: account?.fullName,
       },
     })
       .then(() => {
-        toastConfig("Cập nhật thông tin thành công !", {status: 'success'});
+        toastConfig("Cập nhật thông tin thành công !", { status: "success" });
         setShow(false);
       })
       .catch((err) => {
@@ -105,10 +105,7 @@ export default function Header() {
                   </Link>
                 </li>
               ))}
-            </ul>
-            <ul className="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5 d-flex align-items-center">
-              <li></li>
-              <li>
+              <ul className="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5 d-flex align-items-center">
                 <Dropdown>
                   <Dropdown.Toggle
                     split
@@ -119,33 +116,43 @@ export default function Header() {
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu className="mt-2">
-                    <Dropdown.Item>
-                      <Link
-                        onClick={() => setShow(true)}
-                        className="text-decoration-none"
-                        href={"#"}
-                        prefetch
-                      >
-                        Tài khoản
-                      </Link>
-                    </Dropdown.Item>
-                    {data?.data?.role?.name === 'SUPER_ADMIN' && <Dropdown.Item>
-                      <a
-                        className="text-decoration-none"
-                        onClick={() => window.location.href = LINK.DASHBOARD}
-                      >
-                        Vào trang quản trị 
-                      </a>
-                    </Dropdown.Item>}
-                    <Dropdown.Item>
-                      <Link className="text-decoration-none" href={LINK.ORDER} prefetch>
-                        Lịch sử đặt hàng
-                      </Link>
-                    </Dropdown.Item>
                     {data?.data ? (
-                      <Dropdown.Item onClick={() => handleLogout()}>
-                        Đăng xuất
-                      </Dropdown.Item>
+                      <>
+                        <Dropdown.Item>
+                          <Link
+                            onClick={() => setShow(true)}
+                            className="text-decoration-none"
+                            href={"#"}
+                            prefetch
+                          >
+                            Tài khoản
+                          </Link>
+                        </Dropdown.Item>
+                        {data?.data?.role?.name === "SUPER_ADMIN" && (
+                          <Dropdown.Item>
+                            <a
+                              className="text-decoration-none"
+                              onClick={() =>
+                                (window.location.href = LINK.DASHBOARD)
+                              }
+                            >
+                              Vào trang quản trị
+                            </a>
+                          </Dropdown.Item>
+                        )}
+                        <Dropdown.Item>
+                          <Link
+                            className="text-decoration-none"
+                            href={LINK.ORDER}
+                            prefetch
+                          >
+                            Lịch sử đặt hàng
+                          </Link>
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleLogout()}>
+                          Đăng xuất
+                        </Dropdown.Item>
+                      </>
                     ) : (
                       <Dropdown.Item>
                         <Link
@@ -159,7 +166,7 @@ export default function Header() {
                     )}
                   </Dropdown.Menu>
                 </Dropdown>
-              </li>
+              </ul>
             </ul>
           </div>
         </div>

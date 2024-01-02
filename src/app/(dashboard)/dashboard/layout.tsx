@@ -6,45 +6,35 @@ import { COOKIE_NAME, getCookieConfig } from "~/lib";
 import { LINK } from "~/lib/constants";
 import "../../../../public/css/dashboard.style.css";
 import Loading from "~/components/loading/loading";
-import 'tippy.js/dist/tippy.css'; // optional
+import "tippy.js/dist/tippy.css";
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { data: res, isLoading } = useIsUserLogined();
+  const { data: res, isLoading, error} = useIsUserLogined();
   if (!isLoading) {
     if (
       !getCookieConfig(COOKIE_NAME.ACCESS_TOKEN) ||
-      res.data?.role?.name !== "SUPER_ADMIN"
+      res?.data?.role?.name !== "SUPER_ADMIN"
     ) {
+      
       window.location.href = LINK.HOME;
-    } else {
-      return (
-        <>
-          <div className="container-scroller">
-            <Header />
-            <div className="container-fluid page-body-wrapper ">
-              <Sidebar />
-              {children}
-            </div>
-          </div>
-        </>
-      );
+    } else if (error) {
+      window.location.href = LINK.LOGIN;
     }
-    // if (
-    //   getCookieConfig(COOKIE_NAME.ACCESS_TOKEN) &&
-    //   res.data?.role?.name === "SUPER_ADMIN"
-    // ) {
-
-    // } else {
-    //   window.location.href = LINK.HOME
-    // }
-  } else {
-    return (
-      <>
-        <Loading />
-      </>
-    );
   }
+  return res?.data ? (
+    <>
+      <div className="container-scroller">
+        <Header />
+        <div className="container-fluid page-body-wrapper ">
+          <Sidebar />
+          {children}
+        </div>
+      </div>
+    </>
+  ) : (
+    <Loading />
+  );
 }

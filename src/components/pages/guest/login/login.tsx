@@ -67,7 +67,7 @@ export default function LoginPage() {
       <div className="container">
         <div className="row justify-content-center">
           <div className="col-md-6 text-center mb-5">
-            <h2 className="heading-section"></h2>
+              <h2 className="heading-section">Đăng nhập</h2>
           </div>
         </div>
         <div className="row justify-content-center">
@@ -79,7 +79,7 @@ export default function LoginPage() {
                   <p>Bạn có tài khoản chưa ?</p>
                   <Link
                     href={LINK.REGISTER}
-                    className="login-wrap btn btn-outline-danger"
+                    className="login-wrap btn btn-primary border-white mt-4 p-3"
                     prefetch
                   >
                     Đăng kí

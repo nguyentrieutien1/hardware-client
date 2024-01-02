@@ -4,11 +4,20 @@ import Image from "next/image";
 import Logo from "../../../../../public/images/logo.svg";
 import Link from "next/link";
 import { LINK } from "~/lib/constants";
-import { CiFolderOff } from "react-icons/ci";
 import { useIsUserLogined } from "~/queries";
+import Tippy from "@tippyjs/react";
+import { COOKIE_NAME, deleteCookieConfig } from "~/lib";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
   const { data: res } = useIsUserLogined();
+  const router = useRouter();
+  const handleLogout = () => {
+    try {
+      deleteCookieConfig(COOKIE_NAME.ACCESS_TOKEN);
+      router.push(LINK.LOGIN);
+    } catch (error) {}
+  };
   return (
     <nav className="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div className="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
@@ -42,46 +51,40 @@ export default function Header() {
             </div>
           </form>
         </div>
-        <ul className="navbar-nav navbar-nav-right">
-          <li className="nav-item nav-profile">
-            <a
-              className="nav-link dropdown-toggle"
-              id="profileDropdown"
-              href="#"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <div className="nav-profile-img">
-                <img
-                  src={res?.data?.image?.url}
-                  style={{ objectFit: "cover" }}
-                  alt="image"
-                />
-                <span className="availability-status online" />
+        <ul className="navbar-nav navbar-nav-right   cursor-pointer">
+          <Tippy
+            trigger="click"
+            allowHTML={true}
+            placement="bottom-end"
+            arrow={false}
+            className="bg-gradient border-2 cursor-pointer"
+            interactive={true}
+            content={
+              <div
+                onClick={() => handleLogout()}
+                style={{ cursor: "pointer !important" }}
+              >
+                <button className="btn btn-info p-2 rounded-1">Đăng xuất</button>
               </div>
-              <div className="nav-profile-text">
-                <p className="mb-1 text-black">{res?.data?.fullName}</p>
-              </div>
-            </a>
-          </li>
-          <li className="nav-item nav-logout d-none d-lg-block">
-            <a className="nav-link" href="#">
-              <i className="mdi mdi-power" />
-            </a>
-          </li>
-          <li className="nav-item nav-settings d-none d-lg-block">
-            <a className="nav-link" href="#">
-              <i className="mdi mdi-format-line-spacing" />
-            </a>
-          </li>
+            }
+          >
+            <li className="nav-item nav-profile">
+              <a className="nav-link dropdown-toggle">
+                <div className="nav-profile-img">
+                  <img
+                    src={res?.data?.image?.url}
+                    style={{ objectFit: "cover" }}
+                    alt="image"
+                  />
+                  <span className="availability-status online" />
+                </div>
+                <div className="nav-profile-text">
+                  <p className="mb-1 text-black">{res?.data?.fullName}</p>
+                </div>
+              </a>
+            </li>
+          </Tippy>
         </ul>
-        <button
-          className="navbar-toggler navbar-toggler-right d-lg-none align-self-center"
-          type="button"
-          data-toggle="offcanvas"
-        >
-          <span className="mdi mdi-menu" />
-        </button>
       </div>
     </nav>
   );
