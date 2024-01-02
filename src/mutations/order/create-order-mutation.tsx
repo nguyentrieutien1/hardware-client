@@ -10,8 +10,7 @@ const handleCreateOrder = async (data: IOrder[]) => {
 };
 export const useCreateOrderMutation = () => {
   const queryClient = useQueryClient()
-  return useMutation(handleCreateOrder, {onSuccess(data, variables, context) {
-    const key = constructorIsUserLogined();
-    queryClient.refetchQueries({queryKey: key})
+  return useMutation(handleCreateOrder, {onSuccess({data}) {
+   
   },});
 };

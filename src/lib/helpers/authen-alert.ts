@@ -1,6 +1,8 @@
 import { toastConfig } from "..";
 
 export const toastErrorAuthen = (err, message) => {
+  console.log(err);
+  
   if (err?.response?.status === 401) {
     return toastConfig(message, {
       status: "error",
