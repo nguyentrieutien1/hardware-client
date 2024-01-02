@@ -45,12 +45,11 @@ export default function LoginPage() {
           if (status === 201) {
             setCookieConfig(COOKIE_NAME.ACCESS_TOKEN, access_token);
             if (data?.role?.name === "SUPER_ADMIN") {
-              router.push(LINK.DASHBOARD);
-              setIsLoading(false);
+              router.replace(LINK.DASHBOARD);
             } else {
-              router.push(LINK.HOME);
-              setIsLoading(false);
+              router.replace(LINK.HOME);
             }
+            setIsLoading(false);
           }
         })
         .catch((err) => {

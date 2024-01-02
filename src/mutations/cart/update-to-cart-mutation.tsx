@@ -16,7 +16,19 @@ export const useUpdateToCartMutation = () => {
   return useMutation(handleOnUpdateToCart, {
     onSuccess({ data }) {
       const key = constructorIsUserLogined();
-      queryClient.fetchQuery({queryKey: key})
+      queryClient.setQueriesData(key, (oldData: any) => {
+          const newCart = oldData?.data?.cart?.map(item => {
+            if(item?.id === data?.id) {
+              return data
+            }
+            else {
+              return item
+            }
+          })
+
+        oldData['data']['cart'] = newCart
+        return oldData;
+      })
     },
   });
 };
