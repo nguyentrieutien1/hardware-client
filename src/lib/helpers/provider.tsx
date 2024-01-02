@@ -12,9 +12,11 @@ function Providers({ children }: React.PropsWithChildren) {
   }, []);
   return (
     <QueryClientProvider client={client}>
-      <div id="fb-root"></div>
-      <div id="fb-customer-chat" className="fb-customerchat"></div>
       {children}
+      <div id="fb-root"></div>
+
+    <div id="fb-customer-chat" className="fb-customerchat">
+    </div>
     </QueryClientProvider>
   );
 }

@@ -114,7 +114,7 @@ export default function ProductPage() {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
           const {value} = e.target
-          const product = [...products].filter(product => product.name.includes(value))
+          const product = [...products].filter(product => product?.name?.toLowerCase()?.includes(value?.toLowerCase()))
           setProductList([...product])
           
   }

@@ -118,11 +118,12 @@ import Loading from "~/components/loading/loading";
                       {cart.map((item) => {
                         const { id, quantity, product } = item;
                         const { price, name } = product;
+               
                         return (
                           <tr>
                             <td className="product-thumbnail">
                               <img
-                                src="images/product-1.png"
+                                src={product?.images?.length > 0 && product?.images[0]?.url}
                                 alt="Image"
                                 className="img-fluid"
                               />
