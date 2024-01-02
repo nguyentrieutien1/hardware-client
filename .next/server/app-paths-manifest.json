@@ -1,13 +1,3 @@
 {
-  "/_not-found": "app/_not-found.js",
-  "/(auth)/register/page": "app/(auth)/register/page.js",
-  "/(dashboard)/dashboard/page": "app/(dashboard)/dashboard/page.js",
-  "/(auth)/login/page": "app/(auth)/login/page.js",
-  "/(dashboard)/dashboard/order/page": "app/(dashboard)/dashboard/order/page.js",
-  "/(guest)/about/page": "app/(guest)/about/page.js",
-  "/(dashboard)/dashboard/product/page": "app/(dashboard)/dashboard/product/page.js",
-  "/(guest)/shop/page": "app/(guest)/shop/page.js",
-  "/(guest)/page": "app/(guest)/page.js",
-  "/(guest)/order/page": "app/(guest)/order/page.js",
-  "/(guest)/cart/page": "app/(guest)/cart/page.js"
+  "/(guest)/page": "app/(guest)/page.js"
 }
