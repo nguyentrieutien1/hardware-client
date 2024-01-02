@@ -1,5 +1,6 @@
 import Tippy from "@tippyjs/react";
 import React from "react";
+import Spinner from "~/components/spinner/spinner";
 import { toastConfig } from "~/lib";
 import { toastErrorAuthen } from "~/lib/helpers";
 import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
@@ -12,7 +13,7 @@ type ProductProps = {
 export default function Product(props: ProductProps) {
   const { id, images, name, price, description } = props.product;
   const { data: res } = useIsUserLogined();
-  const { mutateAsync } = useAddToCartMutation();
+  const { mutateAsync, isLoading} = useAddToCartMutation();
   const onAddToCart = async () => {
     mutateAsync({ productId: id, quantity: 1, accountId: res?.data.id })
       .then(() => {
@@ -26,6 +27,7 @@ export default function Product(props: ProductProps) {
   };
   return (
     <>
+    {isLoading && <Spinner isLoading={isLoading} />}
       <Tippy
         allowHTML={true}
         content={<p className="product-title text-center">{description}</p>}

@@ -31,7 +31,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="col-lg-7">
-              <div className="hero-img-wrap">
+              <div className="hero-img-wrap" >
                 <img src="images/Hardware.png" className="img-fluid" />
               </div>
             </div>
