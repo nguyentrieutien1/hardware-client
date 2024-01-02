@@ -8,7 +8,6 @@ function Spinner(props: SpinnerProps) {
   return (
     isLoading && (
       <div
-        className=""
         style={{
           background: "#000",
           opacity: ".5",
@@ -17,7 +16,7 @@ function Spinner(props: SpinnerProps) {
           height: "100%",
           top: 0,
           left: 0,
-          zIndex: 100,
+          zIndex: 1000000,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",

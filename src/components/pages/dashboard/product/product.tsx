@@ -13,6 +13,7 @@ import {
 import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
 import { toastErrorAuthen } from "~/lib/helpers";
 import Tippy from "@tippyjs/react";
+import Spinner from "~/components/spinner/spinner";
 export default function ProductPage() {
   const [show, setShow] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
@@ -30,9 +31,11 @@ export default function ProductPage() {
   const { data: res } = useGetProducts();
   const products = res?.data;
 
-  const { mutateAsync: createProduct } = useCreateProductMutation();
-  const { mutateAsync: updateProduct } = useUpdateProductMutation();
-  const { mutateAsync: deleteProduct } = useDeleteProductMutation();
+
+
+  const { mutateAsync: createProduct, isLoading: isCreateLoading } = useCreateProductMutation();
+  const { mutateAsync: updateProduct, isLoading: isUpdateLoading } = useUpdateProductMutation();
+  const { mutateAsync: deleteProduct, isLoading: isDeleteLoading } = useDeleteProductMutation();
 
   const setProductInit = () => {
     setProduct({ name: "", stock: 0, price: null, description: "", id: null });
@@ -107,29 +110,20 @@ export default function ProductPage() {
         setShowDeleteModal(false);
         toastConfig("Xóa sản phẩm thành công !", { status: "success" });
       });
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-<<<<<<< HEAD
-    const { value } = e.target;
-    const product = [...products].filter((product) =>
-      product.name.includes(value)
-    );
-    setProductList([...product]);
-  };
-=======
-          const {value} = e.target
-          const product = [...products].filter(product => product?.name?.toLowerCase()?.includes(value?.toLowerCase()))
-          setProductList([...product])
-          
+    const { value } = e.target
+    const product = [...products].filter(product => product?.name?.toLowerCase()?.includes(value?.toLowerCase()))
+    setProductList([...product])
+
   }
->>>>>>> 5e5cb761c850cc743a92f575d20338a4d5711409
   useEffect(() => {
     if (products) {
       setProductList([...products]);
     }
-  }, [res]);
+  }, [products?.length, products]);
   return (
     <>
       {show && (
@@ -307,6 +301,7 @@ export default function ProductPage() {
           onConfirm={() => handleDeleteProduct()}
         />
       )}
+      <Spinner isLoading={isDeleteLoading || isCreateLoading || isUpdateLoading} />
 
       <div className="row content-wrapper">
         <div className="col-12 ">
@@ -349,11 +344,6 @@ export default function ProductPage() {
                   </thead>
                   <tbody>
                     {productList?.map((product) => {
-<<<<<<< HEAD
-                      console.log(product);
-
-=======
->>>>>>> 5e5cb761c850cc743a92f575d20338a4d5711409
                       return (
                         <tr>
                           <td>

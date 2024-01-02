@@ -15,13 +15,8 @@ export const useCreateProductMutation = () => {
     onSuccess({ data }) {
       const key = constructorGetProducts();
       queryClient.setQueriesData(key, (oldData: any) => {
- 
-        console.log(oldData?.data);
-        
-        // oldData['data'] = newProducts
-        // console.log(oldData.data);
-        
-        return oldData
+        oldData['data'].unshift(data)
+        return {...oldData}
       })
     },
   });
