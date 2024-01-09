@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import { CiInboxOut, CiMedicalCross,  } from "react-icons/ci";
+import { CiAlarmOn, CiInboxOut, CiMedicalCross,  } from "react-icons/ci";
 import { LINK } from "~/lib/constants";
 import Image from "next/image";
 import { useIsUserLogined } from "~/queries";
@@ -38,6 +38,12 @@ export default function Sidebar() {
           <Link className="nav-link d-flex align-items-center justify-content-between" href={LINK.DASHBOARD_ORDER} prefetch>
             <span className="menu-title">Quản lý đơn đặt hàng</span>
             <CiInboxOut />
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link className="nav-link d-flex align-items-center justify-content-between" href={LINK.DASHBOARD_CATEGORIES} prefetch>
+            <span className="menu-title">Quản lý thể loại</span>
+            <CiAlarmOn />
           </Link>
         </li>
       </ul>
