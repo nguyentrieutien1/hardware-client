@@ -5,133 +5,117 @@ import MessengerCustomerChat from "react-messenger-customer-chat";
 
 export default function Footer() {
   return (
-    <footer className="footer-section">
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-8"></div>
-        </div>
-        <div className="row g-5 mb-5">
-          <div className="col-lg-4">
-            <div className="mb-4 footer-logo-wrap">
-              <a href="#" className="footer-logo">
-                FASTFIX TN<span>.</span>
+    <footer className="footer spad">
+    <div className="container">
+      <div className="row">
+        <div className="col-lg-3 col-md-6 col-sm-6">
+          <div className="footer__about">
+            <div className="footer__about__logo">
+              <a href="./index.html">
+                <img src="img/logo.png" alt="" />
               </a>
             </div>
-            <p className="mb-4">
-              Chào mừng đến với cửa hàng chuyên mua bán và sửa chữa phần cứng!
-              Chúng tôi cung cấp dịch vụ sửa chữa chuyên nghiệp và mua bán các
-              linh kiện phần cứng chất lượng cao. Với đội ngũ kỹ thuật viên giàu
-              kinh nghiệm và sự chăm sóc khách hàng tận tâm, chúng tôi cam kết
-              mang lại cho bạn trải nghiệm tuyệt vời và giải pháp phù hợp cho
-              nhu cầu công nghệ của bạn. Hãy liên hệ với chúng tôi để biết thêm
-              thông tin và nhận tư vấn từ đội ngũ chuyên gia của chúng tôi.
-            </p>
-            <ul className="list-unstyled custom-social">
+            <ul>
+              <li>Address: 60-49 Road 11378 New York</li>
+              <li>Phone: +65 11.188.888</li>
+              <li>Email: hello@colorlib.com</li>
+            </ul>
+          </div>
+        </div>
+        <div className="col-lg-4 col-md-6 col-sm-6 offset-lg-1">
+          <div className="footer__widget">
+            <h6>Useful Links</h6>
+            <ul>
               <li>
-                <a href="#">
-                  <Icon IconComponent={CiFacebook} />
-                </a>
+                <a href="#">About Us</a>
               </li>
               <li>
-                <a href="#">
-                  <Icon IconComponent={CiTwitter} />
-                </a>
+                <a href="#">About Our Shop</a>
               </li>
               <li>
-                <a href="#">
-                  <Icon IconComponent={CiInstagram} />
-                </a>
+                <a href="#">Secure Shopping</a>
               </li>
               <li>
-                <a href="#">
-                  <Icon IconComponent={CiLaptop} />
-                </a>
+                <a href="#">Delivery infomation</a>
+              </li>
+              <li>
+                <a href="#">Privacy Policy</a>
+              </li>
+              <li>
+                <a href="#">Our Sitemap</a>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <a href="#">Who We Are</a>
+              </li>
+              <li>
+                <a href="#">Our Services</a>
+              </li>
+              <li>
+                <a href="#">Projects</a>
+              </li>
+              <li>
+                <a href="#">Contact</a>
+              </li>
+              <li>
+                <a href="#">Innovation</a>
+              </li>
+              <li>
+                <a href="#">Testimonials</a>
               </li>
             </ul>
           </div>
-          <div className="col-lg-8  text-center">
-            <div className="row links-wrap">
-              <div className="col-6 col-sm-6 col-md-3">
-                <ul className="list-unstyled">
-                  <li>
-                    <a href="#">Về chúng tôi</a>
-                  </li>
-                  <li>
-                    <a href="#">Dịch vụ</a>
-                  </li>
-                  <li>
-                    <a href="#">Bài viết</a>
-                  </li>
-                  <li>
-                    <a href="#">Liên hệ</a>
-                  </li>
-                </ul>
-              </div>
-              <div className="col-6 col-sm-6 col-md-3">
-                <ul className="list-unstyled">
-                  <li>
-                    <a href="#">Hỗ trợ</a>
-                  </li>
-                  <li>
-                    <a href="#">Live chat</a>
-                  </li>
-                </ul>
-              </div>
-              <div className="col-6 col-sm-6 col-md-3">
-                <ul className="list-unstyled">
-                  <li>
-                    <a href="#">Jobs</a>
-                  </li>
-                  <li>
-                    <a href="#">Our team</a>
-                  </li>
-                  <li>
-                    <a href="#">Leadership</a>
-                  </li>
-                  <li>
-                    <a href="#">Privacy Policy</a>
-                  </li>
-                </ul>
-              </div>
-              <div className="col-6 col-sm-6 col-md-3">
-                <ul className="list-unstyled">
-                  <li>
-                    <a href="#">Nordic Chair</a>
-                  </li>
-                  <li>
-                    <a href="#">Kruzo Aero</a>
-                  </li>
-                  <li>
-                    <a href="#">Ergonomic Chair</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
         </div>
-
-        <div className="border-top copyright">
-          <div className="row pt-4">
-            <div className="col-lg-6">
-              <p className="mb-2 text-center text-lg-start">
-                Copyright ©. All Rights Reserved. — Designed with love by
-                <a href="https://untree.co">Trieu Tien Nguyen</a>
-                {/* License information: https://untree.co/license/ */}
-              </p>
-            </div>
-            <div className="col-lg-6 text-center text-lg-end">
-              <ul className="list-unstyled d-inline-flex ms-auto text-center">
-                <li className="me-4">
-                  <a href="#">Terms &amp; Conditions</a>
-                </li>
-                <li>
-                  <a href="#">Privacy Policy</a>
-                </li>
-              </ul>
+        <div className="col-lg-4 col-md-12">
+          <div className="footer__widget">
+            <h6>Join Our Newsletter Now</h6>
+            <p>Get E-mail updates about our latest shop and special offers.</p>
+            <form action="#">
+              <input type="text" placeholder="Enter your mail" />
+              <button type="submit" className="site-btn">
+                Subscribe
+              </button>
+            </form>
+            <div className="footer__widget__social">
+              <a href="#">
+                <i className="fa fa-facebook" />
+              </a>
+              <a href="#">
+                <i className="fa fa-instagram" />
+              </a>
+              <a href="#">
+                <i className="fa fa-twitter" />
+              </a>
+              <a href="#">
+                <i className="fa fa-pinterest" />
+              </a>
             </div>
           </div>
         </div>
       </div>
-    </footer>
+      <div className="row">
+        <div className="col-lg-12">
+          <div className="footer__copyright">
+            <div className="footer__copyright__text">
+              <p>
+                {/* Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. */}
+                Copyright © All rights reserved | This template is made with{" "}
+                <i className="fa fa-heart" aria-hidden="true" /> by{" "}
+                <a href="https://colorlib.com" target="_blank">
+                  Colorlib
+                </a>
+                {/* Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. */}
+              </p>
+            </div>
+            <div className="footer__copyright__payment">
+              <img src="img/payment-item.png" alt="" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
   );
 }

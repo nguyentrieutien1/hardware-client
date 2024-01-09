@@ -69,106 +69,115 @@ export default function Header() {
           title="Hồ sơ"
         />
       )}
-      <nav
-        className=" custom-navbar navbar  navbar navbar-expand-md navbar-dark bg-dark"
-        arial-label="Furni navigation bar"
-      >
-        <div className="container">
-          <Link className="navbar-brand" href={navItems[0].href} prefetch>
-            FASTFIX TN<span>.</span>
-          </Link>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarsFurni"
-            aria-controls="navbarsFurni"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon" />
-          </button>
-          <div className="collapse navbar-collapse" id="navbarsFurni">
-            <ul className="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-              {navItems.map((item: LinkItem, index: number) => (
-                <li
-                  key={index}
-                  className={`nav-item ${
-                    navItems.findIndex((item) => item.href === pathname) ===
-                    index
-                      ? "active"
-                      : ""
-                  }`}
-                >
-                  <Link className="nav-link" href={item.href} prefetch>
-                    {item.text}
-                  </Link>
-                </li>
-              ))}
-              <ul className="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5 d-flex align-items-center">
-                <Dropdown>
-                  <Dropdown.Toggle
-                    split
-                    variant="success"
-                    className="bg-transparent border-0 border-end-0 p-0"
-                  >
-                    <img src="images/user.svg" id="dropdown-split-basic" />
-                  </Dropdown.Toggle>
-
-                  <Dropdown.Menu className="mt-2">
-                    {data?.data ? (
-                      <>
-                        <Dropdown.Item>
-                          <Link
-                            onClick={() => setShow(true)}
-                            className="text-decoration-none"
-                            href={"#"}
-                            prefetch
-                          >
-                            Tài khoản
-                          </Link>
-                        </Dropdown.Item>
-                        {data?.data?.role?.name === "SUPER_ADMIN" && (
-                          <Dropdown.Item>
-                            <a
-                              className="text-decoration-none"
-                              onClick={() => router.replace(LINK.DASHBOARD)}
-                            >
-                              Vào trang quản trị
-                            </a>
-                          </Dropdown.Item>
-                        )}
-                        <Dropdown.Item>
-                          <Link
-                            className="text-decoration-none"
-                            href={LINK.ORDER}
-                            prefetch
-                          >
-                            Lịch sử đặt hàng
-                          </Link>
-                        </Dropdown.Item>
-                        <Dropdown.Item onClick={() => handleLogout()}>
-                          Đăng xuất
-                        </Dropdown.Item>
-                      </>
-                    ) : (
-                      <Dropdown.Item>
-                        <Link
-                          className="text-decoration-none"
-                          href={LINK.LOGIN}
-                          prefetch
-                        >
-                          Đăng nhập
-                        </Link>
-                      </Dropdown.Item>
-                    )}
-                  </Dropdown.Menu>
-                </Dropdown>
-              </ul>
-            </ul>
+      <header className="header">
+        <div className="header__top">
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-6">
+                <div className="header__top__left">
+                  <ul>
+                    <li>
+                      <i className="fa fa-envelope" /> hello@colorlib.com
+                    </li>
+                    <li>Free Shipping for all Order of $99</li>
+                  </ul>
+                </div>
+              </div>
+              <div className="col-lg-6">
+                <div className="header__top__right">
+                  <div className="header__top__right__social">
+                    <a href="#">
+                      <i className="fa fa-facebook" />
+                    </a>
+                    <a href="#">
+                      <i className="fa fa-twitter" />
+                    </a>
+                    <a href="#">
+                      <i className="fa fa-linkedin" />
+                    </a>
+                    <a href="#">
+                      <i className="fa fa-pinterest-p" />
+                    </a>
+                  </div>
+                  <div className="header__top__right__language">
+                    <img src="img/language.png" alt="" />
+                    <div>English</div>
+                    <span className="arrow_carrot-down" />
+                    <ul>
+                      <li>
+                        <a href="#">Spanis</a>
+                      </li>
+                      <li>
+                        <a href="#">English</a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="header__top__right__auth">
+                    <a href="#">
+                      <i className="fa fa-user" /> Login
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </nav>
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-3">
+              <div className="header__logo">
+                <a href="./index.html">
+                  <img src="img/logo.png" alt="" />
+                </a>
+              </div>
+            </div>
+            <div className="col-lg-6">
+              <nav className="header__menu">
+                <ul>
+                  {navItems.map((item, index) => {
+                    return (
+                      <li
+                        key={index}
+                        className={`nav-item ${
+                          navItems.findIndex(
+                            (item) => item.href === pathname
+                          ) === index
+                            ? "active"
+                            : ""
+                        }`}
+                      >
+                        <Link href={item.href}>{item.text}</Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </nav>
+            </div>
+            <div className="col-lg-3">
+              <div className="header__cart">
+                <ul>
+                  <li>
+                    <a href="#">
+                      <i className="fa fa-heart" /> <span>1</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <i className="fa fa-shopping-bag" /> <span>3</span>
+                    </a>
+                  </li>
+                </ul>
+                <div className="header__cart__price">
+                  item: <span>$150.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="humberger__open">
+            <i className="fa fa-bars" />
+          </div>
+        </div>
+      </header>
     </>
   );
 }

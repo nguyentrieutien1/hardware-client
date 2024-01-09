@@ -1,7 +1,9 @@
 import Tippy from "@tippyjs/react";
+import Link from "next/link";
+import { title } from "process";
 import React from "react";
-import Spinner from "~/components/spinner/spinner";
 import { toastConfig } from "~/lib";
+import { LINK } from "~/lib/constants";
 import { toastErrorAuthen } from "~/lib/helpers";
 import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
 import { useAddToCartMutation } from "~/mutations";
@@ -13,47 +15,76 @@ type ProductProps = {
 export default function Product(props: ProductProps) {
   const { id, images, name, price, description } = props.product;
   const { data: res } = useIsUserLogined();
-  const { mutateAsync, isLoading} = useAddToCartMutation();
-  const onAddToCart = async () => {
-    mutateAsync({ productId: id, quantity: 1, accountId: res?.data.id })
-      .then(() => {
-        toastConfig(`Bạn đã thêm ${name} vào giỏ hàng thành công !`, {
-          status: "success",
-        });
-      })
-      .catch((err) => {
-        toastErrorAuthen(err, `Để mua hàng, trước tiên bạn phải đăng nhập đã `);
-      });
-  };
+  const { mutateAsync } = useAddToCartMutation();
+  // const onAddToCart = async () => {
+  //   mutateAsync({ productId: id, quantity: 1, accountId: res?.data.id })
+  //     .then(() => {
+  //       toastConfig(`Bạn đã thêm ${name} vào giỏ hàng thành công !`, {
+  //         status: "success",
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       toastErrorAuthen(err, `Để mua hàng, trước tiên bạn phải đăng nhập đã `);
+  //     });
+  // };
   return (
-    <>
-    {isLoading && <Spinner isLoading={isLoading} />}
-      <Tippy
-        allowHTML={true}
-        content={<p className="product-title text-center">{description}</p>}
-        followCursor={true}
-        arrow={true}
-        animation={'scale'}
-        placement="right"
-      >
-        <div className="col-12 col-md-4 col-lg-3 mb-5 mb-md-0 mt-5 text-break">
-          <div className="product-item">
+    <div className="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat cursor-pointer">
+      <div className="featured__item">
+        <div className="featured__item__pic set-bg">
+          <Link href={`${LINK.SHOP_DETAIL}/${id}`}>
             <img
-              src={images.length > 0 ? images[0].url : "images/product-1.png"}
-              className="img-fluid product-thumbnail"
+              className="rounded-3"
+              src={images.length > 0 && images[0]?.url}
             />
-            <h3 className="product-title">{name}</h3>
-
-            <p className="product-title">{`${description.slice(0, 20)}...`}</p>
-            <strong className="product-price">
-              {currencyFormatterConfig(price)}
-            </strong>
-            <span onClick={onAddToCart} className="icon-cross">
-              <img src="images/cross.svg" className="img-fluid" />
-            </span>
-          </div>
+          </Link>
+          <ul className="featured__item__pic__hover z-n1">
+            <Tippy
+              theme="light"
+              content={
+                <p style={{ color: "white" }}>
+                  Hiện tại chức năng chưa phát triển
+                </p>
+              }
+              allowHTML={true}
+            >
+              <li>
+                <a>
+                  <i className="fa fa-heart" />
+                </a>
+              </li>
+            </Tippy>
+            <Tippy
+              theme="light"
+              content={
+                <p style={{ color: "white" }}>
+                  Hiện tại chức năng chưa phát triển
+                </p>
+              }
+              allowHTML={true}
+            >
+              <li>
+                <a>
+                  <i className="fa fa-retweet" />
+                </a>
+              </li>
+            </Tippy>
+            <Link href={`${LINK.SHOP_DETAIL}/${id}`}>
+              <li>
+                <a>
+                  <i className="fa fa-shopping-cart" />
+                </a>
+              </li>
+            </Link>
+          </ul>
         </div>
-      </Tippy>
-    </>
+        <div className="featured__item__text">
+          <h6>
+            <a>{title}</a>
+          </h6>
+          <h5>{currencyFormatterConfig(price)}</h5>
+        </div>
+      </div>
+    </div>
   );
 }

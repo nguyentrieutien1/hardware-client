@@ -2,6 +2,7 @@ export const LINK = {
     HOME: "/",
     CART: '/cart',
     SHOP: '/shop',
+    SHOP_DETAIL: '/shop-detail',
     LOGIN: "/login",
     ORDER: "/order",
     REGISTER:"/register",
