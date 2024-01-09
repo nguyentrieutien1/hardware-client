@@ -8,5 +8,6 @@ export const LINK = {
     REGISTER:"/register",
     DASHBOARD: "/dashboard",
     DASHBOARD_PRODUCT: "/dashboard/product",
-    DASHBOARD_ORDER: "/dashboard/order"
+    DASHBOARD_ORDER: "/dashboard/order",
+    DASHBOARD_CATEGORIES: "/dashboard/categories"
 }

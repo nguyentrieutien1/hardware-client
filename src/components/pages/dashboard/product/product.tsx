@@ -28,7 +28,7 @@ export default function ProductPage() {
     description: "",
     id: null,
   });
-  const { data: res } = useGetProducts();
+  const { data: res, isLoading: isProductLoading } = useGetProducts();
   const products = res?.data;
 
 
@@ -301,7 +301,7 @@ export default function ProductPage() {
           onConfirm={() => handleDeleteProduct()}
         />
       )}
-      <Spinner isLoading={isDeleteLoading || isCreateLoading || isUpdateLoading} />
+      <Spinner isLoading={isDeleteLoading || isCreateLoading || isUpdateLoading || isProductLoading} />
 
       <div className="row content-wrapper">
         <div className="col-12 ">

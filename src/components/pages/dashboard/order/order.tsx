@@ -9,7 +9,7 @@ import { useUpdateOrderMutation } from "~/mutations/order/update-order-mutation"
 import Spinner from "~/components/spinner/spinner";
 export default function OrderPage() {
   const [orders, setOrders] = useState([]);
-  const { data: res } = useGetOrders();
+  const { data: res, isLoading: isGetOrdersLoading } = useGetOrders();
 const { mutateAsync, isLoading } = useUpdateOrderMutation();
   const handleAcceptOrder = (orderId, statusId) => {
     mutateAsync({ id: orderId, data: { statusId } });
@@ -31,7 +31,7 @@ const { mutateAsync, isLoading } = useUpdateOrderMutation();
   };
   return (
     <div className="content-wrapper">
-    {isLoading && <Spinner isLoading={isLoading} />}
+       <Spinner isLoading={isLoading || isGetOrdersLoading} />
       <div className="col-2 mb-3">
         <div className="">
           <label htmlFor="" className="form-label">
