@@ -37,6 +37,8 @@ export default function Profile(props: ProfileProps) {
   useEffect(() => {
     if (res?.data) {
       setAccount({ ...res?.data });
+      console.log(res?.data);
+      
       setImages([{ data_url: res?.data?.image?.url }]);
     }
   }, [res?.data]);
