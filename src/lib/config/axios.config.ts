@@ -3,8 +3,8 @@ import axios from 'axios';
 import { COOKIE_NAME, getCookieConfig } from '../helpers';
 const isProduction = process.env.NODE_ENV === 'production';
 export const axiosConfig = axios.create({
-    // baseURL:  'https://maytinhthunguyen.com/api' 
-    baseURL:  'http://localhost:5000/api' 
+    baseURL:  'https://maytinhthunguyen.com/api' 
+    // baseURL:  'http://localhost:5000/api' 
 
     
 });
