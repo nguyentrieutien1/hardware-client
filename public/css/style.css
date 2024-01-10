@@ -619,7 +619,6 @@ i {
 	position: absolute;
 	right: 18px;
 	top: 9px;
-	content: "3";
 	font-family: "ElegantIcons";
 	font-size: 18px;
 	color: #ffffff;
@@ -861,10 +860,13 @@ i {
 
 .featured__item {
 	margin-bottom: 50px;
+	border: 1px solid rgba(0, 0, 0, 0.151);
+	padding: 2px;
+	border-radius: 5px;
 }
 
 .featured__item:hover .featured__item__pic .featured__item__pic__hover {
-	bottom: 20px;
+	bottom: 10px;
 }
 
 .featured__item__pic {
@@ -877,7 +879,7 @@ i {
 .featured__item__pic__hover {
 	position: absolute;
 	left: 0;
-	bottom: -50px;
+	bottom: -60px;
 	width: 100%;
 	text-align: center;
 	-webkit-transition: all, 0.5s;

@@ -1,7 +1,7 @@
 "use client";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { AppModal } from "~/components/modal/modal";
-import { useGetProducts } from "~/queries";
+import { useCategories, useGetProducts } from "~/queries";
 import ImageUploading from "react-images-uploading";
 import { IProduct } from "~/types";
 import { toastConfig } from "~/lib";
@@ -21,21 +21,24 @@ export default function ProductPage() {
   const [images, setImages] = useState([]);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
   const [productList, setProductList] = useState([]);
-  const [product, setProduct] = useState<IProduct>({
+  const [product, setProduct] = useState<any>({
     name: "",
-    stock: 0,
+    stock: 1,
     price: null,
     description: "",
     id: null,
+    categoriesId: null,
   });
   const { data: res, isLoading: isProductLoading } = useGetProducts();
   const products = res?.data;
 
-
-
-  const { mutateAsync: createProduct, isLoading: isCreateLoading } = useCreateProductMutation();
-  const { mutateAsync: updateProduct, isLoading: isUpdateLoading } = useUpdateProductMutation();
-  const { mutateAsync: deleteProduct, isLoading: isDeleteLoading } = useDeleteProductMutation();
+  const { mutateAsync: createProduct, isLoading: isCreateLoading } =
+    useCreateProductMutation();
+  const { mutateAsync: updateProduct, isLoading: isUpdateLoading } =
+    useUpdateProductMutation();
+  const { mutateAsync: deleteProduct, isLoading: isDeleteLoading } =
+    useDeleteProductMutation();
+  const { data: categories } = useCategories();
 
   const setProductInit = () => {
     setProduct({ name: "", stock: 0, price: null, description: "", id: null });
@@ -45,7 +48,7 @@ export default function ProductPage() {
   };
 
   const onChangeProduct = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     if (name === "price" || name === "stock") {
@@ -59,7 +62,10 @@ export default function ProductPage() {
     setProduct((prev) => {
       return {
         ...prev,
-        [name]: name === "price" || name === "stock" ? +value : value,
+        [name]:
+          name === "price" || name === "stock" || name === "categoriesId"
+            ? +value
+            : value,
       };
     });
   };
@@ -84,7 +90,7 @@ export default function ProductPage() {
           setShow(false);
           setProductInit();
           toastConfig("Tạo sản phẩm thành công !", { status: "success" });
-          setImages([])
+          setImages([]);
         })
         .catch((err) => {
           toastErrorAuthen(err, "Tạo sản phẩm");
@@ -110,15 +116,16 @@ export default function ProductPage() {
         setShowDeleteModal(false);
         toastConfig("Xóa sản phẩm thành công !", { status: "success" });
       });
-    } catch (error) { }
+    } catch (error) {}
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target
-    const product = [...products].filter(product => product?.name?.toLowerCase()?.includes(value?.toLowerCase()))
-    setProductList([...product])
-
-  }
+    const { value } = e.target;
+    const product = [...products].filter((product) =>
+      product?.name?.toLowerCase()?.includes(value?.toLowerCase())
+    );
+    setProductList([...product]);
+  };
   useEffect(() => {
     if (products) {
       setProductList([...products]);
@@ -185,8 +192,36 @@ export default function ProductPage() {
                             value={product?.price}
                           />
                         </div>
+                        <div className="form-group">
+                          <label htmlFor="exampleInputPassword5">
+                            Danh mục
+                          </label>
+                          <div className="mb-3">
+                            <select
+                              className="form-select form-group form-select-sm p-2"
+                              name="categoriesId"
+                              onChange={onChangeProduct}
+                              id="exampleInputPassword5"
+                            >
+                              <option>chọn danh mục</option>
+                              {categories.data?.map((cat) => {
+                                return (
+                                  <option
+                                    selected={product?.categoriesId == cat?.id}
+                                    value={cat?.id}
+                                  >
+                                    {cat?.name}
+                                  </option>
+                                );
+                              })}
+                            </select>
+                          </div>
+                        </div>
                       </div>
                       <div className="col-lg-6 col-sm-12">
+                        <label className="mb-2" htmlFor="">
+                          Hình ảnh
+                        </label>
                         <ImageUploading
                           multiple
                           value={images}
@@ -206,7 +241,7 @@ export default function ProductPage() {
                             // write your building UI
                             <div className="upload__image-wrapper">
                               <button
-                                className="btn btn-primary btn-sm"
+                                className="btn btn-success btn-sm"
                                 type="button"
                                 style={
                                   isDragging ? { color: "red" } : undefined
@@ -301,7 +336,14 @@ export default function ProductPage() {
           onConfirm={() => handleDeleteProduct()}
         />
       )}
-      <Spinner isLoading={isDeleteLoading || isCreateLoading || isUpdateLoading || isProductLoading} />
+      <Spinner
+        isLoading={
+          isDeleteLoading ||
+          isCreateLoading ||
+          isUpdateLoading ||
+          isProductLoading
+        }
+      />
 
       <div className="row content-wrapper">
         <div className="col-12 ">
@@ -311,7 +353,7 @@ export default function ProductPage() {
                 <button
                   onClick={() => setShow(true)}
                   type="button"
-                  className="btn btn-primary"
+                  className="btn btn-success p-2"
                 >
                   + Thêm sản phẩm
                 </button>
@@ -403,6 +445,7 @@ export default function ProductPage() {
                                   price: product?.price,
                                   stock: product?.stock,
                                   id: product?.id,
+                                  categoriesId: product?.categoriesId,
                                 });
                                 setImages(
                                   product?.images.map((image) => {
@@ -413,7 +456,7 @@ export default function ProductPage() {
                                 );
                               }}
                               type="button"
-                              className="btn btn-primary btn-sm m-lg-1"
+                              className="btn btn-success btn-sm m-lg-1"
                             >
                               Cập nhật
                             </button>

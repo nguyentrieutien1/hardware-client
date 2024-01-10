@@ -1,15 +1,16 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LINK, NAME } from "~/lib/constants/routes";
 import Dropdown from "react-bootstrap/Dropdown";
-import { useIsUserLogined } from "~/queries";
+import { useGetProducts, useIsUserLogined } from "~/queries";
 import { COOKIE_NAME, deleteCookieConfig, toastConfig } from "~/lib";
 import { AppModal } from "~/components/modal/modal";
 import Profile from "../profile/profile";
 import { useUpdateAccountMutation } from "~/mutations/account/account-update-mutation";
-import { toastErrorAuthen } from "~/lib/helpers";
+import { getItemFromLocalStorage, toastErrorAuthen } from "~/lib/helpers";
+import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
 interface LinkItem {
   text: string;
   href: string;
@@ -21,6 +22,8 @@ export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const { mutateAsync: updateAccount } = useUpdateAccountMutation();
+  const { data: products, isLoading: productLoading } = useGetProducts();
+  const [cartLocal, setCartLocal] = useState([]);
 
   const navItems: LinkItem[] = [
     { text: NAME.HOME, href: LINK.HOME },
@@ -55,6 +58,26 @@ export default function Header() {
         toastErrorAuthen(err, "Cập nhật tài khoản thất bại");
       });
   };
+  useEffect(() => {
+    if (products?.data) {
+      let carts = getItemFromLocalStorage("cart") || [];
+      carts = carts.map((cart) => {
+        const checkItemIsExist = products?.data.find(
+          (product) => {
+            console.log(carts);
+            console.log(product);
+            
+            return product?.id == cart?.productId
+          }
+        );
+        return {
+          ...cart,
+          product: checkItemIsExist,
+        };
+      });
+      setCartLocal([...carts]);
+    }
+  }, [products?.data, products?.data?.length]);
   return (
     <>
       {show && (
@@ -77,7 +100,7 @@ export default function Header() {
                 <div className="header__top__left">
                   <ul>
                     <li>
-                      <i className="fa fa-envelope" /> hello@colorlib.com
+                    <i className="fa fa-envelope" /> hello@colorlib.com
                     </li>
                     <li>Free Shipping for all Order of $99</li>
                   </ul>
@@ -101,19 +124,19 @@ export default function Header() {
                   </div>
                   <div className="header__top__right__language">
                     <img src="img/language.png" alt="" />
-                    <div>English</div>
+                    <div>Tùy chọn</div>
                     <span className="arrow_carrot-down" />
                     <ul>
                       <li>
-                        <a href="#">Spanis</a>
+                        <a href="#">Tùy chọn 1</a>
                       </li>
                       <li>
-                        <a href="#">English</a>
+                        <a href="#">Tùy chọn 2</a>
                       </li>
                     </ul>
                   </div>
-                  <div className="header__top__right__auth">
-                    <a href="#">
+                  <div className="header__top__right__auth cursor-pointer">
+                    <a onClick={() => router.replace(LINK.LOGIN)}>
                       <i className="fa fa-user" /> Login
                     </a>
                   </div>
@@ -126,12 +149,12 @@ export default function Header() {
           <div className="row">
             <div className="col-lg-3">
               <div className="header__logo">
-                <a href="./index.html">
-                  <img src="img/logo.png" alt="" />
-                </a>
+                <Link href={LINK.HOME}>
+                  <h1>LOGO</h1>
+                </Link>
               </div>
             </div>
-            <div className="col-lg-6">
+            <div className="col-lg-9 justify-content-center text-right">
               <nav className="header__menu">
                 <ul>
                   {navItems.map((item, index) => {
@@ -153,28 +176,7 @@ export default function Header() {
                 </ul>
               </nav>
             </div>
-            <div className="col-lg-3">
-              <div className="header__cart">
-                <ul>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-heart" /> <span>1</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-shopping-bag" /> <span>3</span>
-                    </a>
-                  </li>
-                </ul>
-                <div className="header__cart__price">
-                  item: <span>$150.00</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="humberger__open">
-            <i className="fa fa-bars" />
+            
           </div>
         </div>
       </header>

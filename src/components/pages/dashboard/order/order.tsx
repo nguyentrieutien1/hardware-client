@@ -73,10 +73,10 @@ const { mutateAsync, isLoading } = useUpdateOrderMutation();
                     {orders.map((order) => {
                       return (
                         <tr className="cursor-pointer">
-                          <td>{order?.cart?.product?.name}</td>
+                          <td>{order?.product?.name}</td>
                           <td> {formattedDate(order?.createdAt)}</td>
                           <td>{order?.account?.fullName}</td>
-                          <td> {order?.cart?.quantity}</td>
+                          <td> {order?.quantity}</td>
                           <td>
                             <Tippy
                               trigger="click"
@@ -162,13 +162,13 @@ const { mutateAsync, isLoading } = useUpdateOrderMutation();
                           </td>
                           <td>
                             {currencyFormatterConfig(
-                              order?.cart?.product?.price
+                              order?.product?.price
                             )}
                           </td>
                           <td>
                             {currencyFormatterConfig(
-                              order?.cart?.product?.price *
-                                order?.cart?.quantity
+                              order?.product?.price *
+                                order?.quantity
                             )}
                           </td>
                         </tr>

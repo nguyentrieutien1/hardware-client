@@ -6,11 +6,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
-import "./categories.css"
+import "./slide.css"
 
 // import required modules
 import { EffectCoverflow, Pagination } from 'swiper/modules';
-export default function Categories() {
+export default function Slide() {
     return (
         <div className="container">
           <Swiper
