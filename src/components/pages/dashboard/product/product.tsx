@@ -41,7 +41,7 @@ export default function ProductPage() {
   const { data: categories } = useCategories();
 
   const setProductInit = () => {
-    setProduct({ name: "", stock: 0, price: null, description: "", id: null });
+    setProduct({ name: "", stock: 1, price: null, description: "", id: null });
   };
   const onChangeImages = (imageList) => {
     setImages(imageList);
