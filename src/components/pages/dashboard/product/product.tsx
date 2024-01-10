@@ -106,6 +106,7 @@ export default function ProductPage() {
         setIsUpdate(false);
         setProductInit();
         toastConfig("Cập nhật sản phẩm thành công !", { status: "success" });
+        setImages([])
       });
     }
   };
