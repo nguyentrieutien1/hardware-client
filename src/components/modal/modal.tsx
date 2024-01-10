@@ -20,30 +20,30 @@ export function AppModal(props: AppModalProps) {
           show={modalIsOpen}
           onHide={() => closeModal()}
         >
-          <Modal.Header closeButton>
+          <Modal.Header closeButton={false}>
             <Modal.Title>{title}</Modal.Title>
           </Modal.Header>
           <Modal.Body>{content}</Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => closeModal()}>
+            <Button className="p-2"  variant="secondary" onClick={() => closeModal()}>
               Đóng
             </Button>
-            <Button variant="primary" onClick={() => onConfirm()}>
+            <Button className="p-2"  variant="success" onClick={() => onConfirm()}>
               Xác nhận
             </Button>
           </Modal.Footer>
         </Modal>
       ) : (
-        <Modal backdrop="static" show={modalIsOpen} onHide={() => closeModal()}>
-          <Modal.Header closeButton>
+        <Modal  backdrop="static" show={modalIsOpen} onHide={() => closeModal()}>
+          <Modal.Header closeButton={false}>
             <Modal.Title>{title}</Modal.Title>
           </Modal.Header>
           <Modal.Body>{content}</Modal.Body>
           <Modal.Footer>
-            <Button size="sm" variant="secondary" onClick={() => closeModal()}>
+            <Button className="p-2"  size="sm" variant="secondary" onClick={() => closeModal()}>
               Đóng
             </Button>
-            <Button size="sm" variant="primary" onClick={() => onConfirm()}>
+            <Button className="p-2" size="sm" variant="success" onClick={() => onConfirm()}>
               Xác nhận
             </Button>
           </Modal.Footer>

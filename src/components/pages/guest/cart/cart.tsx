@@ -30,30 +30,49 @@ function CartPage() {
   const { data: products, isLoading: productLoading } = useGetProducts();
   const [productId, setProductId] = useState(undefined);
   const [cartLocal, setCartLocal] = useState([]);
-  const [isShowInfoForm, setIsShowInfoForm] = useState(true);
+  const [isShowInfoForm, setIsShowInfoForm] = useState(false);
   const [orderInfo, setOrderInfo] = useState<any>({
     fullName: "",
+    email: "",
     phone: "",
     address: "",
-    note: "",
-    type: 1,
-    email: "",
+    note: "note...",
+    type: "COD",
   });
+  const parseKey = (name) => {
+    switch (name) {
+      case "fullName":
+        return "Họ và tên";
+      case "email":
+        return "Email";
+      case "phone":
+        return "Số điện thoại";
+      case "address":
+        return "Địa chỉ";
+    }
+  };
   const onUpdateQuantity = (id: number, { quantity }) => {
     let carts = getItemFromLocalStorage("cart") || [];
     const findIndex = carts?.findIndex((cart) => cart?.productId == id);
     const total = carts[findIndex]?.quantity + quantity;
-    if (isLoadingDelelete || isLoadingUpdate || isLoadingOrder) {
-      return;
-    }
     if (total === 0) {
       setShow(true);
       setProductId(id);
     } else {
-      carts[findIndex].quantity = total;
-      cartLocal[findIndex].quantity = total;
+      console.log(carts);
+      console.log(findIndex);
+      carts[findIndex]["quantity"] = total;
+      carts = carts.map((cart) => {
+        const checkItemIsExist = products?.data.find(
+          (product) => product?.id == cart?.productId
+        );
+        return {
+          ...cart,
+          product: checkItemIsExist,
+        };
+      });
       setItemToLocalStorage("cart", carts);
-      setCartLocal([...cartLocal]);
+      setCartLocal([...carts]);
     }
   };
   const onDeleteProduct = (productId) => {
@@ -68,9 +87,19 @@ function CartPage() {
     setShow(false);
   };
   const handleOrder = () => {
-    const order: any = (cart || cartLocal).map((item) => {
+    for (const key in orderInfo) {
+      if (Object.prototype.hasOwnProperty.call(orderInfo, key)) {
+        if (!orderInfo[key]) {
+          toastConfig(`${parseKey(key)} không được trống !`);
+          return;
+        }
+      }
+    }
+    const order: any = (cartLocal).map((item) => {
       return {
         cartId: item.id,
+        quantity: item?.quantity,
+        productId: item?.productId,
         accountId: res?.data?.id,
         ...orderInfo,
       };
@@ -90,22 +119,37 @@ function CartPage() {
       });
   };
   useEffect(() => {
-    let carts = getItemFromLocalStorage("cart") || [];
-    carts = carts.map((cart) => {
-      const checkItemIsExist = products?.data.find(
-        (product) => product?.id == cart?.productId
-      );
-      return {
-        quantity: cart?.quantity,
-        product: checkItemIsExist,
-      };
-    });
-    setCartLocal(carts);
-    setOrderInfo({
-      email: products?.data?.email,
-      fullName: products?.data?.fullName,
-    });
-  }, [products?.data]);
+    if (products?.data) {
+      let carts = getItemFromLocalStorage("cart") || [];
+      carts = carts.map((cart) => {
+        const checkItemIsExist = products?.data.find(
+          (product) => {
+            console.log(carts);
+            console.log(product);
+            
+            return product?.id == cart?.productId
+          }
+        );
+        return {
+          ...cart,
+          product: checkItemIsExist,
+        };
+      });
+      setCartLocal([...carts]);
+    }
+  }, [products?.data, products?.data?.length]);
+  
+  useEffect(() => {
+    if (res?.data) {
+      setOrderInfo({
+        email: res?.data?.email,
+        fullName: res?.data?.fullName,
+        phone: res?.data?.phone,
+        address: res?.data?.address,
+        type: "COD",
+      });
+    }
+  }, [res?.data]);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -128,247 +172,255 @@ function CartPage() {
           content={<p>Bạn có chắc chắn muốn xóa sản phẩm này không ?</p>}
         />
       )}
-      {cartLocal.length > 0 ? <div className="container">
-        <div className="row">
-          <div className="col-lg-12">
-            <div className="shoping__cart__table">
-              <table>
-                <thead>
-                  <tr>
-                    <th className="shoping__product">Sản phẩm</th>
-                    <th>Giá</th>
-                    <th>Số lượng</th>
-                    <th>Tổng Tiền</th>
-                    <th />
-                  </tr>
-                </thead>
-                <tbody>
-                  {(cart || cartLocal).map((item) => {
-                    return (
-                      <tr>
-                        <td className="shoping__cart__item">
-                          <img
-                            width={100}
-                            height={100}
-                            style={{ objectFit: "cover", borderRadius: 4 }}
-                            src={
-                              item?.product?.images?.length > 0
-                                ? item?.product?.images[0].url
-                                : ""
-                            }
-                            alt=""
-                          />
+      {cartLocal.length > 0 ? (
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="shoping__cart__table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th className="shoping__product">Sản phẩm</th>
+                      <th>Giá</th>
+                      <th>Số lượng</th>
+                      <th>Tổng Tiền</th>
+                      <th />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {cartLocal.map((item) => {
+                      return (
+                        <tr>
+                          <td className="shoping__cart__item">
+                            <img
+                              width={100}
+                              height={100}
+                              style={{ objectFit: "cover", borderRadius: 4 }}
+                              src={
+                                item?.product?.images?.length > 0
+                                  ? item?.product?.images[0].url
+                                  : ""
+                              }
+                              alt=""
+                            />
 
-                          <h5>{item?.product?.name}</h5>
-                        </td>
-                        <td className="shoping__cart__price">
-                          {currencyFormatterConfig(item?.product?.price)}
-                        </td>
-                        <td className="shoping__cart__quantity pl-5">
-                          <div className="quantity">
-                            <div className="pro-qty d-flex align-items-center m-auto">
-                              <div
-                                onClick={() =>
-                                  onUpdateQuantity(item?.product?.id, {
-                                    quantity: -1,
-                                  })
-                                }
-                                className=" cursor-pointer"
-                              >
-                                -
-                              </div>
-                              <input type="number" value={item?.quantity} />
-                              <div
-                                className=" cursor-pointer"
-                                onClick={() =>
-                                  onUpdateQuantity(item?.product?.id, {
-                                    quantity: 1,
-                                  })
-                                }
-                              >
-                                +
+                            <h5>{item?.product?.name}</h5>
+                          </td>
+                          <td className="shoping__cart__price">
+                            {currencyFormatterConfig(item?.product?.price)}
+                          </td>
+                          <td className="shoping__cart__quantity pl-5">
+                            <div className="quantity">
+                              <div className="pro-qty d-flex align-items-center m-auto">
+                                <div
+                                  onClick={() =>
+                                    onUpdateQuantity(item?.product?.id, {
+                                      quantity: -1,
+                                    })
+                                  }
+                                  className=" cursor-pointer"
+                                >
+                                  -
+                                </div>
+                                <input type="number" value={item?.quantity} />
+                                <div
+                                  className=" cursor-pointer"
+                                  onClick={() =>
+                                    onUpdateQuantity(item?.product?.id, {
+                                      quantity: 1,
+                                    })
+                                  }
+                                >
+                                  +
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </td>
-                        <td className="shoping__cart__total">
-                          {currencyFormatterConfig(
-                            item?.quantity * item?.product?.price
-                          )}
-                        </td>
-                        <td
-                          onClick={() => onDeleteProduct(item?.product?.id)}
-                          className="shoping__cart__item__close cursor-pointer"
-                        >
-                          X
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-lg-12">
-            <div className="shoping__cart__btns">
-              <a href="#" className="primary-btn cart-btn">
-                CONTINUE SHOPPING
-              </a>
-            </div>
-          </div>
-          <div className="col-lg-6">
-            <div className="shoping__continue">
-              <div className="shoping__discount">
-                <h5>Mã giảm giá</h5>
-                <form action="#">
-                  <input type="text" placeholder="Nhập mã giảm giá" />
-                  <button type="submit" className="site-btn">
-                    Áp dụng
-                  </button>
-                </form>
+                          </td>
+                          <td className="shoping__cart__total">
+                            {currencyFormatterConfig(
+                              item?.quantity * item?.product?.price
+                            )}
+                          </td>
+                          <td
+                            onClick={() => onDeleteProduct(item?.product?.id)}
+                            className="shoping__cart__item__close cursor-pointer"
+                          >
+                            X
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
-          <div className="col-lg-6">
-            <div className="shoping__checkout">
-              <h5>Tổng Tiền</h5>
-              <ul>
-                <li>
-                  Phụ phí <span>{currencyFormatterConfig(0)}</span>
-                </li>
-                <li>
-                  Tổng
-                  <span>
-                    {currencyFormatterConfig(
-                      (cart || cartLocal).reduce((acc, curr) => {
-                        return (acc += curr?.product?.price * curr?.quantity);
-                      }, 0)
-                    )}
-                  </span>
-                </li>
-              </ul>
-              <a
-                onClick={() => setIsShowInfoForm(true)}
-                className="primary-btn text-white cursor-pointer"
-              >
-                Tiến hành đặt hàng
-              </a>
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="shoping__cart__btns">
+                <a href="#" className="primary-btn cart-btn">
+                  CONTINUE SHOPPING
+                </a>
+              </div>
             </div>
-          </div>
-        </div>
-        {isShowInfoForm && (
-          <div className="mt-5 row ">
-            <div className="col-6 ">
-              <h3 className="mb-5">2. Hình thức thanh toán</h3>
-              <div className="d-flex align-items-center">
-                <div className="form-check mr-3">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    value={"COD"}
-                    name="type"
-                    id="ra1"
-                    onChange={handleChange}
-                  />
-                  <label className="form-check-label" htmlFor="ra1">
-                    COD
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="type"
-                    id="ra2"
-                    value={"Chuyển khoản"}
-                    onChange={handleChange}
-                  />
-                  <label className="form-check-label" htmlFor="ra2">
-                    Chuyển khoản
-                  </label>
+            <div className="col-lg-6">
+              <div className="shoping__continue">
+                <div className="shoping__discount">
+                  <h5>Mã giảm giá</h5>
+                  <form action="#">
+                    <input type="text" placeholder="Nhập mã giảm giá" />
+                    <button type="submit" className="site-btn">
+                      Áp dụng
+                    </button>
+                  </form>
                 </div>
               </div>
             </div>
-            <div className="col-6">
-              <h3 className="mb-5">1. Thông tin khách hàng</h3>
-              <form>
-                <div className="form-group mb-4">
-                  <label htmlFor="exampleFormControlInput1">Họ và tên</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="exampleFormControlInput1"
-                    placeholder="Nhập họ và tên"
-                    value={orderInfo?.fullName}
-                    onChange={handleChange}
-                    name="fullName"
-                  />
+            <div className="col-lg-6">
+              <div className="shoping__checkout">
+                <h5>Tổng Tiền</h5>
+                <ul>
+                  <li>
+                    Phụ phí <span>{currencyFormatterConfig(0)}</span>
+                  </li>
+                  <li>
+                    Tổng
+                    <span>
+                      {currencyFormatterConfig(
+                        ( cartLocal).reduce((acc, curr) => {
+                          return (acc += curr?.product?.price * curr?.quantity);
+                        }, 0)
+                      )}
+                    </span>
+                  </li>
+                </ul>
+                <a
+                  onClick={() => setIsShowInfoForm(true)}
+                  className="primary-btn text-white cursor-pointer"
+                >
+                  Tiến hành đặt hàng
+                </a>
+              </div>
+            </div>
+          </div>
+          {isShowInfoForm && (
+            <div className="mt-5 row ">
+              <div className="col-6 ">
+                <h3 className="mb-5">2. Hình thức thanh toán</h3>
+                <div className="d-flex align-items-center">
+                  <div className="form-check mr-3">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      value={"COD"}
+                      name="type"
+                      checked={orderInfo?.type === "COD"}
+                      id="ra1"
+                      onChange={handleChange}
+                    />
+                    <label className="form-check-label" htmlFor="ra1">
+                      COD
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      checked={orderInfo?.type === "Chuyển khoản"}
+                      name="type"
+                      id="ra2"
+                      value={"Chuyển khoản"}
+                      onChange={handleChange}
+                    />
+                    <label className="form-check-label" htmlFor="ra2">
+                      Chuyển khoản
+                    </label>
+                  </div>
                 </div>
-                <div className="form-group mb-4">
-                  <label htmlFor="exampleFormControlInput2">Email</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="exampleFormControlInput2"
-                    placeholder="Nhập email"
-                    value={orderInfo?.email}
-                    onChange={handleChange}
-                    name="email"
-                  />
-                </div>
-                <div className="form-group mb-4">
-                  <label htmlFor="exampleFormControlInput3">
-                    Nhập số điện thoại
-                  </label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    id="exampleFormControlInput3"
-                    placeholder="Nhập số điện thoại"
-                    value={orderInfo?.phone}
-                    onChange={handleChange}
-                    name="phone"
-                  />
-                </div>
-                <div className="form-group mb-4">
-                  <label htmlFor="exampleFormControlInput4">Nhập địa chỉ</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="exampleFormControlInput4"
-                    placeholder="Nhập địa chỉ"
-                    value={orderInfo?.address}
-                    onChange={handleChange}
-                    name="address"
-                  />
-                </div>
+              </div>
+              <div className="col-6">
+                <h3 className="mb-5">1. Thông tin khách hàng</h3>
+                <form>
+                  <div className="form-group mb-4">
+                    <label htmlFor="exampleFormControlInput1">Họ và tên</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="exampleFormControlInput1"
+                      placeholder="Nhập họ và tên"
+                      value={orderInfo?.fullName}
+                      onChange={handleChange}
+                      name="fullName"
+                    />
+                  </div>
+                  <div className="form-group mb-4">
+                    <label htmlFor="exampleFormControlInput2">Email</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="exampleFormControlInput2"
+                      placeholder="Nhập email"
+                      value={orderInfo?.email}
+                      onChange={handleChange}
+                      name="email"
+                    />
+                  </div>
+                  <div className="form-group mb-4">
+                    <label htmlFor="exampleFormControlInput3">
+                      Nhập số điện thoại
+                    </label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      id="exampleFormControlInput3"
+                      placeholder="Nhập số điện thoại"
+                      value={orderInfo?.phone}
+                      onChange={handleChange}
+                      name="phone"
+                    />
+                  </div>
+                  <div className="form-group mb-4">
+                    <label htmlFor="exampleFormControlInput4">
+                      Nhập địa chỉ
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="exampleFormControlInput4"
+                      placeholder="Nhập địa chỉ"
+                      value={orderInfo?.address}
+                      onChange={handleChange}
+                      name="address"
+                    />
+                  </div>
 
-                <div className="form-group mb-4">
-                  <label htmlFor="exampleFormControlTextarea5">
-                    Nhập ghi chú
-                  </label>
-                  <textarea
-                    rows={5}
-                    className="form-control"
-                    id="exampleFormControlTextarea5"
-                    value={orderInfo?.note}
-                    onChange={handleChange}
-                    name="note"
-                  ></textarea>
-                </div>
-              </form>
-              <a
-                onClick={() => handleOrder()}
-                className="primary-btn text-white cursor-pointer float-right"
-              >
-                Gửi đơn hàng
-              </a>
+                  <div className="form-group mb-4">
+                    <label htmlFor="exampleFormControlTextarea5">
+                      Nhập ghi chú
+                    </label>
+                    <textarea
+                      rows={5}
+                      className="form-control"
+                      id="exampleFormControlTextarea5"
+                      value={orderInfo?.note}
+                      onChange={handleChange}
+                      name="note"
+                    ></textarea>
+                  </div>
+                </form>
+                <a
+                  onClick={() => handleOrder()}
+                  className="primary-btn text-white cursor-pointer float-right"
+                >
+                  Gửi đơn hàng
+                </a>
+              </div>
             </div>
-          </div>
-        )}
-      </div> : <h3 className="text-center">Bạn chưa có đơn nào trong giỏ hàng !</h3>}
+          )}
+        </div>
+      ) : (
+        <h3 className="text-center">Bạn chưa có đơn nào trong giỏ hàng !</h3>
+      )}
     </section>
   ) : (
     <Spinner isLoading={productLoading} />

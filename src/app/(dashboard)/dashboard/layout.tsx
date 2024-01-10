@@ -5,7 +5,6 @@ import { useIsUserLogined } from "~/queries";
 import { COOKIE_NAME, getCookieConfig } from "~/lib";
 import { LINK } from "~/lib/constants";
 import "../../../../public/css/dashboard.style.css";
-import Loading from "~/components/loading/loading";
 import "tippy.js/dist/tippy.css";
 import Spinner from "~/components/spinner/spinner";
 export default function DashboardLayout({

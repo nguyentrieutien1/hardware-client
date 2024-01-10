@@ -1,55 +1,44 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useGetProductDetail, useIsUserLogined } from "~/queries";
 import { useParams } from "next/navigation";
 import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
-import { useAddToCartMutation } from "~/mutations";
 import {
   getItemFromLocalStorage,
   setItemToLocalStorage,
-  toastErrorAuthen,
 } from "~/lib/helpers";
 import { toastConfig } from "~/lib";
-import Loading from "~/components/loading/loading";
 import Spinner from "~/components/spinner/spinner";
+import Tippy from "@tippyjs/react";
 export default function ShopDetail() {
   const { id } = useParams();
   const [quantity, setQuantity] = useState(1);
-  const { data: product, isLoading } = useGetProductDetail({ id });
-  const { mutateAsync } = useAddToCartMutation();
-  const { data: res } = useIsUserLogined();
+  const { data: product, isLoading } = useGetProductDetail({ id});
+  console.log(isLoading);
+  
+  const [productData, setProductData] = useState<any>({});
   const onAddToCart = async () => {
-    if (res?.data?.id) {
-      mutateAsync({ productId: +id, quantity, accountId: res?.data.id })
-        .then(() => {
-          toastConfig(`Bạn đã thêm ${name} vào giỏ hàng thành công !`, {
-            status: "success",
-          });
-        })
-        .catch((err) => {
-          toastErrorAuthen(
-            err,
-            `Để mua hàng, trước tiên bạn phải đăng nhập đã `
-          );
-        });
-    } else {
-      const cart = getItemFromLocalStorage("cart") || [];
-      const checkItemIsExist = cart.findIndex((item) => item?.productId == +id);
-      console.log(checkItemIsExist);
+    const cart = getItemFromLocalStorage("cart") || [];
+    const checkItemIsExist = cart.findIndex((item) => item?.productId == +id);
+    console.log(checkItemIsExist);
 
-      if (checkItemIsExist > -1) {
-        cart[checkItemIsExist].quantity =
-          cart[checkItemIsExist].quantity + quantity;
-        console.log(cart[checkItemIsExist]);
-      } else {
-        cart.push({ productId: +id, quantity });
-      }
-      setItemToLocalStorage("cart", cart);
+    if (checkItemIsExist > -1) {
+      cart[checkItemIsExist].quantity =
+        cart[checkItemIsExist].quantity + quantity;
+      console.log(cart[checkItemIsExist]);
+    } else {
+      cart.push({ productId: +id, quantity });
     }
+    setItemToLocalStorage("cart", cart);
     toastConfig(`Bạn đã thêm ${name} vào giỏ hàng thành công !`, {
       status: "success",
     });
   };
+  useEffect(() => {
+    if (product?.data) {
+      setProductData({ ...product?.data });
+    }
+  }, [product?.data]);
   return product ? (
     <section className="product-details spad">
       <div className="container">
@@ -61,8 +50,8 @@ export default function ShopDetail() {
                   className="product__details__pic__item--large"
                   alt="1"
                   src={
-                    product?.data?.images?.length > 0
-                      ? product?.data?.images[0].url
+                    productData?.images?.length > 0
+                      ? productData?.images[0].url
                       : ""
                   }
                   height={400}
@@ -70,22 +59,27 @@ export default function ShopDetail() {
                 />
               </div>
               <div className="product__details__pic__slider owl-carousel">
-                <img
-                  data-imgbigurl="img/product/details/product-details-2.jpg"
-                  alt="2"
-                />
-                <img
-                  data-imgbigurl="img/product/details/product-details-3.jpg"
-                  alt="3"
-                />
-                <img
-                  data-imgbigurl="img/product/details/product-details-5.jpg"
-                  alt="4"
-                />
-                <img
-                  data-imgbigurl="img/product/details/product-details-4.jpg"
-                  alt="5"
-                />
+                {productData?.images?.map((img) => (
+                  <Tippy
+                    allowHTML={true}
+                    content={
+                      <img
+                        style={{ objectFit: "contain", width: '100%', height: '100%' }}
+                        src={img?.url}
+                        alt="5"
+                      />
+                    }
+                  >
+                    <img
+                      className="m-2"
+                      width={50}
+                      height={50}
+                      style={{ objectFit: "cover" }}
+                      src={img?.url}
+                      alt="5"
+                    />
+                  </Tippy>
+                ))}
               </div>
             </div>
           </div>

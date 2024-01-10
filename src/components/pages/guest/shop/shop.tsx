@@ -2,124 +2,94 @@
 import React, { useState } from "react";
 import { useGetProducts } from "~/queries";
 import Loading from "~/components/loading/loading";
-import Categories from "../categories/categories";
 import Product from "../product/product";
+import Categories from "../../categories/categories";
 
 export default function ShopPage() {
   const { data: products, isLoading } = useGetProducts();
   const [hideCategories, setHideCategories] = useState<boolean>(true);
-
   if (isLoading) return <Loading />;
 
   return (
     <>
-      <section className="hero">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-3">
-              <div className="hero__categories">
-                <div
-                  onClick={() => setHideCategories((prev) => !prev)}
-                  className="hero__categories__all"
-                >
-                  <i className="fa fa-bars" />
-                  <span>Thể loại</span>
+      <>
+        <section className="hero-normal container">
+          <div className="">
+            <div className="row">
+                <Categories />
+              <div className="col-lg-9">
+                <div className="hero__search">
+                  <div className="hero__search__form">
+                    <form action="#">
+                      <div className="hero__search__categories">
+                        All Categories
+                        <span className="arrow_carrot-down" />
+                      </div>
+                      <input type="text" placeholder="What do yo u need?" />
+                      <button type="submit" className="site-btn">
+                        SEARCH
+                      </button>
+                    </form>
+                  </div>
+                  <div className="hero__search__phone">
+                    <div className="hero__search__phone__icon">
+                      <i className="fa fa-phone" />
+                    </div>
+                    <div className="hero__search__phone__text">
+                      <h5>+65 11.188.888</h5>
+                      <span>support 24/7 time</span>
+                    </div>
+                  </div>
                 </div>
-                {hideCategories && (
-                  <ul>
-                    <li>
-                      <a href="#">Máy tính</a>
-                    </li>
-                    <li>
-                      <a href="#">Máy tính</a>
-                    </li>
-                    <li>
-                      <a href="#">Máy tính</a>
-                    </li>
-                    <li>
-                      <a href="#">Máy tính</a>
-                    </li>
-                    <li>
-                      <a href="#">Máy tính</a>
-                    </li>
-                    <li>
-                      <a href="#">Máy tính</a>
-                    </li>
-                  </ul>
-                )}
               </div>
             </div>
-            <div className="col-lg-9">
-              <div className="hero__search">
-                <div className="hero__search__form">
-                  <form action="#">
-                    <div className="hero__search__categories">
-                      All Categories
-                      <span className="arrow_carrot-down" />
+          </div>
+        </section>
+        {/* Hero Section End */}
+        {/* Breadcrumb Section Begin */}
+        {/* Breadcrumb Section End */}
+        {/* Product Section Begin */}
+        <section className="product spad container">
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-12 col-md-7">
+                <div className="filter__item">
+                  <div className="row">
+                    <div className="col-lg-4 col-md-5">
+                      <div className="filter__sort">
+                        <span>Sort By</span>
+                        <select>
+                          <option value={0}>Default</option>
+                          <option value={0}>Default</option>
+                        </select>
+                      </div>
                     </div>
-                    <input type="text" placeholder="What do yo u need?" />
-                    <button type="submit" className="site-btn">
-                      SEARCH
-                    </button>
-                  </form>
-                </div>
-                <div className="hero__search__phone">
-                  <div className="hero__search__phone__icon">
-                    <i className="fa fa-phone" />
-                  </div>
-                  <div className="hero__search__phone__text">
-                    <h5>+65 11.188.888</h5>
-                    <span>support 24/7 time</span>
+                    <div className="col-lg-4 col-md-3">
+                      <div className="filter__option">
+                        <span className="icon_grid-2x2" />
+                        <span className="icon_ul" />
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="hero__item set-bg" data-setbg="images/bowl-2.png">
-                <div className="hero__text">
-                  <span>FRUIT FRESH</span>
-                  <h2>
-                    Vegetable <br />
-                    100% Organic
-                  </h2>
-                  <p>Free Pickup and Delivery Available</p>
-                  <a href="#" className="primary-btn">
-                    SHOP NOW
+                <div className="row">
+                  {products?.data?.map((product) => (
+                    <Product product={product} />
+                  ))}
+                </div>
+                <div className="product__pagination">
+                  <a href="#">1</a>
+                  <a href="#">2</a>
+                  <a href="#">3</a>
+                  <a href="#">
+                    <i className="fa fa-long-arrow-right" />
                   </a>
                 </div>
-                <img className="ml-3" src="images/bowl-2.png" width={300} />
               </div>
             </div>
           </div>
-        </div>
-      </section>
-      <Categories />
-      <section className="featured spad">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-12">
-              <div className="section-title">
-                <h2>Tất cả sản phẩm</h2>
-              </div>
-              <div className="featured__controls">
-                <ul>
-                  <li className="active" data-filter="*">
-                    Tất cả
-                  </li>
-                  {/* <li data-filter=".oranges">Oranges</li>
-                  <li data-filter=".fresh-meat">Fresh Meat</li>
-                  <li data-filter=".vegetables">Vegetables</li>
-                  <li data-filter=".fastfood">Fastfood</li> */}
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div className="row featured__filter">
-            {products?.data?.map((product) => (
-              <Product product={product} />
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      </>
     </>
   );
 }

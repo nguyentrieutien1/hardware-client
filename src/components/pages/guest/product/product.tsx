@@ -1,6 +1,5 @@
 import Tippy from "@tippyjs/react";
 import Link from "next/link";
-import { title } from "process";
 import React from "react";
 import { toastConfig } from "~/lib";
 import { LINK } from "~/lib/constants";
@@ -13,7 +12,7 @@ type ProductProps = {
   product: IProduct;
 };
 export default function Product(props: ProductProps) {
-  const { id, images, name, price, description } = props.product;
+  const { id, images, name, price } = props.product;
   const { data: res } = useIsUserLogined();
   const { mutateAsync } = useAddToCartMutation();
   // const onAddToCart = async () => {
@@ -29,13 +28,13 @@ export default function Product(props: ProductProps) {
   //     });
   // };
   return (
-    <div className="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat cursor-pointer">
+    <div className="col-lg-3 col-md-4 col-sm-6 cursor-pointer ">
       <div className="featured__item">
-        <div className="featured__item__pic set-bg">
+        <div className="featured__item__pic  set-bg">
           <Link href={`${LINK.SHOP_DETAIL}/${id}`}>
             <img
-              className="rounded-3"
               src={images.length > 0 && images[0]?.url}
+              style={{objectFit: 'cover', width: '100%', height: '100%'}}
             />
           </Link>
           <ul className="featured__item__pic__hover z-n1">
@@ -80,7 +79,7 @@ export default function Product(props: ProductProps) {
         </div>
         <div className="featured__item__text">
           <h6>
-            <a>{title}</a>
+            <a>{name}</a>
           </h6>
           <h5>{currencyFormatterConfig(price)}</h5>
         </div>

@@ -110,7 +110,7 @@ export default function RegisterPage() {
                     </Link>
                   </div>
                 </div>
-                <div className="login-wrap p-4 p-lg-5">
+                <div className="login-wrap p-4 p-lg-6">
                   <div className="d-flex">
                     <div className="w-100">
                       <h3 className="mb-4">Đăng kí</h3>

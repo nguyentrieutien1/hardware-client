@@ -1,13 +1,12 @@
 "use client";
 import React, { useState } from "react";
-import { useGetProducts } from "~/queries";
+import { useCategories, useGetProducts } from "~/queries";
 import Loading from "~/components/loading/loading";
-import Categories from "../categories/categories";
 import Product from "../product/product";
+import Categories from "../../categories/categories";
 
 export default function ShopPage() {
   const { data: products, isLoading } = useGetProducts();
-  const [hideCategories, setHideCategories] = useState<boolean>(true);
 
   if (isLoading) return <Loading />;
 
@@ -16,39 +15,7 @@ export default function ShopPage() {
       <section className="hero">
         <div className="container">
           <div className="row">
-            <div className="col-lg-3">
-              <div className="hero__categories">
-                <div
-                  onClick={() => setHideCategories((prev) => !prev)}
-                  className="hero__categories__all"
-                >
-                  <i className="fa fa-bars" />
-                  <span>Thể loại</span>
-                </div>
-                {hideCategories && (
-                  <ul>
-                    <li>
-                      <a href="#">Máy tính</a>
-                    </li>
-                    <li>
-                      <a href="#">Máy tính</a>
-                    </li>
-                    <li>
-                      <a href="#">Máy tính</a>
-                    </li>
-                    <li>
-                      <a href="#">Máy tính</a>
-                    </li>
-                    <li>
-                      <a href="#">Máy tính</a>
-                    </li>
-                    <li>
-                      <a href="#">Máy tính</a>
-                    </li>
-                  </ul>
-                )}
-              </div>
-            </div>
+           <Categories />
             <div className="col-lg-9">
               <div className="hero__search">
                 <div className="hero__search__form">
@@ -91,7 +58,6 @@ export default function ShopPage() {
           </div>
         </div>
       </section>
-      <Categories />
       <section className="featured spad">
         <div className="container">
           <div className="row">

@@ -8,6 +8,7 @@ import { COOKIE_NAME, setCookieConfig, toastConfig } from "~/lib";
 import { useAuthLoginMutation } from "~/mutations";
 import { useRouter } from "next/navigation";
 import { toastErrorAuthen } from "~/lib/helpers";
+import "../../../../../public/css/bootstrap.min.css"
 export default function LoginPage() {
   const [loginInfo, setLoginInfo] = useState<IAuthLogin>({
     email: "",
