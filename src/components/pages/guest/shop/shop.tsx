@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useGetProducts } from "~/queries";
 import Loading from "~/components/loading/loading";
 import Product from "../product/product";
-import Categories from "../../categories/categories";
+import Categories from "../categories/categories";
 
 export default function ShopPage() {
   const { data: products, isLoading } = useGetProducts();

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import { CiAlarmOn, CiInboxOut, CiMedicalCross,  } from "react-icons/ci";
+import { CiAlarmOn, CiInboxOut, CiMedicalCross, CiTextAlignLeft, CiTextAlignRight,  } from "react-icons/ci";
 import { LINK } from "~/lib/constants";
 import Image from "next/image";
 import { useIsUserLogined } from "~/queries";
@@ -43,7 +43,13 @@ export default function Sidebar() {
         <li className="nav-item">
           <Link className="nav-link d-flex align-items-center justify-content-between" href={LINK.DASHBOARD_CATEGORIES} prefetch>
             <span className="menu-title">Quản lý danh mục</span>
-            <CiAlarmOn />
+            <CiTextAlignRight />
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link className="nav-link d-flex align-items-center justify-content-between" href={LINK.DASHBOARD_POST} prefetch>
+            <span className="menu-title">Quản lý bài viết</span>
+            <CiTextAlignLeft />
           </Link>
         </li>
       </ul>

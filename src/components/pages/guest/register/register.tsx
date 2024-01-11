@@ -8,6 +8,7 @@ import { toastConfig } from "~/lib";
 import { TOAST_MESSAGE } from "~/lib/constants/routes/toast-message";
 import { useRouter } from "next/navigation";
 import { useAuthRegisterMutation } from "~/mutations";
+import "../../../../../public/css/bootstrap.min.css"
 export default function RegisterPage() {
   const router = useRouter();
 
@@ -167,7 +168,7 @@ export default function RegisterPage() {
                         <div className="mb-3">
                           <select
                             onChange={handleChange}
-                            className="form-select border-1 rounded-pill form-control"
+                            className="form-select border-1 form-control"
                             id="sex"
                             name="sex"
                             value={registerInfo.sex}
