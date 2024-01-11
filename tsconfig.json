@@ -34,7 +34,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/lib/helpers/cookie.ts"
-  ],
+, "src/components/pages/dashboard/post/insertImagePlugin.js"  ],
   "exclude": [
     "node_modules"
   ]

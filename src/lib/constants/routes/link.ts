@@ -9,5 +9,6 @@ export const LINK = {
     DASHBOARD: "/dashboard",
     DASHBOARD_PRODUCT: "/dashboard/product",
     DASHBOARD_ORDER: "/dashboard/order",
-    DASHBOARD_CATEGORIES: "/dashboard/categories"
+    DASHBOARD_CATEGORIES: "/dashboard/categories",
+    DASHBOARD_POST: "/dashboard/post"
 }
