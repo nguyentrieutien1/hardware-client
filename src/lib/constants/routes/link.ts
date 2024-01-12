@@ -3,6 +3,7 @@ export const LINK = {
     CART: '/cart',
     SHOP: '/shop',
     SHOP_DETAIL: '/shop-detail',
+    POST_DETAIL: '/post-detail',
     LOGIN: "/login",
     ORDER: "/order",
     REGISTER:"/register",

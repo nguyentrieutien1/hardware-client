@@ -14,8 +14,6 @@ export default function ShopDetail() {
   const { id } = useParams();
   const [quantity, setQuantity] = useState(1);
   const { data: product, isLoading } = useGetProductDetail({ id});
-  console.log(isLoading);
-  
   const [productData, setProductData] = useState<any>({});
   const onAddToCart = async () => {
     const cart = getItemFromLocalStorage("cart") || [];

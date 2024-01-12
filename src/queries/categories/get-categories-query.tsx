@@ -9,6 +9,7 @@ export const useCategories = () => {
   return useQuery({
     queryKey: constructorGetCategories(),
     queryFn: getCategories,
+    refetchOnWindowFocus: false
 
   });
 };

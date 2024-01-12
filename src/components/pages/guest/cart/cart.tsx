@@ -211,7 +211,7 @@ function CartPage() {
                           </td>
                           <td className="shoping__cart__quantity pl-5">
                             <div className="quantity">
-                              <div className="pro-qty d-flex align-items-center m-auto">
+                              <div className="pro-qty d-flex align-items-center m-auto justify-content-center">
                                 <div
                                   onClick={() =>
                                     onUpdateQuantity(item?.product?.id, {
