@@ -6,7 +6,7 @@ interface AppModalProps {
   closeModal: () => void;
   onConfirm: () => void;
   title: string;
-  content: ReactElement;
+  content: ReactElement | string;
   size?: "sm" | "lg" | "xl";
 }
 export function AppModal(props: AppModalProps) {

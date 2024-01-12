@@ -9,5 +9,6 @@ export const useGetProducts = () => {
   return useQuery({
     queryKey: constructorGetProducts(),
     queryFn: getProducts,
+    refetchOnWindowFocus: false
   });
 };

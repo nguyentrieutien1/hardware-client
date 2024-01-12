@@ -16,9 +16,9 @@ export default function Footer() {
               </a>
             </div>
             <ul>
-              <li>Address: 60-49 Road 11378 New York</li>
-              <li>Phone: +65 11.188.888</li>
-              <li>Email: hello@colorlib.com</li>
+              <li>Địa chỉ: Thăng Bình, Quảng Nam</li>
+              <li>Phone: +84 983787454</li>
+              <li>Email:vanhao.0112@gmail.com</li>
             </ul>
           </div>
         </div>
@@ -100,11 +100,9 @@ export default function Footer() {
             <div className="footer__copyright__text">
               <p>
                 {/* Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. */}
-                Copyright © All rights reserved | This template is made with{" "}
+                Copyright © All rights reserved | This template is made with
                 <i className="fa fa-heart" aria-hidden="true" /> by{" "}
-                <a href="https://colorlib.com" target="_blank">
-                  Colorlib
-                </a>
+                  Trieu Tien Nguyen
                 {/* Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. */}
               </p>
             </div>

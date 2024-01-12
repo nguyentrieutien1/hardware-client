@@ -9,5 +9,6 @@ export const useGetProductDetail = ({id}) => {
   return useQuery({
     queryFn: () => getProductDetail({id}),
     queryKey: constructorGetProductDetail(id),
+    refetchOnWindowFocus: false
   });
 };

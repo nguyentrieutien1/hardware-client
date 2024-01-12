@@ -36,6 +36,8 @@ body {
 	font-family: "Cairo", sans-serif;
 	-webkit-font-smoothing: antialiased;
 	font-smoothing: antialiased;
+	padding: 0;
+	margin: 0 !important;
 }
 
 h1,
@@ -1781,13 +1783,7 @@ i {
 }
 
 .pro-qty {
-	width: 140px;
-	height: 50px;
-	display: inline-block;
-	position: relative;
-	text-align: center;
 	background: #f5f5f5;
-	margin-bottom: 5px;
 }
 
 .pro-qty input {

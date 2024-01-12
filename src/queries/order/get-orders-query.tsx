@@ -9,6 +9,7 @@ export const useGetOrders = () => {
   return useQuery({
     queryKey: constructorGetOrders(),
     queryFn: getOrders,
+    refetchOnWindowFocus: false
 
   });
 };

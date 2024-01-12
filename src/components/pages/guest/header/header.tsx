@@ -92,7 +92,7 @@ export default function Header() {
           title="Hồ sơ"
         />
       )}
-      <header className="header">
+      <header className="header mb-3">
         <div className="header__top">
           <div className="container">
             <div className="row">
@@ -100,9 +100,9 @@ export default function Header() {
                 <div className="header__top__left">
                   <ul>
                     <li>
-                    <i className="fa fa-envelope" /> hello@colorlib.com
+                    <i className="fa fa-envelope" />vanhao.0112@gmail.com
                     </li>
-                    <li>Free Shipping for all Order of $99</li>
+                    <li>Miễn phí vận chuyển</li>
                   </ul>
                 </div>
               </div>

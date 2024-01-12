@@ -1,44 +1,38 @@
 "use client";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { AppModal } from "~/components/modal/modal";
-import { useCategories, useGetProducts } from "~/queries";
-import { toastConfig } from "~/lib";
+import { useGetPosts, useIsUserLogined } from "~/queries";
+import { DOMFormatter, axiosConfig, toastConfig } from "~/lib";
 import { Editor, EditorTools } from "@progress/kendo-react-editor";
-import {
-  useCreateProductMutation,
-  useDeleteProductMutation,
-  useUpdateProductMutation,
-} from "~/mutations";
-import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
-import { toastErrorAuthen } from "~/lib/helpers";
+import ImageUploading from "react-images-uploading";
+import { useCreatePostMutation } from "~/mutations";
+import { formattedDate, toastErrorAuthen } from "~/lib/helpers";
 import Tippy from "@tippyjs/react";
 import Spinner from "~/components/spinner/spinner";
 import "@progress/kendo-theme-default/dist/all.css";
+import { useDeletePostMutation } from "~/mutations/post/delete-post-mutation";
+import { useUpdatePostMutation } from "~/mutations/post/update-post-mutation";
 export default function Post() {
   const [show, setShow] = useState<boolean>(false);
+  const [showUrl, setShowUrl] = useState<boolean>(false);
+  const [url, setUrl] = useState("");
+  const textRef = useRef(null);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
-  const [content, setContent] = useState("");
+  const [post, setPost] = useState<any>({ title: "", content: "" });
   const [images, setImages] = useState([]);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
-  const [productList, setProductList] = useState([]);
-  const [product, setProduct] = useState<any>({
-    name: "",
-    stock: 1,
-    price: null,
-    description: "",
-    id: null,
-    categoriesId: null,
-  });
-  const { data: res, isLoading: isProductLoading } = useGetProducts();
-  const products = res?.data;
-
-  const { mutateAsync: createProduct, isLoading: isCreateLoading } =
-    useCreateProductMutation();
-  const { mutateAsync: updateProduct, isLoading: isUpdateLoading } =
-    useUpdateProductMutation();
-  const { mutateAsync: deleteProduct, isLoading: isDeleteLoading } =
-    useDeleteProductMutation();
-  const { data: categories } = useCategories();
+  const [postList, setPostList] = useState([]);
+  const [postId, setPostId] = useState();
+  const [selectedFile, setSelectedFile] = useState(null);
+  const { data: res, isLoading: isPostLoading } = useGetPosts();
+  const posts = res?.data;
+  const { mutateAsync: createPost, isLoading: isCreatePostLoading } =
+    useCreatePostMutation();
+  const { mutateAsync: updatePost, isLoading: isUpdateLoading } =
+    useUpdatePostMutation();
+  const { mutateAsync: deletePost, isLoading: isDeleteLoading } =
+    useDeletePostMutation();
+  const { data: account } = useIsUserLogined();
   const {
     Bold,
     Italic,
@@ -57,60 +51,33 @@ export default function Post() {
     InsertImage,
   } = EditorTools;
 
-  const setProductInit = () => {
-    setProduct({ name: "", stock: 1, price: null, description: "", id: null });
+  const setPostInit = () => {
+    setPost({ title: "", content: "" });
   };
   const onChangeImages = (imageList) => {
     setImages(imageList);
   };
   useEffect(() => {
     const siblingElements: any = document.querySelector(".k-editor-content");
-
-    // Lặp qua từng thẻ đứng liền kề và xóa background-image
-    siblingElements.nextElementSibling.style.backgroundImage = "none";
-  }, []);
-  const onChangeProduct = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    if (name === "price" || name === "stock") {
-      if (value.length > 9) {
-        toastConfig(
-          `Vui lòng nhập đúng số ${name === "price" ? "tiền" : "lượng"}`
-        );
-        return;
-      }
+    if (siblingElements) {
+      siblingElements.nextElementSibling.style.backgroundImage = "none";
     }
-    setProduct((prev) => {
-      return {
-        ...prev,
-        [name]:
-          name === "price" || name === "stock" || name === "categoriesId"
-            ? +value
-            : value,
-      };
-    });
-  };
-  const handleOnSubmit = () => {
-    for (const key in product) {
-      if (Object.prototype.hasOwnProperty.call(product, key)) {
-        if (!product[key] && key !== "id") {
-          toastConfig(`Các trường phải đảm bảo không được trống.`);
+  });
+
+  const handleCreatePost = () => {
+    for (const key in post) {
+      if (Object.prototype.hasOwnProperty.call(post, key)) {
+        if (!post[key]) {
+          toastConfig(`Các trường phải đảm bảo không được trống !`);
           return;
         }
       }
     }
     if (!isUpdate) {
-      delete product.id;
-      createProduct({
-        ...product,
-        images: images.map((image) => {
-          return { url: image.data_url };
-        }),
-      })
+      createPost({ ...post, accountId: account?.data?.id, images })
         .then((res) => {
           setShow(false);
-          setProductInit();
+          setPostInit();
           toastConfig("Tạo bài viết thành công !", { status: "success" });
           setImages([]);
         })
@@ -118,204 +85,155 @@ export default function Post() {
           toastErrorAuthen(err, "Tạo bài viết");
         });
     } else {
-      updateProduct({
-        ...product,
-        images: images.map((image) => {
-          return { url: image.data_url };
-        }),
+      updatePost({
+        id: postId,
+        data: {
+          ...post,
+          images: images.map((image) => {
+            return { url: image.data_url };
+          }),
+        },
       }).then(() => {
         setShow(false);
         setIsUpdate(false);
-        setProductInit();
+        setPostInit();
         toastConfig("Cập nhật bài viết thành công !", { status: "success" });
         setImages([]);
       });
     }
   };
-  const handleDeleteProduct = () => {
+  const handleDeletePost = () => {
     try {
-      deleteProduct({ id: product.id }).then(() => {
-        setProductInit();
+      deletePost({ id: postId }).then(() => {
+        setPostInit();
         setShowDeleteModal(false);
+        setPostId(null);
         toastConfig("Xóa bài viết thành công !", { status: "success" });
       });
     } catch (error) {}
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    const product = [...products].filter((product) =>
-      product?.name?.toLowerCase()?.includes(value?.toLowerCase())
-    );
-    setProductList([...product]);
-  };
   useEffect(() => {
-    if (products) {
-      setProductList([...products]);
+    if (posts) {
+      setPostList([...posts]);
     }
-  }, [products?.length, products]);
+  }, [posts?.length, posts]);
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const handleCopy = () => {
+    if (textRef.current) {
+      const textToCopy = textRef.current.textContent;
+      navigator.clipboard
+        .writeText(textToCopy)
+        .then(() => {
+          toastConfig("Sao chép thành công", { status: "success" });
+        })
+        .catch((error) => {
+          console.error("Failed to copy text to clipboard:", error);
+        });
+    }
+  };
+  const handleUpload = () => {
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append("upload", selectedFile);
+      axiosConfig
+        .post("/upload", formData)
+        .then((res) => res.data)
+        .then((result) => {
+          setUrl(result);
+          setShowUrl(true);
+        })
+        .catch(() => {
+          toastConfig("Lỗi file, vui lòng chọn file ảnh khác !", {
+            status: "error",
+          });
+        });
+    }
+  };
 
   return (
-    <>
-      <div className="col-12">
-        <div className="row content-wrapper">
-          <div className="col-12 ">
-            <div className="row mb-2 justify-content-between d-flex ">
-              <div className="col-2 ">
-                <div className="d-grid gap-2">
-                  <button
-                    onClick={() => setShow(true)}
-                    type="button"
-                    className="btn btn-success p-2"
-                  >
-                    + Thêm bài viết
-                  </button>
-                </div>
-              </div>
-              <div className="col-5">
-                <input
-                  type="text"
-                  className="form-control"
-                  onChange={handleChange}
-                  aria-describedby="helpId"
-                  placeholder="Tìm kiếm bài viết theo tên"
-                />
-              </div>
+    <div className="content-wrapper">
+      {showUrl && (
+        <AppModal
+          closeModal={() => setShowUrl(false)}
+          content={
+            <div>
+              <div ref={textRef}>{url}</div>
+              <a
+                onClick={() => handleCopy()}
+                className="btn btn-success btn-md mt-4"
+                href="#"
+                role="button"
+              >
+                Sao chép nội dung
+              </a>
             </div>
-            <div className="card">
-              <div className="card-body">
-                <h4 className="card-title">Danh sách bài viết</h4>
-                <div className="table-responsive">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th> Tiêu đề </th>
-                        <th> Ảnh </th>
-                        <th> Nội dung </th>
-                        <th> Ngày tạo </th>
-                        <th> Ngày cập nhật </th>
-                        <th>Xóa/Cập nhật</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {productList?.map((product) => {
-                        return (
-                          <tr>
-                            <td>
-                              <img
-                                src={
-                                  product?.images?.length > 0 &&
-                                  product?.images[0]?.url
-                                }
-                                className="me-1 rounded"
-                                alt="image"
-                              />
-                            </td>
-                            <td>{product?.name}</td>
-                            <td className="w-25 cursor-pointer">
-                              <Tippy
-                                allowHTML={true}
-                                content={<div>{product?.description}</div>}
-                                arrow={true}
-                                placement="right"
-                              >
-                                <div
-                                  style={{
-                                    width: "200px",
-                                    whiteSpace: "break-spaces",
-                                  }}
-                                >
-                                  {product?.description?.slice(0, 20)}...
-                                </div>
-                              </Tippy>
-                            </td>
-                            <td>{product?.stock} </td>
-                            <td>{currencyFormatterConfig(product?.price)}</td>
-                            <td>
-                              <button
-                                onClick={() => {
-                                  setShowDeleteModal(true);
-                                  setProduct({
-                                    id: product?.id,
-                                    description: "",
-                                    name: "",
-                                    price: null,
-                                    stock: null,
-                                  });
-                                }}
-                                type="button"
-                                className="btn btn-danger btn-sm"
-                              >
-                                Xóa
-                              </button>
-                              <button
-                                onClick={() => {
-                                  setIsUpdate(true);
-                                  setShow(true);
-                                  setProduct({
-                                    description: product?.description,
-                                    name: product?.name,
-                                    price: product?.price,
-                                    stock: product?.stock,
-                                    id: product?.id,
-                                    categoriesId: product?.categoriesId,
-                                  });
-                                  setImages(
-                                    product?.images.map((image) => {
-                                      return {
-                                        data_url: image.url,
-                                      };
-                                    })
-                                  );
-                                }}
-                                type="button"
-                                className="btn btn-success btn-sm m-lg-1"
-                              >
-                                Cập nhật
-                              </button>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+          }
+          onConfirm={() => {
+            setShowUrl(false);
+            setSelectedFile(null);
+          }}
+          modalIsOpen={showUrl}
+          title="Đây là đường dẫn ảnh"
+        />
+      )}
+      {show ? (
         <div className="card">
           <div className="card-body">
             <form className="forms-sample">
               <div className="row">
-                <div className="form-group col-lg-6 col-sm-6">
+                <div className="form-group col-lg-4 col-sm-6">
                   <label htmlFor="exampleInputName1">Tiêu đề</label>
                   <input
-                    onChange={onChangeProduct}
+                    onChange={(event) => {
+                      setPost((prev) => {
+                        return {
+                          ...prev,
+                          title: event.target.value,
+                        };
+                      });
+                    }}
                     type="text"
                     className="form-control"
                     id="exampleInputName1"
                     placeholder="Tiêu đề"
                     name="title"
-                    value={product?.name}
+                    value={post.title}
                   />
                 </div>
-                <div className="col-lg-12 col-sm-12">
+                <div className="col-4">
                   <div className="">
-                    <label htmlFor="exampleTextarea1">Mô tả bài viết</label>
-                    <Editor
-                      tools={[
-                        [Bold, Italic, Underline],
-                        [Undo, Redo],
-                        [InsertImage],
-                      ]}
-                      defaultContent={content}
-                      contentStyle={{ height: 430, width: "100%" }}
+                    <label
+                      htmlFor="upload"
+                      className="form-label d-block cursor-pointer"
+                    >
+                     Nhấn vào đây để lấy đường dẫn ảnh
+                    </label>
+                    <input
+                      onChange={handleFileChange}
+                      type="file"
+                      aria-describedby="helpId"
+                      placeholder=""
+                      id="upload"
+                      className="d-block my-2 d-none"
                     />
+                    {selectedFile && (
+                      <a
+                        onClick={handleUpload}
+                        className="btn btn-success btn-md"
+                        href="#"
+                        role="button"
+                      >
+                        Lấy đường dẫn
+                      </a>
+                    )}
                   </div>
                 </div>
-
-                {/* <div className="col-lg-6 col-sm-12">
+                <div className="col-lg-4 col-sm-12">
                   <label className="mb-2" htmlFor="">
                     Hình ảnh
                   </label>
@@ -350,15 +268,17 @@ export default function Post() {
                           Nhấn chọn hoặc kéo thả tại đây
                         </button>
                         &nbsp;
-                        <button
-                          className="btn btn-danger btn-sm"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            onImageRemoveAll();
-                          }}
-                        >
-                          Xóa tất cả cá ảnh
-                        </button>
+                        {images.length > 0 && (
+                          <button
+                            className="btn btn-danger btn-sm"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              onImageRemoveAll();
+                            }}
+                          >
+                            Xóa tất cả cá ảnh
+                          </button>
+                        )}
                         <div className="my-2 d-flex align-items-center row">
                           {imageList.map((image, index) => (
                             <div
@@ -398,29 +318,197 @@ export default function Post() {
                       </div>
                     )}
                   </ImageUploading>
-                </div> */}
+                </div>
+                <div className="col-lg-12 col-sm-12">
+                  <div className="">
+                    <label htmlFor="exampleTextarea1">Mô tả bài viết</label>
+                    <Editor
+                      tools={[
+                        [Bold, Italic, Underline],
+                        [Undo, Redo],
+                        [InsertImage],
+                      ]}
+                      defaultContent={post.content}
+                      onChange={(event) => {
+                        setPost((prev) => {
+                          return {
+                            ...prev,
+                            content: event.html,
+                          };
+                        });
+                      }}
+                      value={post.content}
+                      contentStyle={{ height: 430, width: "100%" }}
+                    />
+                  </div>
+                </div>
               </div>
             </form>
+            <div className="d-flex justify-content-end">
+              <a
+                onClick={() => {
+                  setIsUpdate(false);
+                  setShow(false);
+                  setPostInit();
+                  setImages([]);
+                }}
+                className="btn btn-danger btn-md mt-2 align-items"
+                href="#"
+                role="button"
+              >
+                {"Đóng"}
+              </a>
+              <a
+                onClick={() => handleCreatePost()}
+                className="btn btn-success btn-md mt-2 align-items mx-2"
+                href="#"
+                role="button"
+              >
+                {isUpdate ? "Cập nhật bài viết" : "Tạo bài viết"}
+              </a>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="col-12">
+          <div className="row">
+            <div className="col-12 ">
+              <div className="row mb-2 justify-content-between d-flex ">
+                <div className="col-2 ">
+                  <div className="d-grid gap-2">
+                    <button
+                      onClick={() => setShow(true)}
+                      type="button"
+                      className="btn btn-success p-2"
+                    >
+                      + Thêm bài viết
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="card">
+                <div className="card-body">
+                  <h4 className="card-title">Danh sách bài viết</h4>
+                  <div className="table-responsive">
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th> Ảnh </th>
+                          <th> Người tạo </th>
+                          <th> Tiêu đề </th>
+                          <th> Nội dung </th>
+                          <th> Ngày tạo </th>
+                          <th>Xóa/Cập nhật</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {postList?.map((post) => {
+                          return (
+                            <tr>
+                              <td>
+                                <img
+                                  src={
+                                    post?.images?.length > 0 &&
+                                    post?.images[0]?.url
+                                  }
+                                  className="me-1 rounded"
+                                  alt=""
+                                />
+                              </td>
+                              <td>{post?.account?.fullName}</td>
+                              <td>{post?.title.slice(0, 10)}...</td>
+                              <td className="cursor-pointer">
+                                <Tippy
+                                  placement="right"
+                                  className="bg-light"
+                                  trigger="click"
+                                  maxWidth={500}
+                                  allowHTML={true}
+                                  arrow={false}
+                                  content={
+                                    <div
+                                      dangerouslySetInnerHTML={{
+                                        __html: DOMFormatter(post?.content),
+                                      }}
+                                    ></div>
+                                  }
+                                >
+                                  <div
+                                  >
+                                    <button
+                                      type="button"
+                                      className="btn btn-success btn-md"
+                                    >
+                                      Nhấp vào đây để xem chi tiết
+                                    </button>
+                                    
+                                  </div>
+                                </Tippy>
+                              </td>
+                              <td>{formattedDate(post?.createdAt)}</td>
+                              <td>
+                                <button
+                                  onClick={() => {
+                                    setShowDeleteModal(true);
+                                    setPostId(post?.id);
+                                  }}
+                                  type="button"
+                                  className="btn btn-danger btn-sm"
+                                >
+                                  Xóa
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    setIsUpdate(true);
+                                    setShow(true);
+                                    setPost({
+                                      content: post?.content,
+                                      title: post?.title,
+                                    });
+                                    setPostId(post?.id);
+                                    setImages(
+                                      post?.images.map((image) => {
+                                        return {
+                                          data_url: image.url,
+                                        };
+                                      })
+                                    );
+                                  }}
+                                  type="button"
+                                  className="btn btn-success btn-sm m-lg-1"
+                                >
+                                  Cập nhật
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {showDeleteModal && (
         <AppModal
           title="Xóa bài viết"
           content={<p>Bạn có muốn xóa bài viết này không ?</p>}
           closeModal={() => setShowDeleteModal(false)}
           modalIsOpen={showDeleteModal}
-          onConfirm={() => handleDeleteProduct()}
+          onConfirm={() => handleDeletePost()}
         />
       )}
       <Spinner
         isLoading={
           isDeleteLoading ||
-          isCreateLoading ||
+          isCreatePostLoading ||
           isUpdateLoading ||
-          isProductLoading
+          isPostLoading
         }
       />
-    </>
+    </div>
   );
 }

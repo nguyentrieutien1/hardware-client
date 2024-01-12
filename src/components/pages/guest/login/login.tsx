@@ -156,7 +156,7 @@ export default function LoginPage() {
                     </button>
                   </div>
                   <div className="form-group d-md-flex">
-                    <div className="w-50 text-md-right">
+                    <div className="text-md-center">
                       <a href="#">Quên mật khẩu ?</a>
                     </div>
                   </div>

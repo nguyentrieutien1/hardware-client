@@ -5412,6 +5412,7 @@ textarea.form-control.is-invalid {
   line-height: 1;
   color: #343a40;
   text-align: center;
+  padding: 10px 15px;
   text-decoration: none;
   vertical-align: middle;
   cursor: pointer;

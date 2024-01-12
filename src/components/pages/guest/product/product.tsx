@@ -13,8 +13,6 @@ type ProductProps = {
 };
 export default function Product(props: ProductProps) {
   const { id, images, name, price } = props.product;
-  const { data: res } = useIsUserLogined();
-  const { mutateAsync } = useAddToCartMutation();
   // const onAddToCart = async () => {
   //   mutateAsync({ productId: id, quantity: 1, accountId: res?.data.id })
   //     .then(() => {

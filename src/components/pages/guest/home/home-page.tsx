@@ -4,6 +4,9 @@ import { useCategories, useGetProducts } from "~/queries";
 import Loading from "~/components/loading/loading";
 import Product from "../product/product";
 import Categories from "../categories/categories";
+import Link from "next/link";
+import { LINK } from "~/lib/constants";
+import Post from "../post/post";
 
 export default function ShopPage() {
   const { data: products, isLoading } = useGetProducts();
@@ -15,7 +18,7 @@ export default function ShopPage() {
       <section className="hero">
         <div className="container">
           <div className="row">
-           <Categories />
+            <Categories />
             <div className="col-lg-9">
               <div className="hero__search">
                 <div className="hero__search__form">
@@ -35,24 +38,28 @@ export default function ShopPage() {
                     <i className="fa fa-phone" />
                   </div>
                   <div className="hero__search__phone__text">
-                    <h5>+65 11.188.888</h5>
-                    <span>support 24/7 time</span>
+                    <h5>+84 983787454</h5>
+                    <span>Hỗ trợ 24/7</span>
                   </div>
                 </div>
               </div>
               <div className="hero__item set-bg" data-setbg="images/bowl-2.png">
                 <div className="hero__text">
-                  <span>FRUIT FRESH</span>
+                  <span>Cửa hàng Chuyên mua bán và sửa chữa phần cứng</span>
                   <h2>
-                    Vegetable <br />
-                    100% Organic
+                    dịch vụ tốt <br />
+                    nhất
                   </h2>
-                  <p>Free Pickup and Delivery Available</p>
-                  <a href="#" className="primary-btn">
-                    SHOP NOW
-                  </a>
+                  <p>cho thiết bị của bạn!</p>
+                  <Link href={LINK.SHOP} className="primary-btn">
+                    Mua ngay
+                  </Link>
                 </div>
-                <img className="ml-3" src="images/bowl-2.png" width={300} />
+                <img
+                  className="ml-3"
+                  src="https://previews.123rf.com/images/trodler/trodler1701/trodler170100003/72181166-pc-hardware-components-isolated-on-white-3d-rendering.jpg"
+                  width={300}
+                />
               </div>
             </div>
           </div>
@@ -67,9 +74,6 @@ export default function ShopPage() {
               </div>
               <div className="featured__controls">
                 <ul>
-                  <li className="active" data-filter="*">
-                    Tất cả
-                  </li>
                   {/* <li data-filter=".oranges">Oranges</li>
                   <li data-filter=".fresh-meat">Fresh Meat</li>
                   <li data-filter=".vegetables">Vegetables</li>
@@ -80,10 +84,22 @@ export default function ShopPage() {
           </div>
 
           <div className="row featured__filter">
-            {products?.data?.map((product) => (
-              <Product product={product} />
-            ))}
+            {products?.data?.length > 0 ? (
+              products?.data?.map((product) => <Product product={product} />)
+            ) : (
+              <div className="text-center  col-12">
+                <h3>Hiện tại cửa hàng chưa có sản phẩm nào</h3>
+              </div>
+            )}
           </div>
+          <div className="row">
+            <div className="col-12">
+              <div className="section-title">
+                <h2>Bài viết gần đây</h2>
+              </div>
+            </div>
+          </div>
+          <Post />
         </div>
       </section>
     </>
