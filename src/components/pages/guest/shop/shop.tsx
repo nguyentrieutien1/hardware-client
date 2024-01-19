@@ -55,7 +55,7 @@ export default function ShopPage() {
               <div className="col-lg-12 col-md-7">
                 <div className="filter__item">
                   <div className="row">
-                    <div className="col-lg-4 col-md-5">
+                    {/* <div className="col-lg-4 col-md-5">
                       <div className="filter__sort">
                         <span>Sort By</span>
                         <select>
@@ -63,7 +63,7 @@ export default function ShopPage() {
                           <option value={0}>Default</option>
                         </select>
                       </div>
-                    </div>
+                    </div> */}
                     <div className="col-lg-4 col-md-3">
                       <div className="filter__option">
                         <span className="icon_grid-2x2" />

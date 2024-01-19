@@ -13,7 +13,7 @@ import Tippy from "@tippyjs/react";
 export default function ShopDetail() {
   const { id } = useParams();
   const [quantity, setQuantity] = useState(1);
-  const { data: product, isLoading } = useGetProductDetail({ id});
+  const { data: product, isLoading } = useGetProductDetail({ id });
   const [productData, setProductData] = useState<any>({});
   const onAddToCart = async () => {
     const cart = getItemFromLocalStorage("cart") || [];
@@ -96,11 +96,15 @@ export default function ShopDetail() {
                 {currencyFormatterConfig(product?.data?.price)}
               </div>
               <p>{product?.data?.description}</p>
-              <div className="product__details__quantity">
-                <div className="quantity">
-                  <div className="pro-qty">
+              <div className="product__details__quantity align-items-center">
+                <div className="quantity d-flex align-items-center">
+                  <span>
+                    Số lượng: </span>
+                  <div className="pro-qty  p-2 " >
                     <input
                       type="number"
+
+                      className="bg-transparent"
                       value={quantity}
                       onChange={(e) => {
                         if (+e.target.value < 1) {
@@ -111,42 +115,24 @@ export default function ShopDetail() {
                     />
                   </div>
                 </div>
+                <a
+                  onClick={() => onAddToCart()}
+                  className="primary-btn text-white cursor-pointer"
+                >
+
+                  Thêm vào giỏ hàng
+                </a>
               </div>
-              <a
-                onClick={() => onAddToCart()}
-                className="primary-btn text-white cursor-pointer"
-              >
-                ADD TO CARD
-              </a>
+
               <ul>
                 <li>
-                  <b>Availability</b> <span>In Stock</span>
-                </li>
-                <li>
-                  <b>Shipping</b>
+                  <b>Thời gian vận chuyển</b>{"  "}
                   <span>
-                    01 day shipping. <samp>Free pickup today</samp>
+                    khoảng 01 ngày. <samp>Free pickup today</samp>
                   </span>
                 </li>
                 <li>
-                  <b>Weight</b> <span>0.5 kg</span>
-                </li>
-                <li>
-                  <b>Share on</b>
-                  <div className="share">
-                    <a>
-                      <i className="fa fa-facebook" />
-                    </a>
-                    <a>
-                      <i className="fa fa-twitter" />
-                    </a>
-                    <a>
-                      <i className="fa fa-instagram" />
-                    </a>
-                    <a>
-                      <i className="fa fa-pinterest" />
-                    </a>
-                  </div>
+                  <b>Nặng</b> <span>0.5 kg</span>
                 </li>
               </ul>
             </div>
@@ -155,45 +141,19 @@ export default function ShopDetail() {
             <div className="product__details__tab">
               <ul className="nav nav-tabs" role="tablist">
                 <li className="nav-item">
-                  <a
-                    className="nav-link active"
+                  <p
                     data-toggle="tab"
-                    href="#tabs-1"
-                    role="tab"
-                    aria-selected="true"
                   >
-                    Description
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a
-                    className="nav-link"
-                    data-toggle="tab"
-                    href="#tabs-2"
-                    role="tab"
-                    aria-selected="false"
-                  >
-                    Information
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a
-                    className="nav-link"
-                    data-toggle="tab"
-                    href="#tabs-3"
-                    role="tab"
-                    aria-selected="false"
-                  >
-                    Reviews <span>(1)</span>
-                  </a>
+                    Thông tin
+                  </p>
                 </li>
               </ul>
               <div className="tab-content">
                 <div className="tab-pane active" id="tabs-1" role="tabpanel">
                   <div className="product__details__tab__desc">
-                    <h6>Products Infomation</h6>
+                    <h6>Thông tin về sản phẩm</h6>
                     <p>
-                     {productData?.description}
+                      {productData?.description}
                     </p>
                   </div>
                 </div>
