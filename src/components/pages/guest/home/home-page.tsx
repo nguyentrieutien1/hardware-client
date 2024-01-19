@@ -45,7 +45,7 @@ export default function ShopPage() {
               </div>
               <div className="hero__item set-bg" data-setbg="images/bowl-2.png">
                 <div className="hero__text">
-                  <span>Cửa hàng Chuyên mua bán và sửa chữa phần cứng</span>
+                  <span>Chuyên mua bán và sửa chữa phần cứng</span>
                   <h2>
                     dịch vụ tốt <br />
                     nhất
@@ -87,7 +87,7 @@ export default function ShopPage() {
             {products?.data?.length > 0 ? (
               products?.data?.map((product) => <Product product={product} />)
             ) : (
-              <div className="text-center  col-12">
+              <div className="text-center  col-12 mb-5">
                 <h3>Hiện tại cửa hàng chưa có sản phẩm nào</h3>
               </div>
             )}
