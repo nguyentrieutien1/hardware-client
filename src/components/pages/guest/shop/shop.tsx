@@ -16,7 +16,7 @@ export default function ShopPage() {
         <section className="hero-normal container">
           <div className="">
             <div className="row">
-                <Categories />
+              <Categories />
               <div className="col-lg-9">
                 <div className="hero__search">
                   <div className="hero__search__form">
@@ -73,18 +73,19 @@ export default function ShopPage() {
                   </div>
                 </div>
                 <div className="row">
-                  {products?.data?.map((product) => (
+                  {products?.data?.length > 0 ?products?.data?.map((product) => (
                     <Product product={product} />
-                  ))}
+                  )) : <h3 className="col-12 text-center">Hiện tại cửa hàng chưa có sản phẩm nào !</h3>}
                 </div>
-                <div className="product__pagination">
+                {products?.data?.length > 0 && <div className="product__pagination">
                   <a href="#">1</a>
                   <a href="#">2</a>
                   <a href="#">3</a>
                   <a href="#">
                     <i className="fa fa-long-arrow-right" />
                   </a>
-                </div>
+                </div>}
+
               </div>
             </div>
           </div>

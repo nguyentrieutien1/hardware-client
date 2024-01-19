@@ -11,6 +11,7 @@ import Profile from "../profile/profile";
 import { useUpdateAccountMutation } from "~/mutations/account/account-update-mutation";
 import { getItemFromLocalStorage, toastErrorAuthen } from "~/lib/helpers";
 import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
+import Image from "next/image";
 interface LinkItem {
   text: string;
   href: string;
@@ -24,6 +25,7 @@ export default function Header() {
   const { mutateAsync: updateAccount } = useUpdateAccountMutation();
   const { data: products, isLoading: productLoading } = useGetProducts();
   const [cartLocal, setCartLocal] = useState([]);
+  const isProduction = process.env.NODE_ENV === 'production';
 
   const navItems: LinkItem[] = [
     { text: NAME.HOME, href: LINK.HOME },
@@ -150,7 +152,7 @@ export default function Header() {
             <div className="col-lg-3">
               <div className="header__logo">
                 <Link href={LINK.HOME}>
-                  <h1>LOGO</h1>
+                  <Image src={`${isProduction ? 'https://maytinhthunguyen.com': 'http://localhost:5000'}/api/upload/1705643045785-625737817.png`} alt="logo" width={100} height={100} style={{objectFit: "contain"}}/>
                 </Link>
               </div>
             </div>
