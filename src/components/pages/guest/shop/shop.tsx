@@ -1,22 +1,48 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useGetProducts } from "~/queries";
-import Loading from "~/components/loading/loading";
 import Product from "../product/product";
 import Categories from "../categories/categories";
+import Pagination from 'react-bootstrap/Pagination';
 
 export default function ShopPage() {
-  const { data: products, isLoading } = useGetProducts();
-  const [hideCategories, setHideCategories] = useState<boolean>(true);
-  if (isLoading) return <Loading />;
+  const { data: products } = useGetProducts();
+  const [productList, setProductList] = useState([])
+  const [active, setActive] = useState(1)
+  const step = 8;
+  let items = [];
+  for (let number = 1; number <= (productList?.length / step) + 1; number++) {
+    items.push(
+      <Pagination.Item defaultValue={active} onClick={() => handleJump(number)} activeLabel="" key={number} active={number === active}>
+        {number}
+      </Pagination.Item>,
+    );
+  }
 
+  const handleJump = number => {
+    setActive(number)
+  }
+
+
+  const setFilterByCategory = id => {
+    const filterProducts = [...products.data].filter(product => {
+      return product.categoriesId == id;
+    })
+    setProductList([...filterProducts])
+    setActive(1)
+  }
+  useEffect(() => {
+    if (products?.data) {
+      setProductList(products?.data)
+    }
+  }, [products?.data])
   return (
     <>
       <>
         <section className="hero-normal container">
           <div className="">
             <div className="row">
-              <Categories />
+              <Categories setFilterByCategory={setFilterByCategory} />
               <div className="col-lg-9">
                 <div className="hero__search">
                   <div className="hero__search__form">
@@ -73,17 +99,12 @@ export default function ShopPage() {
                   </div>
                 </div>
                 <div className="row">
-                  {products?.data?.length > 0 ?products?.data?.map((product) => (
+                  {productList.length > 0 ? productList.slice((step * active - step), step * active).map((product) => (
                     <Product product={product} />
                   )) : <h3 className="col-12 text-center">Hiện tại cửa hàng chưa có sản phẩm nào !</h3>}
                 </div>
-                {products?.data?.length > 0 && <div className="product__pagination">
-                  <a href="#">1</a>
-                  <a href="#">2</a>
-                  <a href="#">3</a>
-                  <a href="#">
-                    <i className="fa fa-long-arrow-right" />
-                  </a>
+                {productList.length > 0 && <div className="product__pagination">
+                  <Pagination size="sm">{items}</Pagination>
                 </div>}
 
               </div>

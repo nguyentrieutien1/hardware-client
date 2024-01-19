@@ -15,7 +15,7 @@ export default function Footer() {
                 <img src="img/logo.png" alt="" />
               </a>
             </div>
-            <ul>
+            <ul  className="text-center text-md-left">
               <li>Địa chỉ: Thăng Bình, Quảng Nam</li>
               <li>Phone: +84 983787454</li>
               <li>Email:vanhao.0112@gmail.com</li>
@@ -23,7 +23,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="col-lg-4 col-md-6 col-sm-6 offset-lg-1">
-          <div className="footer__widget">
+          <div className="footer__widget text-center text-md-left">
             <h6>Useful Links</h6>
             <ul>
               <li>
@@ -68,7 +68,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="col-lg-4 col-md-12">
-          <div className="footer__widget">
+          <div className="footer__widget text-center text-md-left">
             <h6>Join Our Newsletter Now</h6>
             <p>Get E-mail updates about our latest shop and special offers.</p>
             <form action="#">
@@ -96,9 +96,9 @@ export default function Footer() {
       </div>
       <div className="row">
         <div className="col-lg-12">
-          <div className="footer__copyright">
+          <div className="footer__copyright  justify-content-center d-flex">
             <div className="footer__copyright__text">
-              <p>
+              <p className="">
                 {/* Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. */}
                 Copyright © All rights reserved | This template is made with
                 <i className="fa fa-heart" aria-hidden="true" /> by{" "}

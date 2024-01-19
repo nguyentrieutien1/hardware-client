@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { useCategories } from "~/queries";
-
-export default function Categories() {
+interface CategoriesProps {
+  setFilterByCategory?: any
+}
+export default function Categories(props: CategoriesProps) {
+  const { setFilterByCategory } = props
   const [hideCategories, setHideCategories] = useState<boolean>(true);
   const { data: categories } = useCategories();
   return (
@@ -23,8 +26,8 @@ export default function Categories() {
           {hideCategories && (
             <ul>
               {categories?.data?.map((cat) => (
-                <li>
-                  <a href="#">{cat?.name}</a>
+                <li className="cursor-pointer" onClick={() => setFilterByCategory(cat?.id)}>
+                  <a>{cat?.name}</a>
                 </li>
               ))}
             </ul>

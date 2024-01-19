@@ -645,7 +645,6 @@ i {
 }
 
 .hero__search {
-	overflow: hidden;
 	margin-bottom: 30px;
 }
 
@@ -741,14 +740,13 @@ i {
 	height: 431px;
 	display: flex;
 	align-items: center;
-	padding-left: 75px;
 }
 
-.hero__text span {
-	font-size: 14px;
+.hero__text p {
+	font-size: 16px;
 	text-transform: uppercase;
 	font-weight: 700;
-	letter-spacing: 4px;
+	letter-spacing: 2px;
 	color: #7fad39;
 }
 

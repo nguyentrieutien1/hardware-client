@@ -1,21 +1,50 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useGetProducts } from "~/queries";
 import Product from "../product/product";
 import Categories from "../categories/categories";
 import Link from "next/link";
 import { LINK } from "~/lib/constants";
 import Post from "../post/post";
-
+import Pagination from 'react-bootstrap/Pagination';
 export default function ShopPage() {
   const { data: products } = useGetProducts();
+  const [productList, setProductList] = useState([])
+  const [active, setActive] = useState(1)
+  const step = 8;
+  let items = [];
+  for (let number = 1; number <= (productList?.length / step) + 1; number++) {
+    items.push(
+      <Pagination.Item defaultValue={active} onClick={() => handleJump(number)} activeLabel="" key={number} active={number === active}>
+        {number}
+      </Pagination.Item>,
+    );
+  }
+
+  const handleJump = number => {
+    setActive(number)
+  }
+
+
+  const setFilterByCategory = id => {
+    const filterProducts = [...products.data].filter(product => {
+      return product.categoriesId == id;
+    })
+    setProductList([...filterProducts])
+    setActive(1)
+  }
+  useEffect(() => {
+    if (products?.data) {
+      setProductList(products?.data)
+    }
+  }, [products?.data])
   return (
     <>
       <section className="hero">
         <div className="container">
           <div className="row">
-            <Categories />
-            <div className="col-lg-9">
+            <Categories setFilterByCategory={setFilterByCategory} />
+            <div className="col-lg-9 row">
               <div className="hero__search">
                 <div className="hero__search__form">
                   <form action="#">
@@ -29,33 +58,39 @@ export default function ShopPage() {
                     </button>
                   </form>
                 </div>
-                <div className="hero__search__phone">
-                  <div className="hero__search__phone__icon">
-                    <i className="fa fa-phone" />
+                <div className="row">
+                  <div className="col-4 col-sm-0"></div>
+                  <div className="hero__search__phone ">
+                    <div className="hero__search__phone__icon">
+                      <i className="fa fa-phone" />
+                    </div>
+                    <div className="hero__search__phone__text">
+                      <h5>+84 983787454</h5>
+                      <span>Hỗ trợ 24/7</span>
+                    </div>
                   </div>
-                  <div className="hero__search__phone__text">
-                    <h5>+84 983787454</h5>
-                    <span>Hỗ trợ 24/7</span>
-                  </div>
+                  <div className="col-4 col-sm-0"></div>
                 </div>
               </div>
-              <div className="hero__item set-bg" data-setbg="images/bowl-2.png">
-                <div className="hero__text">
-                  <span>Chuyên mua bán và sửa chữa phần cứng</span>
-                  <h2>
+              <div className="hero__item set-bg row" data-setbg="images/bowl-2.png">
+                <div className="hero__text col-lg-6 col-md-12 text-center text-lg-left ">
+                  <p className="">Chuyên mua bán và sửa chữa phần cứng</p>
+                  <h2 className="">
                     dịch vụ tốt <br />
                     nhất
                   </h2>
-                  <p>cho thiết bị của bạn!</p>
-                  <Link href={LINK.SHOP} className="primary-btn">
+                  <p className="">cho thiết bị của bạn!</p>
+                  <Link href={LINK.SHOP} className="primary-btn mb-3 ">
                     Mua ngay
                   </Link>
                 </div>
-                <img
-                  className="ml-3"
-                  src="https://previews.123rf.com/images/trodler/trodler1701/trodler170100003/72181166-pc-hardware-components-isolated-on-white-3d-rendering.jpg"
-                  width={300}
-                />
+                <div className="col-12 col-md-12 col-lg-6 justify-content-center d-flex">
+                  <img
+                    className=""
+                    src="https://previews.123rf.com/images/trodler/trodler1701/trodler170100003/72181166-pc-hardware-components-isolated-on-white-3d-rendering.jpg"
+                    width={300}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -80,15 +115,17 @@ export default function ShopPage() {
           </div>
 
           <div className="row featured__filter">
-            {products?.data?.length > 0 ? (
-              products?.data?.map((product) => <Product product={product} />)
-            ) : (
-              <div className="text-center  col-12 mb-5">
-                <h3>Hiện tại cửa hàng chưa có sản phẩm nào</h3>
-              </div>
-            )}
+            {productList.length > 0 ? productList.slice((step * active - step), step * active).map((product) => (
+              <Product product={product} />
+            )) : <h5 className="col-12 text-center mb-5">Hiện tại cửa hàng chưa có sản phẩm nào !</h5>}
+           
           </div>
-          <div className="row">
+          <div className="mb-3">
+          {productList.length > 0 && <div className="product__pagination">
+              <Pagination size="sm">{items}</Pagination>
+            </div>}
+          </div>
+          <div className="row mt-3">
             <div className="col-12">
               <div className="section-title">
                 <h2>Bài viết gần đây</h2>
