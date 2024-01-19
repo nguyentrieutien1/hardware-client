@@ -39,6 +39,6 @@ export default function Post() {
         );
       })}
     </Swiper>
-  </div> : <h3 className="text-center">Hiện tại chưa có bài viết nào</h3>
+  </div> : <h5 className="text-center">Hiện tại chưa có bài viết nào</h5>
   );
 }
