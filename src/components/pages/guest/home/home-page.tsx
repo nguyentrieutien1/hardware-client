@@ -1,7 +1,6 @@
 "use client";
-import React, { useState } from "react";
-import { useCategories, useGetProducts } from "~/queries";
-import Loading from "~/components/loading/loading";
+import React from "react";
+import { useGetProducts } from "~/queries";
 import Product from "../product/product";
 import Categories from "../categories/categories";
 import Link from "next/link";
@@ -9,10 +8,7 @@ import { LINK } from "~/lib/constants";
 import Post from "../post/post";
 
 export default function ShopPage() {
-  const { data: products, isLoading } = useGetProducts();
-
-  if (isLoading) return <Loading />;
-
+  const { data: products } = useGetProducts();
   return (
     <>
       <section className="hero">
