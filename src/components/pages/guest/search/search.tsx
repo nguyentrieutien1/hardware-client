@@ -7,7 +7,7 @@ interface SearchProps {
 export default function Search(props: SearchProps) {
     const {isShowBanner} = props
   return (
-    <div className="col-lg-9 col-sm-12">
+    <div className="col-lg-9 col-sm-12 p-0">
       <div className="hero__search d-flex" style={{ paddingLeft: "10px" }}>
         <div className="hero__search__form col-lg-9 col-sm-12">
           <form action="#" className=" justify-content-center m-auto">
@@ -21,7 +21,7 @@ export default function Search(props: SearchProps) {
             </button>
           </form>
         </div>
-        <div className="d-none d-lg-block">
+        <div className="d-none d-lg-block col-lg-3 p-0 ml-1">
           <div className="hero__search__phone">
             <div className="hero__search__phone__icon">
               <i className="fa fa-phone" />

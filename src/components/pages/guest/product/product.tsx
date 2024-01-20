@@ -30,7 +30,7 @@ export default function Product(props: ProductProps) {
   return (
     <div className={`col-lg-${numberColumn} col-md-${6} col-sm-6 cursor-pointer`}>
       <div className="featured__item">
-        <div className="featured__item__pic  set-bg">
+        <div className="featured__item__pic">
           <Link href={`${LINK.SHOP_DETAIL}/${id}`}>
             <img
               src={images.length > 0 ? images[0]?.url : ""}
@@ -77,7 +77,7 @@ export default function Product(props: ProductProps) {
             </Link>
           </ul>
         </div>
-        <div className="featured__item__text">
+        <div className="featured__item__text p-3">
           <h6>
             <a>{name}</a>
           </h6>
