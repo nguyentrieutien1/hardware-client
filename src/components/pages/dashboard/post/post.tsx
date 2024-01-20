@@ -12,6 +12,7 @@ import Spinner from "~/components/spinner/spinner";
 import "@progress/kendo-theme-default/dist/all.css";
 import { useDeletePostMutation } from "~/mutations/post/delete-post-mutation";
 import { useUpdatePostMutation } from "~/mutations/post/update-post-mutation";
+import PaginationPage from "../../guest/pagination/pagination";
 export default function Post() {
   const [show, setShow] = useState<boolean>(false);
   const [showUrl, setShowUrl] = useState<boolean>(false);
@@ -24,6 +25,8 @@ export default function Post() {
   const [postList, setPostList] = useState([]);
   const [postId, setPostId] = useState();
   const [selectedFile, setSelectedFile] = useState(null);
+  const [active, setActive] = useState(1);
+  const step = 8;
   const { data: res, isLoading: isPostLoading } = useGetPosts();
   const posts = res?.data;
   const { mutateAsync: createPost, isLoading: isCreatePostLoading } =
@@ -122,6 +125,9 @@ export default function Post() {
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
+  const handleJump = (number) => {
+    setActive(number);
+  };
 
   const handleCopy = () => {
     if (textRef.current) {
@@ -211,7 +217,7 @@ export default function Post() {
                       htmlFor="upload"
                       className="form-label d-block cursor-pointer"
                     >
-                     Nhấn vào đây để lấy đường dẫn ảnh
+                      Nhấn vào đây để lấy đường dẫn ảnh
                     </label>
                     <input
                       onChange={handleFileChange}
@@ -433,15 +439,13 @@ export default function Post() {
                                     ></div>
                                   }
                                 >
-                                  <div
-                                  >
+                                  <div>
                                     <button
                                       type="button"
                                       className="btn btn-success btn-md"
                                     >
                                       Nhấp vào đây để xem chi tiết
                                     </button>
-                                    
                                   </div>
                                 </Tippy>
                               </td>
@@ -485,6 +489,16 @@ export default function Post() {
                         })}
                       </tbody>
                     </table>
+                    <div className="d-flex justify-content-end mt-4">
+                      {posts && (
+                        <PaginationPage
+                          active={active}
+                          handleJump={handleJump}
+                          length={postList.length}
+                          step={step}
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

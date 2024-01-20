@@ -10,6 +10,7 @@ import {
 } from "~/mutations";
 import { formattedDate } from "~/lib/helpers";
 import Spinner from "~/components/spinner/spinner";
+import PaginationPage from "../../guest/pagination/pagination";
 export default function Categories() {
   const [show, setShow] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
@@ -19,6 +20,8 @@ export default function Categories() {
   const [category, setCategory] = useState<any>({
     name: "",
   });
+  const [active, setActive] = useState(1);
+  const step = 8;
   const { data: res, isLoading: isProductLoading } = useCategories();
   const { mutateAsync: create, isLoading: isCreateLoading } =
     useCreateCategoriesMutation();
@@ -36,6 +39,9 @@ export default function Categories() {
   ) => {
     const { name, value } = e.target;
     setCategory({ [name]: value });
+  };
+  const handleJump = (number) => {
+    setActive(number);
   };
   const handleOnSubmit = () => {
     try {
@@ -219,6 +225,16 @@ export default function Categories() {
                     })}
                   </tbody>
                 </table>
+                <div className="d-flex justify-content-end mt-4">
+                  {categoriesData && (
+                    <PaginationPage
+                      active={active}
+                      handleJump={handleJump}
+                      length={categories.length}
+                      step={step}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>

@@ -3,14 +3,12 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { LINK, NAME } from "~/lib/constants/routes";
-import Dropdown from "react-bootstrap/Dropdown";
 import { useGetProducts, useIsUserLogined } from "~/queries";
 import { COOKIE_NAME, deleteCookieConfig, toastConfig } from "~/lib";
 import { AppModal } from "~/components/modal/modal";
 import Profile from "../profile/profile";
 import { useUpdateAccountMutation } from "~/mutations/account/account-update-mutation";
 import { getItemFromLocalStorage, toastErrorAuthen } from "~/lib/helpers";
-import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
 import Image from "next/image";
 interface LinkItem {
   text: string;
@@ -19,7 +17,6 @@ interface LinkItem {
 export default function Header() {
   const [account, setAccount] = useState<any>({});
   const [show, setShow] = useState<boolean>(false);
-  const { data } = useIsUserLogined();
   const pathname = usePathname();
   const router = useRouter();
   const { mutateAsync: updateAccount } = useUpdateAccountMutation();

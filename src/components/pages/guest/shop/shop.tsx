@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useGetProducts } from "~/queries";
 import Product from "../product/product";
 import Categories from "../categories/categories";
-import Pagination from "react-bootstrap/Pagination";
 import PaginationPage from "../pagination/pagination";
 import Search from "../search/search";
 

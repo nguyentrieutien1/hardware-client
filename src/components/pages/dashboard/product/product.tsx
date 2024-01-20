@@ -14,10 +14,11 @@ import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
 import { toastErrorAuthen } from "~/lib/helpers";
 import Tippy from "@tippyjs/react";
 import Spinner from "~/components/spinner/spinner";
+import PaginationPage from "../../guest/pagination/pagination";
 export default function ProductPage() {
   const [show, setShow] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
-
+  const [active, setActive] = useState(1);
   const [images, setImages] = useState([]);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
   const [productList, setProductList] = useState([]);
@@ -31,7 +32,7 @@ export default function ProductPage() {
   });
   const { data: res, isLoading: isProductLoading } = useGetProducts();
   const products = res?.data;
-
+  const step = 8;
   const { mutateAsync: createProduct, isLoading: isCreateLoading } =
     useCreateProductMutation();
   const { mutateAsync: updateProduct, isLoading: isUpdateLoading } =
@@ -106,7 +107,7 @@ export default function ProductPage() {
         setIsUpdate(false);
         setProductInit();
         toastConfig("Cập nhật sản phẩm thành công !", { status: "success" });
-        setImages([])
+        setImages([]);
       });
     }
   };
@@ -126,6 +127,9 @@ export default function ProductPage() {
       product?.name?.toLowerCase()?.includes(value?.toLowerCase())
     );
     setProductList([...product]);
+  };
+  const handleJump = (number) => {
+    setActive(number);
   };
   useEffect(() => {
     if (products) {
@@ -386,87 +390,99 @@ export default function ProductPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {productList?.map((product) => {
-                      return (
-                        <tr>
-                          <td>
-                            <img
-                              src={
-                                product?.images?.length > 0 &&
-                                product?.images[0]?.url
-                              }
-                              className="me-1 rounded"
-                              alt="image"
-                            />
-                          </td>
-                          <td>{product?.name}</td>
-                          <td className="w-25 cursor-pointer">
-                            <Tippy
-                              allowHTML={true}
-                              content={<div>{product?.description}</div>}
-                              arrow={true}
-                              placement="right"
-                            >
-                              <div
-                                style={{
-                                  width: "200px",
-                                  whiteSpace: "break-spaces",
-                                }}
+                    {productList
+                      ?.slice(step * active - step, step * active)
+                      .map((product) => {
+                        return (
+                          <tr>
+                            <td>
+                              <img
+                                src={
+                                  product?.images?.length > 0 &&
+                                  product?.images[0]?.url
+                                }
+                                className="me-1 rounded"
+                                alt="image"
+                              />
+                            </td>
+                            <td>{product?.name?.slice(0, 20)}...</td>
+                            <td className="w-25 cursor-pointer">
+                              <Tippy
+                                allowHTML={true}
+                                content={<div>{product?.description}</div>}
+                                arrow={true}
+                                placement="right"
                               >
-                                {product?.description?.slice(0, 20)}...
-                              </div>
-                            </Tippy>
-                          </td>
-                          <td>{product?.stock} </td>
-                          <td>{currencyFormatterConfig(product?.price)}</td>
-                          <td>
-                            <button
-                              onClick={() => {
-                                setShowDeleteModal(true);
-                                setProduct({
-                                  id: product?.id,
-                                  description: "",
-                                  name: "",
-                                  price: null,
-                                  stock: null,
-                                });
-                              }}
-                              type="button"
-                              className="btn btn-danger btn-sm"
-                            >
-                              Xóa
-                            </button>
-                            <button
-                              onClick={() => {
-                                setIsUpdate(true);
-                                setShow(true);
-                                setProduct({
-                                  description: product?.description,
-                                  name: product?.name,
-                                  price: product?.price,
-                                  stock: product?.stock,
-                                  id: product?.id,
-                                  categoriesId: product?.categoriesId,
-                                });
-                                setImages(
-                                  product?.images.map((image) => {
-                                    return {
-                                      data_url: image.url,
-                                    };
-                                  })
-                                );
-                              }}
-                              type="button"
-                              className="btn btn-success btn-sm m-lg-1"
-                            >
-                              Cập nhật
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
+                                <div
+                                  style={{
+                                    width: "200px",
+                                    whiteSpace: "break-spaces",
+                                  }}
+                                >
+                                  {product?.description?.slice(0, 20)}...
+                                </div>
+                              </Tippy>
+                            </td>
+                            <td>{product?.stock} </td>
+                            <td>{currencyFormatterConfig(product?.price)}</td>
+                            <td>
+                              <button
+                                onClick={() => {
+                                  setShowDeleteModal(true);
+                                  setProduct({
+                                    id: product?.id,
+                                    description: "",
+                                    name: "",
+                                    price: null,
+                                    stock: null,
+                                  });
+                                }}
+                                type="button"
+                                className="btn btn-danger btn-sm"
+                              >
+                                Xóa
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setIsUpdate(true);
+                                  setShow(true);
+                                  setProduct({
+                                    description: product?.description,
+                                    name: product?.name,
+                                    price: product?.price,
+                                    stock: product?.stock,
+                                    id: product?.id,
+                                    categoriesId: product?.categoriesId,
+                                  });
+                                  setImages(
+                                    product?.images.map((image) => {
+                                      return {
+                                        data_url: image.url,
+                                      };
+                                    })
+                                  );
+                                }}
+                                type="button"
+                                className="btn btn-success btn-sm m-lg-1"
+                              >
+                                Cập nhật
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
                   </tbody>
                 </table>
+              </div>
+              <div className="d-flex justify-content-end mt-4">
+                {products && (
+                  <PaginationPage
+                    active={active}
+                    handleJump={handleJump}
+                    length={productList.length}
+                    step={step}
+                  />
+                )}
               </div>
             </div>
           </div>
