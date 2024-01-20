@@ -5,10 +5,10 @@ interface CategoriesProps {
 }
 export default function Categories(props: CategoriesProps) {
   const { setFilterByCategory } = props;
-  const [hideCategories, setHideCategories] = useState<boolean>(true);
+  const [hideCategories, setHideCategories] = useState<boolean>(false);
   const { data: categories } = useCategories();
   return (
-    <div className="col-lg-3">
+    <div className="col-lg-3 p-0">
       <div className="hero__categories border-1 position-relative">
         <div
           onClick={() => {
