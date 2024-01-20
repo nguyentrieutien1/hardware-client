@@ -1,7 +1,7 @@
 // First we need to import axios.js
 import axios from 'axios';
 import { COOKIE_NAME, getCookieConfig } from '../helpers';
-const isProduction = process.env.NODE_ENV === 'production';
+export const isProduction = process.env.NODE_ENV === 'production';
 export const axiosConfig = axios.create({
   baseURL: isProduction ? 'https://maytinhthunguyen.com/api' : 'http://localhost:5000/api'
 

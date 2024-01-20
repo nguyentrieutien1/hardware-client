@@ -17,15 +17,12 @@ export default function Post() {
     posts?.data?.length ? <div className="container">
     <Swiper
       effect={"coverflow"}
-      grabCursor={true}
-      centeredSlides={true}
-      slidesPerView={5}
+      slidesPerView={3}
       loop={true}
-      autoplay={{
-        delay: 500,
-        disableOnInteraction: false,
-      }}
+      autoplay={true}
       pagination={true}
+      allowSlideNext={true}
+      allowTouchMove={true}
       modules={[EffectCoverflow, Pagination]}
     >
       {posts?.data?.map((post) => {

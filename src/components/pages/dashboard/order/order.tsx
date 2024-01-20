@@ -7,12 +7,18 @@ import { useGetOrders } from "~/queries/order/get-orders-query";
 import Tippy from "@tippyjs/react";
 import { useUpdateOrderMutation } from "~/mutations/order/update-order-mutation";
 import Spinner from "~/components/spinner/spinner";
+import PaginationPage from "../../guest/pagination/pagination";
 export default function OrderPage() {
   const [orders, setOrders] = useState([]);
+  const [active, setActive] = useState(1);
+  const step = 8;
   const { data: res, isLoading: isGetOrdersLoading } = useGetOrders();
-const { mutateAsync, isLoading } = useUpdateOrderMutation();
+  const { mutateAsync, isLoading } = useUpdateOrderMutation();
   const handleAcceptOrder = (orderId, statusId) => {
     mutateAsync({ id: orderId, data: { statusId } });
+  };
+  const handleJump = (number) => {
+    setActive(number);
   };
   useEffect(() => {
     if (res?.data) {
@@ -31,7 +37,7 @@ const { mutateAsync, isLoading } = useUpdateOrderMutation();
   };
   return (
     <div className="content-wrapper">
-       <Spinner isLoading={isLoading || isGetOrdersLoading} />
+      <Spinner isLoading={isLoading || isGetOrdersLoading} />
       <div className="col-2 mb-3">
         <div className="">
           <label htmlFor="" className="form-label">
@@ -161,14 +167,11 @@ const { mutateAsync, isLoading } = useUpdateOrderMutation();
                             </Tippy>
                           </td>
                           <td>
-                            {currencyFormatterConfig(
-                              order?.product?.price
-                            )}
+                            {currencyFormatterConfig(order?.product?.price)}
                           </td>
                           <td>
                             {currencyFormatterConfig(
-                              order?.product?.price *
-                                order?.quantity
+                              order?.product?.price * order?.quantity
                             )}
                           </td>
                         </tr>
@@ -176,6 +179,16 @@ const { mutateAsync, isLoading } = useUpdateOrderMutation();
                     })}
                   </tbody>
                 </table>
+                <div className="d-flex justify-content-end mt-4">
+                  {res?.data && (
+                    <PaginationPage
+                      active={active}
+                      handleJump={handleJump}
+                      length={orders.length}
+                      step={step}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>

@@ -1,12 +1,10 @@
 "use client";
 import React from "react";
-import Image from "next/image";
-import Logo from "../../../../../public/images/logo.svg";
 import Link from "next/link";
 import { LINK } from "~/lib/constants";
 import { useIsUserLogined } from "~/queries";
 import Tippy from "@tippyjs/react";
-import { COOKIE_NAME, deleteCookieConfig } from "~/lib";
+import { COOKIE_NAME, deleteCookieConfig, isProduction } from "~/lib";
 import { useRouter } from "next/navigation";
 
 export default function Header() {
@@ -22,11 +20,20 @@ export default function Header() {
     <nav className="navbar default-layout-navbar col-lg-12 col-12 fixed-top d-flex flex-row">
       <div className="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
         <Link
-          className="navbar-brand brand-logo"
           href={LINK.DASHBOARD}
           prefetch
         >
-          <Image width={100} height={100} src={Logo} alt="" />
+          <img
+            style={{ objectFit: "contain" }}
+            width={70}
+            height={70}
+            src={`${
+              isProduction
+                ? "https://maytinhthunguyen.com"
+                : "http://localhost:5000"
+            }/api/upload/1705643045785-625737817.png`}
+            alt="logo"
+          />
         </Link>
       </div>
       <div className="navbar-menu-wrapper d-flex align-items-stretch">
@@ -64,7 +71,9 @@ export default function Header() {
                 onClick={() => handleLogout()}
                 style={{ cursor: "pointer !important" }}
               >
-                <button className="btn btn-info p-2 rounded-1">Đăng xuất</button>
+                <button className="btn btn-info p-2 rounded-1">
+                  Đăng xuất
+                </button>
               </div>
             }
           >
