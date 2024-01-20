@@ -276,7 +276,7 @@ export default function ProductPage() {
                                       width="100"
                                       className="rounded"
                                       height="100"
-                                      style={{ objectFit: "cover" }}
+                                      style={{ objectFit: "contain" }}
                                     />
                                     <div className="image-item__btn-wrapper my-2 d-flex align-content-center">
                                       <button

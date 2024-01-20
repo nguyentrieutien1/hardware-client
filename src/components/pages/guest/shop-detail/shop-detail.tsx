@@ -53,7 +53,7 @@ export default function ShopDetail() {
                       : ""
                   }
                   height={400}
-                  style={{ objectFit: "cover" }}
+                  style={{ objectFit: "contain" }}
                 />
               </div>
               <div className="product__details__pic__slider owl-carousel">
@@ -62,7 +62,7 @@ export default function ShopDetail() {
                     allowHTML={true}
                     content={
                       <img
-                        style={{ objectFit: "contain", width: '100%', height: '100%' }}
+                        style={{ objectFit: "contain", width: '200%', height: '200%' }}
                         src={img?.url}
                         alt="5"
                       />
@@ -70,9 +70,9 @@ export default function ShopDetail() {
                   >
                     <img
                       className="m-2"
-                      width={50}
-                      height={50}
-                      style={{ objectFit: "cover" }}
+                      width={70}
+                      height={70}
+                      style={{ objectFit: "contain" }}
                       src={img?.url}
                       alt="5"
                     />

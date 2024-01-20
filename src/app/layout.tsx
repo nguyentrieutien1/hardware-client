@@ -27,7 +27,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="vi">
- 
       <body className={inter.className}>
         <Providers>{children}</Providers>
         <ToastContainer />

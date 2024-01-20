@@ -10,9 +10,11 @@ import { useIsUserLogined } from "~/queries";
 import { IProduct } from "~/types";
 type ProductProps = {
   product: IProduct;
+  numberColumn: any
 };
 export default function Product(props: ProductProps) {
   const { id, images, name, price } = props.product;
+  const {numberColumn} = props;
   // const onAddToCart = async () => {
   //   mutateAsync({ productId: id, quantity: 1, accountId: res?.data.id })
   //     .then(() => {
@@ -26,13 +28,13 @@ export default function Product(props: ProductProps) {
   //     });
   // };
   return (
-    <div className="col-lg-3 col-md-4 col-sm-6 cursor-pointer ">
+    <div className={`col-lg-${numberColumn} col-md-${6} col-sm-6 cursor-pointer`}>
       <div className="featured__item">
         <div className="featured__item__pic  set-bg">
           <Link href={`${LINK.SHOP_DETAIL}/${id}`}>
             <img
-              src={images.length > 0 && images[0]?.url}
-              style={{objectFit: 'cover', width: '100%', height: '100%'}}
+              src={images.length > 0 ? images[0]?.url : ""}
+              style={{ objectFit: "contain",}}
             />
           </Link>
           <ul className="featured__item__pic__hover z-n1">

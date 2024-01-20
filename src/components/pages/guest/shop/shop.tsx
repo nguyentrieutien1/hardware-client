@@ -3,39 +3,32 @@ import React, { useEffect, useState } from "react";
 import { useGetProducts } from "~/queries";
 import Product from "../product/product";
 import Categories from "../categories/categories";
-import Pagination from 'react-bootstrap/Pagination';
+import Pagination from "react-bootstrap/Pagination";
+import PaginationPage from "../pagination/pagination";
+import Search from "../search/search";
 
 export default function ShopPage() {
   const { data: products } = useGetProducts();
-  const [productList, setProductList] = useState([])
-  const [active, setActive] = useState(1)
-  const step = 8;
-  let items = [];
-  for (let number = 1; number <= (productList?.length / step) + 1; number++) {
-    items.push(
-      <Pagination.Item defaultValue={active} onClick={() => handleJump(number)} activeLabel="" key={number} active={number === active}>
-        {number}
-      </Pagination.Item>,
-    );
-  }
+  const [productList, setProductList] = useState([]);
+  const [active, setActive] = useState(1);
+  const step = 9;
 
-  const handleJump = number => {
-    setActive(number)
-  }
+  const handleJump = (number) => {
+    setActive(number);
+  };
 
-
-  const setFilterByCategory = id => {
-    const filterProducts = [...products.data].filter(product => {
+  const setFilterByCategory = (id) => {
+    const filterProducts = [...products.data].filter((product) => {
       return product.categoriesId == id;
-    })
-    setProductList([...filterProducts])
-    setActive(1)
-  }
+    });
+    setProductList([...filterProducts]);
+    setActive(1);
+  };
   useEffect(() => {
     if (products?.data) {
-      setProductList(products?.data)
+      setProductList(products?.data);
     }
-  }, [products?.data])
+  }, [products?.data]);
   return (
     <>
       <>
@@ -43,70 +36,47 @@ export default function ShopPage() {
           <div className="">
             <div className="row">
               <Categories setFilterByCategory={setFilterByCategory} />
-              <div className="col-lg-9">
-                <div className="hero__search">
-                  <div className="hero__search__form">
-                    <form action="#">
-                      <div className="hero__search__categories">
-                        All Categories
-                        <span className="arrow_carrot-down" />
-                      </div>
-                      <input type="text" placeholder="What do yo u need?" />
-                      <button type="submit" className="site-btn">
-                        SEARCH
-                      </button>
-                    </form>
-                  </div>
-                  <div className="hero__search__phone">
-                    <div className="hero__search__phone__icon">
-                      <i className="fa fa-phone" />
-                    </div>
-                    <div className="hero__search__phone__text">
-                      <h5>+84 983787454</h5>
-                      <span>Hỗ trợ 24/7</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <Search />
             </div>
           </div>
         </section>
-        {/* Hero Section End */}
-        {/* Breadcrumb Section Begin */}
-        {/* Breadcrumb Section End */}
-        {/* Product Section Begin */}
         <section className="product spad container">
           <div className="container">
             <div className="row">
-              <div className="col-lg-12 col-md-7">
-                <div className="filter__item">
-                  <div className="row">
-                    {/* <div className="col-lg-4 col-md-5">
-                      <div className="filter__sort">
-                        <span>Sort By</span>
-                        <select>
-                          <option value={0}>Default</option>
-                          <option value={0}>Default</option>
-                        </select>
+              <div className="col-lg-3 col-12 d-flex justify-content-center">
+                <h3>This is menu</h3>
+              </div>
+              <div className="col-lg-9 col-12 mt-3">
+                <div className="">
+                  <div className="">
+                    <div className="">
+                      <div className="section-title product__discount__title text-center">
+                        <h2>Khuyến mãi</h2>
                       </div>
-                    </div> */}
-                    <div className="col-lg-4 col-md-3">
-                      <div className="filter__option">
-                        <span className="icon_grid-2x2" />
-                        <span className="icon_ul" />
+                      <div className="d-flex justify-content-end">
+                        <PaginationPage
+                          active={active}
+                          handleJump={handleJump}
+                          length={productList.length}
+                          step={step}
+                        />
                       </div>
+                    </div>
+                    <div className="row">
+                      {productList.length > 0 ? (
+                        productList
+                          .slice(step * active - step, step * active)
+                          .map((product) => (
+                            <Product numberColumn={4} product={product} />
+                          ))
+                      ) : (
+                        <h3 className="col-12 text-center">
+                          Hiện tại cửa hàng chưa có sản phẩm nào !
+                        </h3>
+                      )}
                     </div>
                   </div>
                 </div>
-                <div className="row">
-                  {productList.length > 0 ? productList.slice((step * active - step), step * active).map((product) => (
-                    <Product product={product} />
-                  )) : <h3 className="col-12 text-center">Hiện tại cửa hàng chưa có sản phẩm nào !</h3>}
-                </div>
-                {productList.length > 0 && <div className="product__pagination">
-                  <Pagination size="sm">{items}</Pagination>
-                </div>}
-
               </div>
             </div>
           </div>

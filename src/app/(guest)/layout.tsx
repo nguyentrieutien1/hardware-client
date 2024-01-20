@@ -6,12 +6,16 @@ import "../../../public/css/style.css";
 import "../../../public/css/bootstrap.min.css";
 
 import "../../../public/css/font-awesome.min.css";
+import { useEffect } from "react";
 
  function GuestLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  useEffect(() => {
+    require("../../../jquery")
+  }, [])
   return (
     <>
       <Header />

@@ -16,6 +16,8 @@ import {
 import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
 import withAuth from "~/HOCs/withAuth";
 import Loading from "~/components/loading/loading";
+import Link from "next/link";
+import { LINK } from "~/lib/constants";
 function CartPage() {
   const [show, setShow] = useState<boolean>(false);
   const [showModalConfirm, setShowModalConfirm] = useState<boolean>(false);
@@ -59,8 +61,6 @@ function CartPage() {
       setShow(true);
       setProductId(id);
     } else {
-      console.log(carts);
-      console.log(findIndex);
       carts[findIndex]["quantity"] = total;
       carts = carts.map((cart) => {
         const checkItemIsExist = products?.data.find(
@@ -95,7 +95,7 @@ function CartPage() {
         }
       }
     }
-    const order: any = (cartLocal).map((item) => {
+    const order: any = cartLocal.map((item) => {
       return {
         cartId: item.id,
         quantity: item?.quantity,
@@ -122,14 +122,12 @@ function CartPage() {
     if (products?.data) {
       let carts = getItemFromLocalStorage("cart") || [];
       carts = carts.map((cart) => {
-        const checkItemIsExist = products?.data.find(
-          (product) => {
-            console.log(carts);
-            console.log(product);
-            
-            return product?.id == cart?.productId
-          }
-        );
+        const checkItemIsExist = products?.data.find((product) => {
+          console.log(carts);
+          console.log(product);
+
+          return product?.id == cart?.productId;
+        });
         return {
           ...cart,
           product: checkItemIsExist,
@@ -138,7 +136,7 @@ function CartPage() {
       setCartLocal([...carts]);
     }
   }, [products?.data, products?.data?.length]);
-  
+
   useEffect(() => {
     if (res?.data) {
       setOrderInfo({
@@ -191,11 +189,11 @@ function CartPage() {
                     {cartLocal.map((item) => {
                       return (
                         <tr>
-                          <td className="shoping__cart__item">
+                          <td className="shoping__cart__item d-flex align-items-center">
                             <img
                               width={100}
                               height={100}
-                              style={{ objectFit: "cover", borderRadius: 4 }}
+                              style={{ objectFit: "contain", borderRadius: 4 }}
                               src={
                                 item?.product?.images?.length > 0
                                   ? item?.product?.images[0].url
@@ -204,27 +202,27 @@ function CartPage() {
                               alt=""
                             />
 
-                            <h5>{item?.product?.name}</h5>
+                            <h5>{`${item?.product?.name?.slice(0, 20)}...`}</h5>
                           </td>
                           <td className="shoping__cart__price">
                             {currencyFormatterConfig(item?.product?.price)}
                           </td>
-                          <td className="shoping__cart__quantity pl-5">
-                            <div className="quantity">
-                              <div className="pro-qty d-flex align-items-center m-auto justify-content-center">
+                          <td className="shoping__cart__quantity">
+                            <div className="quantity d-flex justify-content-center">
+                              <div className="d-flex align-items-center">
                                 <div
                                   onClick={() =>
                                     onUpdateQuantity(item?.product?.id, {
                                       quantity: -1,
                                     })
                                   }
-                                  className=" cursor-pointer"
+                                  className=" cursor-pointer btn btn-info"
                                 >
                                   -
                                 </div>
-                                <input type="number" value={item?.quantity} />
+                                <div className="mx-3">{item?.quantity}</div>
                                 <div
-                                  className=" cursor-pointer"
+                                  className=" cursor-pointer btn btn-success"
                                   onClick={() =>
                                     onUpdateQuantity(item?.product?.id, {
                                       quantity: 1,
@@ -242,10 +240,13 @@ function CartPage() {
                             )}
                           </td>
                           <td
-                            onClick={() => onDeleteProduct(item?.product?.id)}
-                            className="shoping__cart__item__close cursor-pointer"
+                            onClick={() => {
+                              setShow(true);
+                              setProductId(item?.id);
+                            }}
+                            className="cursor-pointer"
                           >
-                            X
+                            <div className="btn btn-danger ml-2">X</div>
                           </td>
                         </tr>
                       );
@@ -258,9 +259,9 @@ function CartPage() {
           <div className="row">
             <div className="col-lg-12">
               <div className="shoping__cart__btns">
-                <a href="#" className="primary-btn cart-btn">
-                  CONTINUE SHOPPING
-                </a>
+                <Link href={LINK.SHOP} className="primary-btn cart-btn">
+                  Tiếp tục mua sắm
+                </Link>
               </div>
             </div>
             <div className="col-lg-6">
@@ -287,7 +288,7 @@ function CartPage() {
                     Tổng
                     <span>
                       {currencyFormatterConfig(
-                        ( cartLocal).reduce((acc, curr) => {
+                        cartLocal.reduce((acc, curr) => {
                           return (acc += curr?.product?.price * curr?.quantity);
                         }, 0)
                       )}
@@ -419,7 +420,7 @@ function CartPage() {
           )}
         </div>
       ) : (
-        <h3 className="text-center">Bạn chưa có đơn nào trong giỏ hàng !</h3>
+        <h3 className="text-center mb-5">Bạn chưa có đơn nào trong giỏ hàng !</h3>
       )}
     </section>
   ) : (
