@@ -25,7 +25,7 @@ export default function Header() {
   const { mutateAsync: updateAccount } = useUpdateAccountMutation();
   const { data: products, isLoading: productLoading } = useGetProducts();
   const [cartLocal, setCartLocal] = useState([]);
-  const isProduction = process.env.NODE_ENV === 'production';
+  const isProduction = process.env.NODE_ENV === "production";
 
   const navItems: LinkItem[] = [
     { text: NAME.HOME, href: LINK.HOME },
@@ -37,7 +37,7 @@ export default function Header() {
     try {
       deleteCookieConfig(COOKIE_NAME.ACCESS_TOKEN);
       router.push(LINK.LOGIN);
-    } catch (error) {}
+    } catch (error) { }
   };
   const handleSubmit = () => {
     updateAccount({
@@ -64,14 +64,12 @@ export default function Header() {
     if (products?.data) {
       let carts = getItemFromLocalStorage("cart") || [];
       carts = carts.map((cart) => {
-        const checkItemIsExist = products?.data.find(
-          (product) => {
-            console.log(carts);
-            console.log(product);
-            
-            return product?.id == cart?.productId
-          }
-        );
+        const checkItemIsExist = products?.data.find((product) => {
+          console.log(carts);
+          console.log(product);
+
+          return product?.id == cart?.productId;
+        });
         return {
           ...cart,
           product: checkItemIsExist,
@@ -82,6 +80,45 @@ export default function Header() {
   }, [products?.data, products?.data?.length]);
   return (
     <>
+      <div className="humberger__menu__overlay "></div>
+      <div className="humberger__menu__wrapper active">
+        <div className="humberger__menu__cart">
+          <ul>
+            <li>
+              <a href="#">
+                <i className="fa fa-shopping-bag" /> <span>3</span>
+              </a>
+            </li>
+          </ul>
+          <div className="header__cart__price">
+            item: <span>$150.00</span>
+          </div>
+        </div>
+        <div id="mobile-menu-wrap">
+          <nav className="mobile-menu-wrap">
+            <ul>
+              {navItems.map((item, index) => {
+                return (
+                  <li
+                    key={index}
+                  >
+                    <Link className="list-unstyled" href={item.href}>{item.text}</Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        </div>
+        <div className="humberger__menu__contact">
+          <ul>
+            <li>
+              <i className="fa fa-envelope" /> vanhao.0112@gmail.com
+            </li>
+            <li>Miễn phí vận chuyển</li>
+          </ul>
+        </div>
+      </div>
+
       {show && (
         <AppModal
           closeModal={() => {
@@ -102,7 +139,8 @@ export default function Header() {
                 <div className="header__top__left">
                   <ul>
                     <li>
-                    <i className="fa fa-envelope" />vanhao.0112@gmail.com
+                      <i className="fa fa-envelope" />
+                      vanhao.0112@gmail.com
                     </li>
                     <li>Miễn phí vận chuyển</li>
                   </ul>
@@ -148,28 +186,36 @@ export default function Header() {
           </div>
         </div>
         <div className="container">
-          <div className="row">
-            <div className="col-lg-3">
+          <div className="row align-items-center justify-content-lg-between">
+            <div className="">
               <div className="header__logo">
                 <Link href={LINK.HOME}>
-                  <Image src={`${isProduction ? 'https://maytinhthunguyen.com': 'http://localhost:5000'}/api/upload/1705643045785-625737817.png`} alt="logo" width={100} height={100} style={{objectFit: "contain"}}/>
+                  <Image
+                    src={`${isProduction
+                      ? "https://maytinhthunguyen.com"
+                      : "http://localhost:5000"
+                      }/api/upload/1705643045785-625737817.png`}
+                    alt="logo"
+                    width={100}
+                    height={100}
+                    style={{ objectFit: "contain" }}
+                  />
                 </Link>
               </div>
             </div>
-            <div className="col-lg-9 justify-content-center text-right">
+            <div className="active">
               <nav className="header__menu">
                 <ul>
                   {navItems.map((item, index) => {
                     return (
                       <li
                         key={index}
-                        className={`nav-item ${
-                          navItems.findIndex(
-                            (item) => item.href === pathname
-                          ) === index
-                            ? "active"
-                            : ""
-                        }`}
+                        className={`nav-item ${navItems.findIndex(
+                          (item) => item.href === pathname
+                        ) === index
+                          ? "active"
+                          : ""
+                          }`}
                       >
                         <Link href={item.href}>{item.text}</Link>
                       </li>
@@ -178,7 +224,23 @@ export default function Header() {
                 </ul>
               </nav>
             </div>
-            
+            <div className="d-flex d-sm-block">
+              <div className="header__cart">
+                <ul>
+                  <li>
+                    <a href="#">
+                      <i className="fa fa-shopping-bag"></i> <span>3</span>
+                    </a>
+                  </li>
+                </ul>
+                <div className="header__cart__price">
+                  item: <span>$150.00</span>
+                </div>
+              </div>
+            </div>
+            <div className="humberger__open">
+              <i className="fa fa-bars"></i>
+            </div>
           </div>
         </div>
       </header>
