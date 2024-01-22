@@ -7,27 +7,27 @@ import {
   getItemFromLocalStorage,
   setItemToLocalStorage,
 } from "~/lib/helpers";
-import { toastConfig } from "~/lib";
+import { toastConfig, useAppDispatch } from "~/lib";
 import Spinner from "~/components/spinner/spinner";
 import Tippy from "@tippyjs/react";
+import { updateQuantity } from "~/lib/features/cart";
 export default function ShopDetail() {
   const { id } = useParams();
   const [quantity, setQuantity] = useState(1);
+  const dispath = useAppDispatch()
   const { data: product, isLoading } = useGetProductDetail({ id });
   const [productData, setProductData] = useState<any>({});
   const onAddToCart = async () => {
     const cart = getItemFromLocalStorage("cart") || [];
     const checkItemIsExist = cart.findIndex((item) => item?.productId == +id);
-    console.log(checkItemIsExist);
-
     if (checkItemIsExist > -1) {
       cart[checkItemIsExist].quantity =
         cart[checkItemIsExist].quantity + quantity;
-      console.log(cart[checkItemIsExist]);
     } else {
       cart.push({ productId: +id, quantity });
     }
     setItemToLocalStorage("cart", cart);
+    dispath(updateQuantity(cart))
     toastConfig(`Bạn đã thêm ${name} vào giỏ hàng thành công !`, {
       status: "success",
     });

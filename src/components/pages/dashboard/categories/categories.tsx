@@ -2,7 +2,7 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { AppModal } from "~/components/modal/modal";
 import { useCategories } from "~/queries";
-import { toastConfig } from "~/lib";
+import { toastConfig, useAppSelector } from "~/lib";
 import {
   useCreateCategoriesMutation,
   useDeleteCategoriesMutation,
@@ -17,6 +17,8 @@ export default function Categories() {
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
   const [categories, setCategories] = useState([]);
   const [categoriesId, setCategoriesId] = useState();
+
+  
   const [category, setCategory] = useState<any>({
     name: "",
   });

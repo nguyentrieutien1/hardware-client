@@ -9,7 +9,9 @@ export const useGetOrders = () => {
   return useQuery({
     queryKey: constructorGetOrders(),
     queryFn: getOrders,
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
+    cacheTime: 12 * 60 * 60 * 1000, // 12 giờ
+    staleTime: 12 * 60 * 60 * 1000 // 12 giờ
 
   });
 };
