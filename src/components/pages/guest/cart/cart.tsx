@@ -426,7 +426,7 @@ function CartPage() {
           )}
         </div>
       ) : (
-        <h3 className="text-center mb-5">Bạn chưa có đơn nào trong giỏ hàng !</h3>
+        <div style={{fontSize: '22px'}} className="text-center mb-5">Bạn chưa có đơn nào trong giỏ hàng !</div>
       )}
     </section>
   ) : (
