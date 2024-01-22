@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { toastErrorAuthen } from "~/lib/helpers";
 
 import "./login.css";
-import "../../../../../public/css/bootstrap.min.css"
+import "../../../../../public/css/bootstrap.min.css";
 export default function LoginPage() {
   const [loginInfo, setLoginInfo] = useState<IAuthLogin>({
     email: "",
@@ -47,9 +47,9 @@ export default function LoginPage() {
           if (status === 201) {
             setCookieConfig(COOKIE_NAME.ACCESS_TOKEN, access_token);
             if (data?.role?.name === "SUPER_ADMIN") {
-              router.replace(LINK.DASHBOARD);
+              window.location.href = LINK.DASHBOARD;
             } else {
-              router.replace(LINK.HOME);
+              window.location.href = LINK.HOME;
             }
             setIsLoading(false);
           }
@@ -68,7 +68,7 @@ export default function LoginPage() {
       <div className="container">
         <div className="row justify-content-center">
           <div className="col-md-6 text-center mb-5">
-              <h2 className="heading-section">Đăng nhập</h2>
+            <h2 className="heading-section">Đăng nhập</h2>
           </div>
         </div>
         <div className="row justify-content-center">
@@ -79,7 +79,8 @@ export default function LoginPage() {
                   <h2>Chào mừng bạn đăng nhập</h2>
                   <p>Bạn có tài khoản chưa ?</p>
                   <Link
-                    href={LINK.REGISTER}
+                    href={"#"}
+                    onClick={() => (window.location.href = LINK.REGISTER)}
                     className="login-wrap btn btn-primary border-white mt-4 p-3"
                     prefetch
                   >

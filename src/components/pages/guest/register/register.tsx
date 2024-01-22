@@ -7,8 +7,8 @@ import { toastConfig } from "~/lib";
 import { TOAST_MESSAGE } from "~/lib/constants/routes/toast-message";
 import { useRouter } from "next/navigation";
 import { useAuthRegisterMutation } from "~/mutations";
-import "../../../../../public/css/style.css"
-import "../../../../../public/css/bootstrap.min.css"
+import "../../../../../public/css/style.css";
+import "../../../../../public/css/bootstrap.min.css";
 import "./login.css";
 export default function RegisterPage() {
   const router = useRouter();
@@ -104,7 +104,8 @@ export default function RegisterPage() {
                   <div className="text w-100">
                     <h2>Chào mừng bạn đăng kí</h2>
                     <Link
-                      href={LINK.LOGIN}
+                      href={"#"}
+                      onClick={() => (window.location.href = LINK.LOGIN)}
                       className="login-wrap btn btn-primary border-white p-3 mt-4"
                       prefetch
                     >
