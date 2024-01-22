@@ -13,7 +13,7 @@ export default function Header() {
   const handleLogout = () => {
     try {
       deleteCookieConfig(COOKIE_NAME.ACCESS_TOKEN);
-      router.push(LINK.LOGIN);
+      window.location.href = LINK.LOGIN;
     } catch (error) {}
   };
   return (

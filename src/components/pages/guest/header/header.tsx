@@ -208,7 +208,7 @@ export default function Header() {
                     </ul>
                   </div>
                   <div className="header__top__right__auth cursor-pointer">
-                    <a onClick={() => router.replace(LINK.LOGIN)}>
+                    <a onClick={() => (window.location.href = LINK.LOGIN)}>
                       <i className="fa fa-user" /> Login
                     </a>
                   </div>
@@ -218,7 +218,7 @@ export default function Header() {
           </div>
         </div>
         <div className="container">
-          <div className="row d-flex align-items-center justify-content-between" >
+          <div className="row d-flex align-items-center justify-content-between">
             <div className="">
               <div className="header__logo">
                 <Link href={LINK.HOME}>
