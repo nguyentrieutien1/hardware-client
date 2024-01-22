@@ -9,7 +9,8 @@ export const useGetPostDetail = ({id}) => {
   return useQuery({
     queryFn: () => getPostDetail({id}),
     queryKey: constructorGetPostDetail(id),
-    
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
+    cacheTime: 12 * 60 * 60 * 1000, // 12 giờ
+  staleTime: 12 * 60 * 60 * 1000 // 12 giờ
   });
 };

@@ -7,7 +7,7 @@ import Spinner from "~/components/spinner/spinner";
 import Button from "react-bootstrap/esm/Button";
 import { useCreateOrderMutation } from "~/mutations/order/create-order-mutation";
 import { IOrder } from "~/types";
-import { toastConfig } from "~/lib";
+import { toastConfig, useAppSelector } from "~/lib";
 import {
   getItemFromLocalStorage,
   setItemToLocalStorage,
@@ -18,6 +18,8 @@ import withAuth from "~/HOCs/withAuth";
 import Loading from "~/components/loading/loading";
 import Link from "next/link";
 import { LINK } from "~/lib/constants";
+import { useDispatch } from "react-redux";
+import { updateQuantity } from "~/lib/features/cart";
 function CartPage() {
   const [show, setShow] = useState<boolean>(false);
   const [showModalConfirm, setShowModalConfirm] = useState<boolean>(false);
@@ -41,6 +43,8 @@ function CartPage() {
     note: "note...",
     type: "COD",
   });
+
+  const dispath = useDispatch()
   const parseKey = (name) => {
     switch (name) {
       case "fullName":
@@ -73,6 +77,7 @@ function CartPage() {
       });
       setItemToLocalStorage("cart", carts);
       setCartLocal([...carts]);
+      dispath(updateQuantity(carts))
     }
   };
   const onDeleteProduct = (productId) => {
@@ -84,6 +89,7 @@ function CartPage() {
     carts.splice(findIndex, 1);
     setCartLocal([...carts]);
     setItemToLocalStorage("cart", carts);
+    dispath(updateQuantity(cart))
     setShow(false);
   };
   const handleOrder = () => {

@@ -3,13 +3,20 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { LINK, NAME } from "~/lib/constants/routes";
-import { useGetProducts, useIsUserLogined } from "~/queries";
-import { COOKIE_NAME, deleteCookieConfig, toastConfig } from "~/lib";
+import { useGetProducts } from "~/queries";
+import {
+  COOKIE_NAME,
+  deleteCookieConfig,
+  toastConfig,
+  useAppSelector,
+} from "~/lib";
 import { AppModal } from "~/components/modal/modal";
 import Profile from "../profile/profile";
 import { useUpdateAccountMutation } from "~/mutations/account/account-update-mutation";
 import { getItemFromLocalStorage, toastErrorAuthen } from "~/lib/helpers";
 import Image from "next/image";
+import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
+import("../../../../../jquery");
 interface LinkItem {
   text: string;
   href: string;
@@ -22,19 +29,49 @@ export default function Header() {
   const { mutateAsync: updateAccount } = useUpdateAccountMutation();
   const { data: products, isLoading: productLoading } = useGetProducts();
   const [cartLocal, setCartLocal] = useState([]);
+  const [quantity, setQuantity] = useState(0);
+  const [total, setTotal] = useState(0);
+  const { value } = useAppSelector((state) => state.cart);
+
   const isProduction = process.env.NODE_ENV === "production";
+  console.log(value);
 
   const navItems: LinkItem[] = [
     { text: NAME.HOME, href: LINK.HOME },
     { text: NAME.SHOP, href: LINK.SHOP },
     { text: NAME.CART, href: LINK.CART },
   ];
+  useEffect(() => {
+    if (products) {
+      const newCarts = value.map((cart: any) => {
+        const checkItemIsExist = products?.data.find(
+          (product) => product?.id == cart?.productId
+        );
+        return {
+          ...cart,
+          product: checkItemIsExist,
+        };
+      });
+      setTotal(
+        newCarts.reduce((acc, curr) => {
+          return (acc += curr?.product?.price * curr?.quantity);
+        }, 0)
+      );
+    }
+  }, [value]);
+  useEffect(() => {
+    setQuantity(
+      value.reduce((prev, curr: any) => {
+        return (prev += curr?.quantity);
+      }, 0)
+    );
+  }, [value]);
 
   const handleLogout = () => {
     try {
       deleteCookieConfig(COOKIE_NAME.ACCESS_TOKEN);
       router.push(LINK.LOGIN);
-    } catch (error) { }
+    } catch (error) {}
   };
   const handleSubmit = () => {
     updateAccount({
@@ -62,9 +99,6 @@ export default function Header() {
       let carts = getItemFromLocalStorage("cart") || [];
       carts = carts.map((cart) => {
         const checkItemIsExist = products?.data.find((product) => {
-          console.log(carts);
-          console.log(product);
-
           return product?.id == cart?.productId;
         });
         return {
@@ -75,6 +109,7 @@ export default function Header() {
       setCartLocal([...carts]);
     }
   }, [products?.data, products?.data?.length]);
+
   return (
     <>
       <div className="humberger__menu__overlay "></div>
@@ -82,24 +117,24 @@ export default function Header() {
         <div className="humberger__menu__cart">
           <ul>
             <li>
-              <a href="#">
-                <i className="fa fa-shopping-bag" /> <span>3</span>
-              </a>
+              <Link href={LINK.CART}>
+                <i className="fa fa-shopping-bag" /> <span>{quantity}</span>
+              </Link>
             </li>
+            <div className="header__cart__price">
+              item: <span>{currencyFormatterConfig(total)}</span>
+            </div>
           </ul>
-          <div className="header__cart__price">
-            item: <span>$150.00</span>
-          </div>
         </div>
         <div id="mobile-menu-wrap">
           <nav className="mobile-menu-wrap">
             <ul>
               {navItems.map((item, index) => {
                 return (
-                  <li
-                    key={index}
-                  >
-                    <Link className="list-unstyled" href={item.href}>{item.text}</Link>
+                  <li key={index}>
+                    <Link className="list-unstyled" href={item.href}>
+                      {item.text}
+                    </Link>
                   </li>
                 );
               })}
@@ -183,15 +218,16 @@ export default function Header() {
           </div>
         </div>
         <div className="container">
-          <div className="row align-items-center justify-content-lg-between">
+          <div className="row align-items-center justify-content-lg-between justify-content-between">
             <div className="">
               <div className="header__logo">
                 <Link href={LINK.HOME}>
                   <Image
-                    src={`${isProduction
-                      ? "https://maytinhthunguyen.com"
-                      : "http://localhost:5000"
-                      }/api/upload/1705643045785-625737817.png`}
+                    src={`${
+                      isProduction
+                        ? "https://maytinhthunguyen.com"
+                        : "http://localhost:5000"
+                    }/api/upload/1705643045785-625737817.png`}
                     alt="logo"
                     width={100}
                     height={100}
@@ -207,12 +243,13 @@ export default function Header() {
                     return (
                       <li
                         key={index}
-                        className={`nav-item ${navItems.findIndex(
-                          (item) => item.href === pathname
-                        ) === index
-                          ? "active"
-                          : ""
-                          }`}
+                        className={`nav-item ${
+                          navItems.findIndex(
+                            (item) => item.href === pathname
+                          ) === index
+                            ? "active"
+                            : ""
+                        }`}
                       >
                         <Link href={item.href}>{item.text}</Link>
                       </li>
@@ -221,18 +258,19 @@ export default function Header() {
                 </ul>
               </nav>
             </div>
-            <div className="d-flex d-sm-block">
+            <div className="d-flex d-sm-block m-sm-auto">
               <div className="header__cart">
                 <ul>
                   <li>
-                    <a href="#">
-                      <i className="fa fa-shopping-bag"></i> <span>3</span>
-                    </a>
+                    <Link href={LINK.CART}>
+                      <i className="fa fa-shopping-bag"></i>{" "}
+                      <span>{quantity}</span>
+                    </Link>
                   </li>
+                  <div className="header__cart__price ml-3">
+                    item: <span>{currencyFormatterConfig(total)}</span>
+                  </div>
                 </ul>
-                <div className="header__cart__price">
-                  item: <span>$150.00</span>
-                </div>
               </div>
             </div>
             <div className="humberger__open">

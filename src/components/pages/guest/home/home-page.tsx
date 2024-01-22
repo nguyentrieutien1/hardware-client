@@ -3,10 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useGetProducts } from "~/queries";
 import Product from "../product/product";
 import Categories from "../categories/categories";
-import Link from "next/link";
-import { LINK } from "~/lib/constants";
 import Post from "../post/post";
-import Pagination from "react-bootstrap/Pagination";
 import Search from "../search/search";
 import PaginationPage from "../pagination/pagination";
 export default function ShopPage() {

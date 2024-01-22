@@ -1,35 +1,37 @@
+"use client"
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./../../public/css/tiny-slider.css";
 import "react-toastify/dist/ReactToastify.css";
 import Providers from "~/lib/helpers/provider";
-import '../../public/css/style.css'
-import 'tippy.js/dist/tippy.css';
+import "../../public/css/style.css";
+import "tippy.js/dist/tippy.css";
 import { ToastContainer } from "react-toastify";
-import Head from "next/head";
+import { Provider } from "react-redux";
+import { useRef } from "react";
+import { AppStore, makeStore } from "~/lib";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "Máy tính Thu Nguyễn",
-  icons: 'https://maytinhthunguyen.com/api/upload/1705643045785-625737817.png'
-};
 
-export const viewport = {
-  width: 1,
-  themeColor: "light",
-};
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const storeRef = useRef<AppStore>();
+  if (!storeRef.current) {
+    // Create the store instance the first time this renders
+    storeRef.current = makeStore();
+  }
   return (
     <html lang="vi">
       <body className={inter.className}>
-        <Providers>{children}</Providers>
-        <ToastContainer />
+        <Provider store={storeRef.current}>
+          <Providers>{children}</Providers>
+          <ToastContainer />
+        </Provider>
       </body>
     </html>
   );
