@@ -16,7 +16,7 @@ export default function Categories(props: CategoriesProps) {
           <Accordion.Item eventKey="0">
             <Accordion.Header>
               <div className="hero__categories__all d-flex align-items-center justify-content-between">
-                <div >
+                <div>
                   <i className="fa fa-bars" />
                   <span>Thể loại</span>
                 </div>

@@ -58,7 +58,7 @@ export default function Header() {
         }, 0)
       );
     }
-  }, [value]);
+  }, [value, products]);
   useEffect(() => {
     setQuantity(
       value.reduce((prev, curr: any) => {
@@ -218,7 +218,7 @@ export default function Header() {
           </div>
         </div>
         <div className="container">
-          <div className="row align-items-center justify-content-lg-between justify-content-between">
+          <div className="row d-flex align-items-center justify-content-between" >
             <div className="">
               <div className="header__logo">
                 <Link href={LINK.HOME}>
@@ -258,7 +258,7 @@ export default function Header() {
                 </ul>
               </nav>
             </div>
-            <div className="d-flex d-sm-block m-sm-auto">
+            <div className="d-flex d-sm-block m-sm-auto m-lg-0">
               <div className="header__cart">
                 <ul>
                   <li>

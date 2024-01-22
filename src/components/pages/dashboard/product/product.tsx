@@ -4,7 +4,7 @@ import { AppModal } from "~/components/modal/modal";
 import { useCategories, useGetProducts } from "~/queries";
 import ImageUploading from "react-images-uploading";
 import { IProduct } from "~/types";
-import { toastConfig } from "~/lib";
+import { axiosConfig, toastConfig } from "~/lib";
 import {
   useCreateProductMutation,
   useDeleteProductMutation,
@@ -15,6 +15,8 @@ import { toastErrorAuthen } from "~/lib/helpers";
 import Tippy from "@tippyjs/react";
 import Spinner from "~/components/spinner/spinner";
 import PaginationPage from "../../guest/pagination/pagination";
+import axios from "axios";
+import { headers } from "next/headers";
 export default function ProductPage() {
   const [show, setShow] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
@@ -45,9 +47,10 @@ export default function ProductPage() {
     setProduct({ name: "", stock: 1, price: null, description: "", id: null });
   };
   const onChangeImages = (imageList) => {
+    console.log(imageList);
+
     setImages(imageList);
   };
-
   const onChangeProduct = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -70,7 +73,7 @@ export default function ProductPage() {
       };
     });
   };
-  const handleOnSubmit = () => {
+  const handleOnSubmit = async () => {
     for (const key in product) {
       if (Object.prototype.hasOwnProperty.call(product, key)) {
         if (!product[key] && key !== "id") {
@@ -81,10 +84,20 @@ export default function ProductPage() {
     }
     if (!isUpdate) {
       delete product.id;
+      const formData = new FormData();
+      images?.forEach((img, index) => {
+        formData.append(`file`, img.file);
+      });
+      const res = await axiosConfig.post("/upload", formData);
       createProduct({
         ...product,
-        images: images.map((image) => {
-          return { url: image.data_url };
+        images: res.data?.map((d) => {
+          return {
+            name: d.originalname,
+            url: d.url,
+            size: d.size,
+            type: d.type,
+          };
         }),
       })
         .then((res) => {
@@ -97,11 +110,20 @@ export default function ProductPage() {
           toastErrorAuthen(err, "Tạo sản phẩm");
         });
     } else {
+      const newImages = [];
+      for (let i = 0; i < images.length; i++) {
+        if (images[i]?.file) {
+          const formData = new FormData();
+          formData.append(`file`, images[i]?.file);
+          const res = await axiosConfig.post("/upload", formData);
+          newImages.push(res.data[0]);
+        } else {
+          newImages.push(images[i]);
+        }
+      }
       updateProduct({
         ...product,
-        images: images.map((image) => {
-          return { url: image.data_url };
-        }),
+        images: newImages,
       }).then(() => {
         setShow(false);
         setIsUpdate(false);
@@ -232,7 +254,7 @@ export default function ProductPage() {
                           value={images}
                           onChange={onChangeImages}
                           maxNumber={69}
-                          dataURLKey="data_url"
+                          dataURLKey="url"
                         >
                           {({
                             imageList,
@@ -276,7 +298,7 @@ export default function ProductPage() {
                                     className=" image-item d-flex flex-column align-items-center justify-content-between col-3 flex-md-wrap"
                                   >
                                     <img
-                                      src={image["data_url"]}
+                                      src={image["url"]}
                                       width="100"
                                       className="rounded"
                                       height="100"
@@ -454,13 +476,8 @@ export default function ProductPage() {
                                     id: product?.id,
                                     categoriesId: product?.categoriesId,
                                   });
-                                  setImages(
-                                    product?.images.map((image) => {
-                                      return {
-                                        data_url: image.url,
-                                      };
-                                    })
-                                  );
+                                  console.log(product?.images);
+                                  setImages(product?.images);
                                 }}
                                 type="button"
                                 className="btn btn-success btn-sm m-lg-1"
