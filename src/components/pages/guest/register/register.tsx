@@ -1,14 +1,15 @@
 "use client";
 import Link from "next/link";
 import React, { ChangeEvent, FormEvent, useState } from "react";
-import "../login/login.css";
 import { LINK } from "~/lib/constants/routes";
 import { IAuthRegister } from "~/types";
 import { toastConfig } from "~/lib";
 import { TOAST_MESSAGE } from "~/lib/constants/routes/toast-message";
 import { useRouter } from "next/navigation";
 import { useAuthRegisterMutation } from "~/mutations";
+import "../../../../../public/css/style.css"
 import "../../../../../public/css/bootstrap.min.css"
+import "./login.css";
 export default function RegisterPage() {
   const router = useRouter();
 

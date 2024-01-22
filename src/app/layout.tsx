@@ -1,10 +1,8 @@
 "use client"
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./../../public/css/tiny-slider.css";
 import "react-toastify/dist/ReactToastify.css";
 import Providers from "~/lib/helpers/provider";
-import "../../public/css/style.css";
 import "tippy.js/dist/tippy.css";
 import { ToastContainer } from "react-toastify";
 import { Provider } from "react-redux";

@@ -1,6 +1,5 @@
 "use client";
 import React, { ChangeEvent, FormEvent, useState } from "react";
-import "./login.css";
 import Link from "next/link";
 import { LINK } from "~/lib/constants/routes";
 import { IAuthLogin } from "~/types";
@@ -9,6 +8,7 @@ import { useAuthLoginMutation } from "~/mutations";
 import { useRouter } from "next/navigation";
 import { toastErrorAuthen } from "~/lib/helpers";
 
+import "./login.css";
 import "../../../../../public/css/bootstrap.min.css"
 export default function LoginPage() {
   const [loginInfo, setLoginInfo] = useState<IAuthLogin>({
