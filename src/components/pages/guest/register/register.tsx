@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useAuthRegisterMutation } from "~/mutations";
 import "../../../../../public/css/style.css";
 import "../../../../../public/css/bootstrap.min.css";
-import "./login.css";
+import "./../login/login.css";
 export default function RegisterPage() {
   const router = useRouter();
 
