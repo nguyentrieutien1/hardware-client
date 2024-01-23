@@ -16,7 +16,6 @@ import { useUpdateAccountMutation } from "~/mutations/account/account-update-mut
 import { getItemFromLocalStorage, toastErrorAuthen } from "~/lib/helpers";
 import Image from "next/image";
 import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
-import("../../../../../jquery");
 interface LinkItem {
   text: string;
   href: string;
