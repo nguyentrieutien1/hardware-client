@@ -44,7 +44,7 @@ function CartPage() {
     type: "COD",
   });
 
-  const dispath = useDispatch()
+  const dispath = useDispatch();
   const parseKey = (name) => {
     switch (name) {
       case "fullName":
@@ -77,7 +77,7 @@ function CartPage() {
       });
       setItemToLocalStorage("cart", carts);
       setCartLocal([...carts]);
-      dispath(updateQuantity(carts))
+      dispath(updateQuantity(carts));
     }
   };
   const onDeleteProduct = (productId) => {
@@ -89,7 +89,7 @@ function CartPage() {
     carts.splice(findIndex, 1);
     setCartLocal([...carts]);
     setItemToLocalStorage("cart", carts);
-    dispath(updateQuantity(cart))
+    dispath(updateQuantity(cart));
     setShow(false);
   };
   const handleOrder = () => {
@@ -228,7 +228,7 @@ function CartPage() {
                                 </div>
                                 <div className="mx-3">{item?.quantity}</div>
                                 <div
-                                  className=" cursor-pointer btn btn-success"
+                                  className=" cursor-pointer btn btn-outline-dark"
                                   onClick={() =>
                                     onUpdateQuantity(item?.product?.id, {
                                       quantity: 1,
@@ -426,7 +426,31 @@ function CartPage() {
           )}
         </div>
       ) : (
-        <div style={{fontSize: '22px'}} className="text-center mb-5">Bạn chưa có đơn nào trong giỏ hàng !</div>
+        <div className="container">
+          <div className="row">
+            <div className="card-body cart">
+              <div className="col-sm-12 empty-cart-cls text-center">
+                <img
+                  src="https://i.imgur.com/dCdflKN.png"
+                  width="130"
+                  height="130"
+                  className="img-fluid mb-4 mr-3"
+                />
+                <h3>
+                  <strong>Giỏ hàng đang trống.</strong>
+                </h3>
+                <h4>Tiếp tục mua bạn nhé !</h4>
+                <Link
+                  href={LINK.SHOP}
+                  className="btn btn-success cart-btn-transform m-3"
+                  data-abc="true"
+                >
+                  Tiếp tục mua sắm
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </section>
   ) : (

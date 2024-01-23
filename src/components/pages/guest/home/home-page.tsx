@@ -75,7 +75,7 @@ export default function ShopPage() {
                 ))
             ) : (
               <h5 className="col-12 text-center mb-5">
-                Hiện tại cửa hàng chưa có sản phẩm nào !
+                Sản
               </h5>
             )}
           </div>
