@@ -2,7 +2,8 @@
 require("dotenv").config();
 const nextConfig = {
   images: {
-    remotePatterns: ['maytinhthunguyen.com', 'localhost'],
+    
+    domains: ['maytinhthunguyen.com', 'localhost'],
   },
   env: {
     BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
