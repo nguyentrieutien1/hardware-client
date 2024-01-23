@@ -463,7 +463,6 @@ function CartPage() {
   //    {showModalConfirm && (
   //     <AppModal
   //       modalIsOpen={showModalConfirm}
-  //       closeModal={() => setShowModalConfirm(false)}
   //       onConfirm={() => handleOrder()}
   //       title={`Đặt hàng`}
   //       content={<p>Bạn có chắc chắn muốn đặt hàng không  ?</p>}
