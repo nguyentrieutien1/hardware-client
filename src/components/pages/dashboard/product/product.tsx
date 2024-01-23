@@ -424,6 +424,7 @@ export default function ProductPage() {
                                   product?.images[0]?.url
                                 }
                                 className="me-1 rounded"
+                                style={{objectFit: 'contain'}}
                                 alt="image"
                               />
                             </td>
