@@ -90,7 +90,7 @@ export default function ShopPage() {
                 <div >
                   <div >
                     <div >
-                      <div className="d-flex justify-content-end">
+                      <div className="d-flex justify-content-start">
                         {productList.length > 0 && (
                           <PaginationPage
                             active={active}
