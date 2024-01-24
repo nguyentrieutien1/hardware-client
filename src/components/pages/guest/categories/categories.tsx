@@ -11,35 +11,33 @@ export default function Categories(props: CategoriesProps) {
   const { data: categories } = useCategories();
   return (
     <div className="col-12 w-100 p-0">
-      <div className="hero__categories">
-        <Accordion defaultActiveKey="0" className="border-0">
-          <Accordion.Item eventKey="0">
-            <Accordion.Header>
-              <div className="hero__categories__all d-flex align-items-center justify-content-between">
-                <div>
-                  <i className="fa fa-bars" />
-                  <span>Danh mục </span>
-                </div>
-                <span>{`(${
-                  categories?.data ? categories?.data?.length : 0
-                })`}</span>
-              </div>
-            </Accordion.Header>
-            <Accordion.Body>
-              <ul className="bg-white" style={{ zIndex: 3 }}>
-                {categories?.data?.map((cat, i) => (
-                  <li
-                    className="cursor-pointer"
-                    key={i}
-                    onClick={() => setFilterByCategory(cat?.id)}
-                  >
-                    <a>{cat?.name}</a>
-                  </li>
-                ))}
-              </ul>
-            </Accordion.Body>
-          </Accordion.Item>
-        </Accordion>
+      <div className="hero__categories position-relative">
+        <div
+          onClick={() => setHideCategories((prev) => !prev)}
+          className="hero__categories__all d-flex align-items-center justify-content-between"
+        >
+          <div>
+            <i className="fa fa-bars" />
+            <span>Danh mục </span>
+          </div>
+          <span>{`(${categories?.data ? categories?.data?.length : 0})`}</span>
+        </div>
+        {hideCategories && (
+          <ul
+            className="bg-white position-absolute w-100"
+            style={{ zIndex: 3 }}
+          >
+            {categories?.data?.map((cat, i) => (
+              <li
+                className="cursor-pointer"
+                key={i}
+                onClick={() => setFilterByCategory(cat?.id)}
+              >
+                <a>{cat?.name}</a>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

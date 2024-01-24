@@ -133,13 +133,11 @@ export default function ShopDetail() {
                 <div className="tab-pane active" id="tabs-1" role="tabpanel">
                   <div className="product__details__tab__desc">
                     <h6>Thông tin về sản phẩm</h6>
-                    <p>
                       <div
                         dangerouslySetInnerHTML={{
                           __html: DOMFormatter(productData?.description),
                         }}
                       ></div>
-                    </p>
                   </div>
                 </div>
               </div>

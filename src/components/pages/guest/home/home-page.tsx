@@ -40,9 +40,13 @@ export default function ShopPage() {
         <div className="container">
           <div className="row">
             <div className="col-lg-12">
+             <div className="row">
+             <div className="col-4">
+              <Categories />
+              </div>
               <div className="section-title">
                 {productList.length > 0 && (
-                  <div className="product__pagination float float-right mt-4">
+                  <div className="product__pagination float float-right mx-4">
                     <PaginationPage
                       active={active}
                       handleJump={handleJump}
@@ -52,14 +56,7 @@ export default function ShopPage() {
                   </div>
                 )}
               </div>
-              <div className="featured__controls">
-                <ul>
-                  {/* <li data-filter=".oranges">Oranges</li>
-                  <li data-filter=".fresh-meat">Fresh Meat</li>
-                  <li data-filter=".vegetables">Vegetables</li>
-                  <li data-filter=".fastfood">Fastfood</li> */}
-                </ul>
-              </div>
+             </div>
             </div>
           </div>
 
