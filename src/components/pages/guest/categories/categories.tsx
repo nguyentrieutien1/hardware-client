@@ -7,7 +7,7 @@ interface CategoriesProps {
 }
 export default function Categories(props: CategoriesProps) {
   const { setFilterByCategory } = props;
-  const [hideCategories, setHideCategories] = useState<boolean>(false);
+  const [hideCategories, setHideCategories] = useState<boolean>(true);
   const { data: categories } = useCategories();
   return (
     <div className="col-12 w-100 p-0">
@@ -20,7 +20,6 @@ export default function Categories(props: CategoriesProps) {
             <i className="fa fa-bars" />
             <span>Danh mục </span>
           </div>
-          <span>{`(${categories?.data ? categories?.data?.length : 0})`}</span>
         </div>
         {hideCategories && (
           <ul

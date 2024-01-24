@@ -19,6 +19,7 @@ import axios from "axios";
 import { headers } from "next/headers";
 import "@progress/kendo-theme-default/dist/all.css";
 import { Editor, EditorTools } from "@progress/kendo-react-editor";
+import DOMPurify from "dompurify";
 export default function ProductPage() {
   const [show, setShow] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
@@ -363,7 +364,20 @@ export default function ProductPage() {
                               [Bold, Italic, Underline],
                               [Undo, Redo],
                             ]}
+                            onPasteHtml={(event) => {
+                              const sanitizedText = DOMPurify.sanitize(
+                                event.pastedHtml
+                              );
+                              setProduct((prev) => {
+                                return {
+                                  ...prev,
+                                  description:sanitizedText,
+                                };
+                              });
+                            }}
                             onChange={(event) => {
+                              console.log(event.html);
+                              
                               setProduct((prev) => {
                                 return {
                                   ...prev,

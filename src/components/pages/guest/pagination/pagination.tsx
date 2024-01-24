@@ -18,6 +18,7 @@ export default function PaginationPage(props: PaginationProps) {
         activeLabel=""
         key={number}
         active={number === active}
+        href="#"
       >
         {number}
       </Pagination.Item>
