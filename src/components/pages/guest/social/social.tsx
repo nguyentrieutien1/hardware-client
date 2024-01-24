@@ -9,7 +9,7 @@ export default function Social() {
       >
         <i className="fa fa-facebook primary-color " />
       </a>
-      <a target="_blank" href="tiktok.com/@thunguyencomputer">
+      <a target="_blank" href="https://www.tiktok.com/@thunguyencomputer">
         <img
           style={{ width: "30px", height: "30px", objectFit: "contain" }}
           src="https://1000logos.net/wp-content/uploads/2019/06/green-tiktok-logo.png"

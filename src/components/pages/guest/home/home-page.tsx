@@ -67,8 +67,7 @@ export default function ShopPage() {
       <section className="featured spad">
         <div className="p-2">
           <div className="row">
-            <div className="col-lg-12">
-            </div>
+            <div className="col-lg-12"></div>
           </div>
           <div className="row featured__filter mb-5 p-2 justify-content-center">
             <div className="col-10 col-xl-2">
@@ -127,20 +126,30 @@ export default function ShopPage() {
                         type="text"
                         placeholder="Tìm kiếm sản phẩm theo tên"
                       />
-                      <button type="button" className="site-btn">
+                      <button
+                        onClick={handleSearch}
+                        type="button"
+                        className="site-btn"
+                      >
                         Tìm kiếm
                       </button>
                     </form>
                   </div>
                 </div>
               )}
-              <div className="row p-5">
+              <div className="row col-12 p-5 text-center">
                 {products?.data ? (
-                  productList
-                    .slice(step * active - step, step * active)
-                    .map((product, i) => (
-                      <Product numberColumn={2} key={i} product={product} />
-                    ))
+                  productList.length > 0 ? (
+                    productList
+                      .slice(step * active - step, step * active)
+                      .map((product, i) => (
+                        <Product numberColumn={2} key={i} product={product} />
+                      ))
+                  ) : (
+                    <div style={{  width: "100%" }}>
+                      <h3 className="text-center">Không tìm thấy sản phẩm </h3>
+                    </div>
+                  )
                 ) : (
                   <Spinner isLoading={isLoading} />
                 )}
@@ -160,13 +169,14 @@ export default function ShopPage() {
             </div>
           </div>
           <div className="row mt-3">
-            <div className="col-12">
+            <div className="col-2"></div>
+            <div className="col-10">
               <div className="section-title">
                 <h2>Bài viết gần đây</h2>
+                <Post />
               </div>
             </div>
           </div>
-          <Post />
         </div>
       </section>
     </>
