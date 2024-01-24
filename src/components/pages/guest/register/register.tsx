@@ -59,14 +59,12 @@ export default function RegisterPage() {
     try {
       e.preventDefault();
       for (const key in registerInfo) {
-        if (Object.prototype.hasOwnProperty.call(registerInfo, key)) {
           if (!registerInfo[key]) {
             toastConfig(
               `Trường ${convertInfoRegisterName(key)} không được trống !`,
               { status: "warning" }
             );
             return;
-          }
         }
       }
       mutateAsync(registerInfo)
@@ -102,7 +100,7 @@ export default function RegisterPage() {
               <div className="wrap d-md-flex">
                 <div className="text-wrap p-4 p-lg-5 text-center d-flex align-items-center order-md-last">
                   <div className="text w-100">
-                    <h2>Chào mừng bạn đăng kí</h2>
+                    <h3 className="text-white">Chào mừng bạn đăng kí</h3>
                     <Link
                       href={"#"}
                       onClick={() => (window.location.href = LINK.LOGIN)}

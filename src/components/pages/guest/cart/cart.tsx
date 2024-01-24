@@ -94,11 +94,9 @@ function CartPage() {
   };
   const handleOrder = () => {
     for (const key in orderInfo) {
-      if (Object.prototype.hasOwnProperty.call(orderInfo, key)) {
-        if (!orderInfo[key]) {
-          toastConfig(`${parseKey(key)} không được trống !`);
-          return;
-        }
+      if (!orderInfo[key]) {
+        toastConfig(`${parseKey(key)} không được trống !`);
+        return;
       }
     }
     const order: any = cartLocal.map((item) => {
@@ -222,13 +220,13 @@ function CartPage() {
                                       quantity: -1,
                                     })
                                   }
-                                  className=" cursor-pointer btn btn-info"
+                                  className=" cursor-pointer btn btn-outline-success"
                                 >
                                   -
                                 </div>
                                 <div className="mx-3">{item?.quantity}</div>
                                 <div
-                                  className=" cursor-pointer btn btn-outline-dark"
+                                  className=" cursor-pointer btn btn-outline-success"
                                   onClick={() =>
                                     onUpdateQuantity(item?.product?.id, {
                                       quantity: 1,
@@ -436,10 +434,7 @@ function CartPage() {
                   height="130"
                   className="img-fluid mb-4 mr-3"
                 />
-                <h3>
-                  <strong>Giỏ hàng đang trống.</strong>
-                </h3>
-                <h4>Tiếp tục mua bạn nhé !</h4>
+                <h3 className="mb-3">Giỏ hàng đang trống.</h3>
                 <Link
                   href={LINK.SHOP}
                   className="btn btn-success cart-btn-transform m-3"

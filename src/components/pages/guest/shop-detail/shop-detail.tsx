@@ -3,18 +3,15 @@ import React, { useEffect, useState } from "react";
 import { useGetProductDetail, useIsUserLogined } from "~/queries";
 import { useParams } from "next/navigation";
 import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
-import {
-  getItemFromLocalStorage,
-  setItemToLocalStorage,
-} from "~/lib/helpers";
-import { toastConfig, useAppDispatch } from "~/lib";
+import { getItemFromLocalStorage, setItemToLocalStorage } from "~/lib/helpers";
+import { DOMFormatter, toastConfig, useAppDispatch } from "~/lib";
 import Spinner from "~/components/spinner/spinner";
 import Tippy from "@tippyjs/react";
 import { updateQuantity } from "~/lib/features/cart";
 export default function ShopDetail() {
   const { id } = useParams();
   const [quantity, setQuantity] = useState(1);
-  const dispath = useAppDispatch()
+  const dispath = useAppDispatch();
   const { data: product, isLoading } = useGetProductDetail({ id });
   const [productData, setProductData] = useState<any>({});
   const onAddToCart = async () => {
@@ -27,7 +24,7 @@ export default function ShopDetail() {
       cart.push({ productId: +id, quantity });
     }
     setItemToLocalStorage("cart", cart);
-    dispath(updateQuantity(cart))
+    dispath(updateQuantity(cart));
     toastConfig(`Bạn đã thêm ${name} vào giỏ hàng thành công !`, {
       status: "success",
     });
@@ -62,7 +59,11 @@ export default function ShopDetail() {
                     allowHTML={true}
                     content={
                       <img
-                        style={{ objectFit: "contain", width: '200%', height: '200%' }}
+                        style={{
+                          objectFit: "contain",
+                          width: "200%",
+                          height: "200%",
+                        }}
                         src={img?.url}
                         alt="5"
                       />
@@ -95,15 +96,12 @@ export default function ShopDetail() {
               <div className="product__details__price">
                 {currencyFormatterConfig(product?.data?.price)}
               </div>
-              <p>{product?.data?.description}</p>
               <div className="product__details__quantity align-items-center">
                 <div className="quantity d-flex align-items-center">
-                  <span>
-                    Số lượng: </span>
-                  <div className="pro-qty  p-2 " >
+                  <span>Số lượng: </span>
+                  <div className="pro-qty  p-2 ">
                     <input
                       type="number"
-
                       className="bg-transparent"
                       value={quantity}
                       onChange={(e) => {
@@ -119,33 +117,16 @@ export default function ShopDetail() {
                   onClick={() => onAddToCart()}
                   className="primary-btn text-white cursor-pointer"
                 >
-
                   Thêm vào giỏ hàng
                 </a>
               </div>
-
-              <ul>
-                <li>
-                  <b>Thời gian vận chuyển</b>{"  "}
-                  <span>
-                    khoảng 01 ngày. <samp>Free pickup today</samp>
-                  </span>
-                </li>
-                <li>
-                  <b>Nặng</b> <span>0.5 kg</span>
-                </li>
-              </ul>
             </div>
           </div>
           <div className="col-lg-12">
             <div className="product__details__tab">
               <ul className="nav nav-tabs" role="tablist">
                 <li className="nav-item">
-                  <p
-                    data-toggle="tab"
-                  >
-                    Thông tin
-                  </p>
+                  <p data-toggle="tab">Thông tin</p>
                 </li>
               </ul>
               <div className="tab-content">
@@ -153,7 +134,11 @@ export default function ShopDetail() {
                   <div className="product__details__tab__desc">
                     <h6>Thông tin về sản phẩm</h6>
                     <p>
-                      {productData?.description}
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: DOMFormatter(productData?.description),
+                        }}
+                      ></div>
                     </p>
                   </div>
                 </div>

@@ -53,21 +53,15 @@ export default function ShopPage() {
   }, [products?.data]);
   return (
     <>
-      <>
-        <section className="hero-normal container">
-          <div className="">
-            <div className="row">
-              <Categories setFilterByCategory={setFilterByCategory} />
-              <Search />
-            </div>
-          </div>
-        </section>
         <section className="product spad container">
           <div className="container">
             <div className="row">
-              <div className="col-lg-3 col-12 d-flex justify-content-center">
+              <div className="col-lg-3 col-12 ">
                 <div className="sidebar">
-                  {productList.length > 0 && <div className="sidebar__item">
+                  <div className="sidebar__item">
+                    <Categories setFilterByCategory={setFilterByCategory}/>
+                  </div>
+                  {products?.data?.length > 0 && <div className="sidebar__item">
                     <h4>Giá</h4>
                     <div className="">
                       <Slider
@@ -92,13 +86,10 @@ export default function ShopPage() {
                   </div>}
                 </div>
               </div>
-              <div className="col-lg-9 col-12 mt-3">
-                <div className="">
-                  <div className="">
-                    <div className="">
-                      <div className="section-title product__discount__title text-center">
-                        <h2>Khuyến mãi</h2>
-                      </div>
+              <div className="col-lg-9 col-12">
+                <div >
+                  <div >
+                    <div >
                       <div className="d-flex justify-content-end">
                         {productList.length > 0 && (
                           <PaginationPage
@@ -128,6 +119,5 @@ export default function ShopPage() {
           </div>
         </section>
       </>
-    </>
   );
 }

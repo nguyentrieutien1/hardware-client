@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { LINK, NAME } from "~/lib/constants/routes";
 import { useGetProducts } from "~/queries";
+import "../../../../../jquery.js";
 import {
   COOKIE_NAME,
   deleteCookieConfig,
@@ -13,7 +14,11 @@ import {
 import { AppModal } from "~/components/modal/modal";
 import Profile from "../profile/profile";
 import { useUpdateAccountMutation } from "~/mutations/account/account-update-mutation";
-import { getItemFromLocalStorage, toastErrorAuthen } from "~/lib/helpers";
+import {
+  getItemFromLocalStorage,
+  setItemToLocalStorage,
+  toastErrorAuthen,
+} from "~/lib/helpers";
 import Image from "next/image";
 import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
 interface LinkItem {
@@ -31,7 +36,7 @@ export default function Header() {
   const [quantity, setQuantity] = useState(0);
   const [total, setTotal] = useState(0);
   const { value } = useAppSelector((state) => state.cart);
-
+  const [userIsLogined, setUserIsLogined] = useState(false);
   const isProduction = process.env.NODE_ENV === "production";
   console.log(value);
 
@@ -108,7 +113,13 @@ export default function Header() {
       setCartLocal([...carts]);
     }
   }, [products?.data, products?.data?.length]);
-
+  useEffect(() => {
+    if (getItemFromLocalStorage("isLogined")) {
+      setUserIsLogined(true);
+    } else {
+      setUserIsLogined(false);
+    }
+  }, []);
   return (
     <>
       <div className="humberger__menu__overlay "></div>
@@ -140,6 +151,24 @@ export default function Header() {
             </ul>
           </nav>
         </div>
+        {userIsLogined ? (
+          <div className="header__top__right__auth cursor-pointer">
+            <a
+              onClick={() => {
+                setItemToLocalStorage("isLogined", false);
+                window.location.href = LINK.LOGIN;
+              }}
+            >
+              <i className="fa fa-user" /> Đăng xuất
+            </a>
+          </div>
+        ) : (
+          <div className="header__top__right__auth cursor-pointer">
+            <a onClick={() => (window.location.href = LINK.LOGIN)}>
+              <i className="fa fa-user" /> Đăng nhập
+            </a>
+          </div>
+        )}
         <div className="humberger__menu__contact">
           <ul>
             <li>
@@ -162,18 +191,18 @@ export default function Header() {
           title="Hồ sơ"
         />
       )}
-      <header className="header mb-3">
-        <div className="header__top">
+      <header className="header mb-3 ">
+        <div className="header__top  primary-bgr text-white">
           <div className="container">
-            <div className="row">
+            <div className="row ">
               <div className="col-lg-6">
                 <div className="header__top__left">
-                  <ul>
-                    <li>
-                      <i className="fa fa-envelope" />
-                      vanhao.0112@gmail.com
+                  <ul className="d-flex">
+                    <li className="d-flex align-items-center">
+                      <i className="fa fa-envelope text-white" />
+                      <div className="text-white">vanhao.0112@gmail.com</div>
                     </li>
-                    <li>Miễn phí vận chuyển</li>
+                    <li className=" text-white">Miễn phí vận chuyển</li>
                   </ul>
                 </div>
               </div>
@@ -181,21 +210,21 @@ export default function Header() {
                 <div className="header__top__right">
                   <div className="header__top__right__social">
                     <a href="#">
-                      <i className="fa fa-facebook" />
+                      <i className="fa fa-facebook text-white" />
                     </a>
                     <a href="#">
-                      <i className="fa fa-twitter" />
+                      <i className="fa fa-twitter text-white" />
                     </a>
                     <a href="#">
-                      <i className="fa fa-linkedin" />
+                      <i className="fa fa-linkedin text-white" />
                     </a>
                     <a href="#">
-                      <i className="fa fa-pinterest-p" />
+                      <i className="fa fa-pinterest-p text-white" />
                     </a>
                   </div>
                   <div className="header__top__right__language">
                     <img src="img/language.png" alt="" />
-                    <div>Tùy chọn</div>
+                    <div className=" text-white">Tùy chọn</div>
                     <span className="arrow_carrot-down" />
                     <ul>
                       <li>
@@ -206,11 +235,24 @@ export default function Header() {
                       </li>
                     </ul>
                   </div>
-                  <div className="header__top__right__auth cursor-pointer">
-                    <a onClick={() => (window.location.href = LINK.LOGIN)}>
-                      <i className="fa fa-user" /> Login
-                    </a>
-                  </div>
+                  {userIsLogined ? (
+                    <div className="header__top__right__auth cursor-pointer">
+                      <a
+                        onClick={() => {
+                          setItemToLocalStorage("isLogined", false);
+                          window.location.href = LINK.LOGIN;
+                        }}
+                      >
+                        <i className="fa fa-user" /> Đăng xuất
+                      </a>
+                    </div>
+                  ) : (
+                    <div className="header__top__right__auth cursor-pointer">
+                      <a onClick={() => (window.location.href = LINK.LOGIN)}>
+                        <i className="fa fa-user" /> Đăng nhập
+                      </a>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -263,7 +305,7 @@ export default function Header() {
                   <li>
                     <Link href={LINK.CART}>
                       <i className="fa fa-shopping-bag"></i>{" "}
-                      <span>{quantity}</span>
+                      <span className=" primary-bgr">{quantity}</span>
                     </Link>
                   </li>
                   <div className="header__cart__price ml-3">

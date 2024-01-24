@@ -6,10 +6,10 @@ import { IAuthLogin } from "~/types";
 import { COOKIE_NAME, setCookieConfig, toastConfig } from "~/lib";
 import { useAuthLoginMutation } from "~/mutations";
 import { useRouter } from "next/navigation";
-import { toastErrorAuthen } from "~/lib/helpers";
-
-import "./login.css";
+import { setItemToLocalStorage, toastErrorAuthen } from "~/lib/helpers";
+import "../../../../../public/css/style.css";
 import "../../../../../public/css/bootstrap.min.css";
+import "./login.css";
 export default function LoginPage() {
   const [loginInfo, setLoginInfo] = useState<IAuthLogin>({
     email: "",
@@ -32,11 +32,9 @@ export default function LoginPage() {
     try {
       e.preventDefault();
       for (const key in loginInfo) {
-        if (Object.prototype.hasOwnProperty.call(loginInfo, key)) {
-          if (!loginInfo[key]) {
-            toastConfig(`${key} không được trống !`);
-            return;
-          }
+        if (!loginInfo[key]) {
+          toastConfig(`${key} không được trống !`);
+          return;
         }
       }
       setIsLoading(true);
@@ -52,6 +50,7 @@ export default function LoginPage() {
               window.location.href = LINK.HOME;
             }
             setIsLoading(false);
+            setItemToLocalStorage('isLogined', true)
           }
         })
         .catch((err) => {
@@ -76,8 +75,8 @@ export default function LoginPage() {
             <div className="wrap d-md-flex">
               <div className="text-wrap p-4 p-lg-5 text-center d-flex align-items-center order-md-last">
                 <div className="text w-100">
-                  <h2>Chào mừng bạn đăng nhập</h2>
-                  <p>Bạn có tài khoản chưa ?</p>
+                  <h3 className="text-white">Chào mừng bạn đăng nhập</h3>
+                  <p className="text-white">Bạn có tài khoản chưa ?</p>
                   <Link
                     href={"#"}
                     onClick={() => (window.location.href = LINK.REGISTER)}
@@ -155,11 +154,6 @@ export default function LoginPage() {
                         "Đăng nhập"
                       )}
                     </button>
-                  </div>
-                  <div className="form-group d-md-flex">
-                    <div className="text-md-center">
-                      <a href="#">Quên mật khẩu ?</a>
-                    </div>
                   </div>
                 </form>
               </div>

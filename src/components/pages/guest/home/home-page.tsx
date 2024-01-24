@@ -7,11 +7,13 @@ import Post from "../post/post";
 import Search from "../search/search";
 import PaginationPage from "../pagination/pagination";
 import ProductNotFound from "../product-not-found/product-not-found";
+import Loading from "~/components/loading/loading";
+import Spinner from "~/components/spinner/spinner";
 export default function ShopPage() {
-  const { data: products } = useGetProducts(); //[1, 2]
+  const { data: products, isLoading } = useGetProducts(); //[1, 2]
   const [productList, setProductList] = useState([]);
   const [active, setActive] = useState(1);
-  const step = 4;
+  const step = 12;
 
   const handleJump = (number) => {
     setActive(number);
@@ -25,7 +27,6 @@ export default function ShopPage() {
     setActive(1);
   };
 
-
   // dsasadsad
   useEffect(() => {
     if (products?.data) {
@@ -35,20 +36,11 @@ export default function ShopPage() {
 
   return (
     <>
-      <section className="hero">
-        <div className="container">
-          <div className="row">
-            <Categories setFilterByCategory={setFilterByCategory} />
-            <Search isShowBanner={true} />
-          </div>
-        </div>
-      </section>
       <section className="featured spad">
         <div className="container">
           <div className="row">
             <div className="col-lg-12">
               <div className="section-title">
-                <h2>Tất cả sản phẩm</h2>
                 {productList.length > 0 && (
                   <div className="product__pagination float float-right mt-4">
                     <PaginationPage
@@ -72,14 +64,14 @@ export default function ShopPage() {
           </div>
 
           <div className="row featured__filter mb-5">
-            {productList.length > 0 ? (
+            {products?.data ? (
               productList
                 .slice(step * active - step, step * active)
                 .map((product, i) => (
                   <Product numberColumn={3} key={i} product={product} />
                 ))
             ) : (
-              <h5 className="text-center w-100" >Hiện tại không có sản phẩm nào</h5>
+              <Spinner isLoading={isLoading} />
             )}
           </div>
           <div className="row mt-3">

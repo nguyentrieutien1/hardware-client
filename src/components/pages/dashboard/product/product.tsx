@@ -4,7 +4,7 @@ import { AppModal } from "~/components/modal/modal";
 import { useCategories, useGetProducts } from "~/queries";
 import ImageUploading from "react-images-uploading";
 import { IProduct } from "~/types";
-import { axiosConfig, toastConfig } from "~/lib";
+import { DOMFormatter, axiosConfig, toastConfig } from "~/lib";
 import {
   useCreateProductMutation,
   useDeleteProductMutation,
@@ -17,6 +17,8 @@ import Spinner from "~/components/spinner/spinner";
 import PaginationPage from "../../guest/pagination/pagination";
 import axios from "axios";
 import { headers } from "next/headers";
+import "@progress/kendo-theme-default/dist/all.css";
+import { Editor, EditorTools } from "@progress/kendo-react-editor";
 export default function ProductPage() {
   const [show, setShow] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
@@ -51,6 +53,30 @@ export default function ProductPage() {
 
     setImages(imageList);
   };
+  useEffect(() => {
+    const siblingElements: any = document.querySelector(".k-editor-content");
+    if (siblingElements) {
+      siblingElements.nextElementSibling.style.backgroundImage = "none";
+    }
+  });
+
+  const {
+    Bold,
+    Italic,
+    Underline,
+    AlignLeft,
+    AlignRight,
+    AlignCenter,
+    Indent,
+    Outdent,
+    OrderedList,
+    UnorderedList,
+    Undo,
+    Redo,
+    Link,
+    Unlink,
+    InsertImage,
+  } = EditorTools;
   const onChangeProduct = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -75,11 +101,9 @@ export default function ProductPage() {
   };
   const handleOnSubmit = async () => {
     for (const key in product) {
-      if (Object.prototype.hasOwnProperty.call(product, key)) {
-        if (!product[key] && key !== "id") {
-          toastConfig(`Các trường phải đảm bảo không được trống.`);
-          return;
-        }
+      if (!product[key] && key !== "id") {
+        toastConfig(`Các trường phải đảm bảo không được trống.`);
+        return;
       }
     }
     if (!isUpdate) {
@@ -120,7 +144,7 @@ export default function ProductPage() {
         }
       }
       const res = await axiosConfig.post("/upload", formData);
-      newImages = [...newImages, ...res.data]
+      newImages = [...newImages, ...res.data];
       updateProduct({
         ...product,
         images: newImages,
@@ -334,15 +358,21 @@ export default function ProductPage() {
                           <label htmlFor="exampleTextarea1">
                             Mô tả sản phẩm
                           </label>
-                          <textarea
-                            onChange={onChangeProduct}
-                            className="form-control"
-                            id="exampleTextarea1"
-                            name="description"
-                            rows={6}
-                            defaultValue={""}
-                            placeholder="Mô tả sản phẩm"
-                            value={product?.description}
+                          <Editor
+                            tools={[
+                              [Bold, Italic, Underline],
+                              [Undo, Redo],
+                            ]}
+                            onChange={(event) => {
+                              setProduct((prev) => {
+                                return {
+                                  ...prev,
+                                  description: event.html,
+                                };
+                              });
+                            }}
+                            value={product?.description || ""}
+                            contentStyle={{ height: 430, width: "100%" }}
                           />
                         </div>
                       </div>
@@ -424,7 +454,7 @@ export default function ProductPage() {
                                   product?.images[0]?.url
                                 }
                                 className="me-1 rounded"
-                                style={{objectFit: 'contain'}}
+                                style={{ objectFit: "contain" }}
                                 alt="image"
                               />
                             </td>
@@ -432,18 +462,23 @@ export default function ProductPage() {
                             <td className="w-25 cursor-pointer">
                               <Tippy
                                 allowHTML={true}
-                                content={<div>{product?.description}</div>}
+                                theme="light"
+                                content={
+                                  <div
+                                    dangerouslySetInnerHTML={{
+                                      __html: DOMFormatter(
+                                        product?.description
+                                      ),
+                                    }}
+                                  ></div>
+                                }
+                                trigger="click"
                                 arrow={true}
                                 placement="right"
                               >
-                                <div
-                                  style={{
-                                    width: "200px",
-                                    whiteSpace: "break-spaces",
-                                  }}
-                                >
-                                  {product?.description?.slice(0, 20)}...
-                                </div>
+                                <button className="btn btn-outline-success ">
+                                  Xem mô tả
+                                </button>
                               </Tippy>
                             </td>
                             <td>{product?.stock} </td>
@@ -477,7 +512,6 @@ export default function ProductPage() {
                                     id: product?.id,
                                     categoriesId: product?.categoriesId,
                                   });
-                                  console.log(product?.images);
                                   setImages(product?.images);
                                 }}
                                 type="button"

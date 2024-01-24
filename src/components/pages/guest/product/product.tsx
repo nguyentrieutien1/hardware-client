@@ -79,7 +79,7 @@ export default function Product(props: ProductProps) {
         </div>
         <div className="featured__item__text p-3">
           <h6>
-            <a>{name}</a>
+            <a>{name?.slice(0, 60)}...</a>
           </h6>
           <h5>{currencyFormatterConfig(price)}</h5>
         </div>

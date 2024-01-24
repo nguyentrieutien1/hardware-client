@@ -48,12 +48,10 @@ export default function Categories() {
   const handleOnSubmit = () => {
     try {
       for (const key in category) {
-        if (Object.prototype.hasOwnProperty.call(category, key)) {
           if (!category[key]) {
             toastConfig(`Tên danh mục không được trống.`);
             return;
           }
-        }
       }
       if (!isUpdate) {
         create(category).then(() => {

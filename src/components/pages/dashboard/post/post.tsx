@@ -69,11 +69,9 @@ export default function Post() {
 
   const handleCreatePost = () => {
     for (const key in post) {
-      if (Object.prototype.hasOwnProperty.call(post, key)) {
         if (!post[key]) {
           toastConfig(`Các trường phải đảm bảo không được trống !`);
           return;
-        }
       }
     }
     if (!isUpdate) {
