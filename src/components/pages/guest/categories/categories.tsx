@@ -7,7 +7,7 @@ interface CategoriesProps {
 }
 export default function Categories(props: CategoriesProps) {
   const { setFilterByCategory } = props;
-  const [hideCategories, setHideCategories] = useState<boolean>(true);
+  const [hideCategories, setHideCategories] = useState<boolean>(false);
   const { data: categories } = useCategories();
   return (
     <div className="col-12 w-100 p-0">

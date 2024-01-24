@@ -28,7 +28,7 @@ export default function Product(props: ProductProps) {
   //     });
   // };
   return (
-    <div className={`col-lg-${numberColumn} col-sm-6 col-xl-3 col-lg-4 col-md-4 col-sm-6 cursor-pointer`}>
+    <div className={`col-lg-${5} col-sm-6  col-md-4 col-lg-3  col-xl-2  cursor-pointer`}>
       <div className="featured__item">
         <div className="featured__item__pic">
           <Link href={`${LINK.SHOP_DETAIL}/${id}`}>

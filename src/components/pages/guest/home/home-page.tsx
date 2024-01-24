@@ -12,6 +12,7 @@ import Spinner from "~/components/spinner/spinner";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
+import Social from "../social/social";
 export default function ShopPage() {
   const { data: products, isLoading } = useGetProducts(); //[1, 2]
   const [productList, setProductList] = useState([]);
@@ -67,13 +68,14 @@ export default function ShopPage() {
         <div className="p-2">
           <div className="row">
             <div className="col-lg-12">
-              <div className="row"></div>
             </div>
           </div>
-          <div className="row featured__filter mb-5 p-2">
-            <div className="col-12 col-lg-2">
-              <Categories setFilterByCategory={setFilterByCategory} />
-              <div className="mt-4">
+          <div className="row featured__filter mb-5 p-2 justify-content-center">
+            <div className="col-10 col-xl-2">
+              {!isLoading && (
+                <Categories setFilterByCategory={setFilterByCategory} />
+              )}
+              {/* <div className="mt-4">
                 {products?.data?.length > 0 && (
                   <div className="sidebar__item">
                     <h4>Giá</h4>
@@ -99,21 +101,22 @@ export default function ShopPage() {
                     </div>
                   </div>
                 )}
-              </div>
+              </div> */}
             </div>
-            <div className="col-10 row d-flex justify-content-center">
-              <div className="col-12 mb-2 w-100">
-                <div className="">
-                  <div className="hero__search__form col-lg-4">
+            <div className="col-10 row ">
+              {!isLoading && (
+                <div className="col-12 mb-2 w-100 d-flex justify-content-center">
+                  <div className="hero__search__form col-12 col-xl-4 mt-3">
                     <form
                       onSubmit={(e) => {
                         e.preventDefault();
                         handleSearch();
                       }}
                       action="#"
+                      className=""
                     >
                       <input
-                      className="w-100"
+                        className="w-100"
                         onChange={(e) => {
                           if (!e.target.value) {
                             setProductList(products.data);
@@ -130,17 +133,19 @@ export default function ShopPage() {
                     </form>
                   </div>
                 </div>
-              </div>
-              {products?.data ? (
-                productList
-                  .slice(step * active - step, step * active)
-                  .map((product, i) => (
-                    <Product numberColumn={2} key={i} product={product} />
-                  ))
-              ) : (
-                <Spinner isLoading={isLoading} />
               )}
-              <div className="section-title d-flex justify-content-end row col-12">
+              <div className="row p-5">
+                {products?.data ? (
+                  productList
+                    .slice(step * active - step, step * active)
+                    .map((product, i) => (
+                      <Product numberColumn={2} key={i} product={product} />
+                    ))
+                ) : (
+                  <Spinner isLoading={isLoading} />
+                )}
+              </div>
+              <div className="section-title d-flex justify-content-center row col-12">
                 {productList.length > 0 && (
                   <div className="product__pagination p-0">
                     <PaginationPage

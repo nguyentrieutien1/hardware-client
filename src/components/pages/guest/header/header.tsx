@@ -42,7 +42,7 @@ export default function Header() {
 
   const navItems: LinkItem[] = [
     { text: NAME.HOME, href: LINK.HOME },
-    { text: NAME.SHOP, href: LINK.SHOP },
+    // { text: NAME.SHOP, href: LINK.SHOP },
     { text: NAME.CART, href: LINK.CART },
   ];
   useEffect(() => {
@@ -208,20 +208,7 @@ export default function Header() {
               </div>
               <div className="col-lg-6">
                 <div className="header__top__right">
-                  <div className="header__top__right__social">
-                    <a href="#">
-                      <i className="fa fa-facebook text-white" />
-                    </a>
-                    <a href="#">
-                      <i className="fa fa-twitter text-white" />
-                    </a>
-                    <a href="#">
-                      <i className="fa fa-linkedin text-white" />
-                    </a>
-                    <a href="#">
-                      <i className="fa fa-pinterest-p text-white" />
-                    </a>
-                  </div>
+                 
                   <div className="header__top__right__language">
                     <img src="img/language.png" alt="" />
                     <div className=" text-white">Tùy chọn</div>
