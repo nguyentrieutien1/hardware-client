@@ -51,7 +51,6 @@ export default function ShopPage() {
       setNewPrice([minPrice, maxPrice]);
     }
   }, [products?.data]);
-
   return (
     <>
       <>
@@ -68,7 +67,7 @@ export default function ShopPage() {
             <div className="row">
               <div className="col-lg-3 col-12 d-flex justify-content-center">
                 <div className="sidebar">
-                  <div className="sidebar__item">
+                  {productList.length > 0 && <div className="sidebar__item">
                     <h4>Giá</h4>
                     <div className="">
                       <Slider
@@ -83,14 +82,14 @@ export default function ShopPage() {
                     <div className="mt-5 d-flex align-items-center justify-content-between text-nowrap">
                       <p> Khoảng giá: </p>
                       <p className="text-body">
-                        {currencyFormatterConfig(newPrice[0])}
+                        {currencyFormatterConfig(newPrice[0]) }
                       </p>
                       <p>-</p>
                       <p className="ml-3 text-body">{`${currencyFormatterConfig(
                         newPrice[1]
                       )}`}</p>
                     </div>
-                  </div>
+                  </div>}
                 </div>
               </div>
               <div className="col-lg-9 col-12 mt-3">

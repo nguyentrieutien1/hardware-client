@@ -110,17 +110,17 @@ export default function ProductPage() {
           toastErrorAuthen(err, "Tạo sản phẩm");
         });
     } else {
-      const newImages = [];
+      const formData = new FormData();
+      let newImages = [];
       for (let i = 0; i < images.length; i++) {
         if (images[i]?.file) {
-          const formData = new FormData();
           formData.append(`file`, images[i]?.file);
-          const res = await axiosConfig.post("/upload", formData);
-          newImages.push(res.data[0]);
         } else {
           newImages.push(images[i]);
         }
       }
+      const res = await axiosConfig.post("/upload", formData);
+      newImages = [...newImages, ...res.data]
       updateProduct({
         ...product,
         images: newImages,
@@ -493,7 +493,7 @@ export default function ProductPage() {
                 </table>
               </div>
               <div className="d-flex justify-content-end mt-4">
-                {products && (
+                {productList.length > 0 && (
                   <PaginationPage
                     active={active}
                     handleJump={handleJump}

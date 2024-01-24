@@ -6,7 +6,7 @@ export interface CartState {
 }
 
 const initialState: CartState = {
-  value: getItemFromLocalStorage('cart') || [],
+  value:  getItemFromLocalStorage('cart') || [],
 }
 
 export const cartSlice = createSlice({

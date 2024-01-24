@@ -6,8 +6,9 @@ import Categories from "../categories/categories";
 import Post from "../post/post";
 import Search from "../search/search";
 import PaginationPage from "../pagination/pagination";
+import ProductNotFound from "../product-not-found/product-not-found";
 export default function ShopPage() {
-  const { data: products } = useGetProducts();
+  const { data: products } = useGetProducts(); //[1, 2]
   const [productList, setProductList] = useState([]);
   const [active, setActive] = useState(1);
   const step = 4;
@@ -23,11 +24,15 @@ export default function ShopPage() {
     setProductList([...filterProducts]);
     setActive(1);
   };
+
+
+  // dsasadsad
   useEffect(() => {
     if (products?.data) {
       setProductList(products?.data);
     }
   }, [products?.data]);
+
   return (
     <>
       <section className="hero">
@@ -66,7 +71,7 @@ export default function ShopPage() {
             </div>
           </div>
 
-          <div className="row featured__filter">
+          <div className="row featured__filter mb-5">
             {productList.length > 0 ? (
               productList
                 .slice(step * active - step, step * active)
@@ -74,12 +79,9 @@ export default function ShopPage() {
                   <Product numberColumn={3} key={i} product={product} />
                 ))
             ) : (
-              <h5 className="col-12 text-center mb-5">
-                Sản
-              </h5>
+              <h5 className="text-center w-100" >Hiện tại không có sản phẩm nào</h5>
             )}
           </div>
-          <div className="mb-3"></div>
           <div className="row mt-3">
             <div className="col-12">
               <div className="section-title">

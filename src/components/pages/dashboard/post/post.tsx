@@ -145,12 +145,12 @@ export default function Post() {
   const handleUpload = () => {
     if (selectedFile) {
       const formData = new FormData();
-      formData.append("upload", selectedFile);
+      formData.append("file", selectedFile);
       axiosConfig
         .post("/upload", formData)
         .then((res) => res.data)
         .then((result) => {
-          setUrl(result);
+          setUrl(result[0]?.url);
           setShowUrl(true);
         })
         .catch(() => {
@@ -165,12 +165,17 @@ export default function Post() {
     <div className="content-wrapper">
       {showUrl && (
         <AppModal
-          closeModal={() => setShowUrl(false)}
+          closeModal={() => {
+            setShowUrl(false)
+            setSelectedFile(null)
+          }}
           content={
             <div>
-              <div ref={textRef}>{url}</div>
+              <div ref={textRef}>{url && url}</div>
               <a
-                onClick={() => handleCopy()}
+                onClick={() => {
+                  handleCopy()
+                }}
                 className="btn btn-success btn-md mt-4"
                 href="#"
                 role="button"
@@ -231,8 +236,6 @@ export default function Post() {
                       <a
                         onClick={handleUpload}
                         className="btn btn-success btn-md"
-                        href="#"
-                        role="button"
                       >
                         Lấy đường dẫn
                       </a>
@@ -490,7 +493,7 @@ export default function Post() {
                       </tbody>
                     </table>
                     <div className="d-flex justify-content-end mt-4">
-                      {posts && (
+                      {postList.length > 0 && (
                         <PaginationPage
                           active={active}
                           handleJump={handleJump}

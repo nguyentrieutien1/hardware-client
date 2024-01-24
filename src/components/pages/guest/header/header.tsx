@@ -257,9 +257,9 @@ export default function Header() {
                 </ul>
               </nav>
             </div>
-            <div className="d-flex d-sm-block m-sm-auto m-lg-0">
+            <div className="d-flex mt-5 m-lg-0">
               <div className="header__cart">
-                <ul>
+                <ul className="m-3 m-sm-0 m-md-3">
                   <li>
                     <Link href={LINK.CART}>
                       <i className="fa fa-shopping-bag"></i>{" "}
@@ -267,7 +267,7 @@ export default function Header() {
                     </Link>
                   </li>
                   <div className="header__cart__price ml-3">
-                    item: <span>{currencyFormatterConfig(total)}</span>
+                    Tổng tiền: <span>{currencyFormatterConfig(total)}</span>
                   </div>
                 </ul>
               </div>

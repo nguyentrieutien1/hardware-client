@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./style.css";
 export default function ProductNotFound() {
   return (
@@ -7,7 +7,6 @@ export default function ProductNotFound() {
         <div className="notfound-404">
           <h1>Oops!</h1>
         </div>
-        
       </div>
     </div>
   );

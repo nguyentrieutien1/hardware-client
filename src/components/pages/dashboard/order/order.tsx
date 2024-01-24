@@ -14,7 +14,7 @@ export default function OrderPage() {
   const step = 8;
   const { data: res, isLoading: isGetOrdersLoading } = useGetOrders();
   const { mutateAsync, isLoading } = useUpdateOrderMutation();
-  const handleAcceptOrder = (orderId, statusId) => {
+  const handleAcceptOrder = (orderId: any, statusId: any) => {
     mutateAsync({ id: orderId, data: { statusId } });
   };
   const handleJump = (number) => {
@@ -180,7 +180,7 @@ export default function OrderPage() {
                   </tbody>
                 </table>
                 <div className="d-flex justify-content-end mt-4">
-                  {res?.data && (
+                  {orders.length > 0 && (
                     <PaginationPage
                       active={active}
                       handleJump={handleJump}

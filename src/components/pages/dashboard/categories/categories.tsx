@@ -42,7 +42,7 @@ export default function Categories() {
     const { name, value } = e.target;
     setCategory({ [name]: value });
   };
-  const handleJump = (number) => {
+  const handleJump = (number: any) => {
     setActive(number);
   };
   const handleOnSubmit = () => {
@@ -228,7 +228,7 @@ export default function Categories() {
                   </tbody>
                 </table>
                 <div className="d-flex justify-content-end mt-4">
-                  {categoriesData && (
+                  {categories.length > 0 && (
                     <PaginationPage
                       active={active}
                       handleJump={handleJump}
