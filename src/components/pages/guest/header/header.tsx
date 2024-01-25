@@ -4,7 +4,6 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { LINK, NAME } from "~/lib/constants/routes";
 import { useGetProducts } from "~/queries";
-import "../../../../../jquery.js";
 import {
   COOKIE_NAME,
   deleteCookieConfig,
@@ -21,6 +20,7 @@ import {
 } from "~/lib/helpers";
 import Image from "next/image";
 import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
+import SearchOrder from "../search-order/search-order";
 interface LinkItem {
   text: string;
   href: string;
@@ -37,6 +37,8 @@ export default function Header() {
   const [total, setTotal] = useState(0);
   const { value } = useAppSelector((state) => state.cart);
   const [userIsLogined, setUserIsLogined] = useState(false);
+  const [searchOrder, setSearchOrder] = useState("");
+  const [isOpenSearchOrderModal, setiIsOpenSearchOrderModal] = useState(false);
   const isProduction = process.env.NODE_ENV === "production";
   console.log(value);
 
@@ -44,6 +46,7 @@ export default function Header() {
     { text: NAME.HOME, href: LINK.HOME },
     // { text: NAME.SHOP, href: LINK.SHOP },
     { text: NAME.CART, href: LINK.CART },
+    { text: NAME.POST, href: LINK.POST },
   ];
   useEffect(() => {
     if (products) {
@@ -120,6 +123,9 @@ export default function Header() {
       setUserIsLogined(false);
     }
   }, []);
+  useEffect(() => {
+    require("../../../../../jquery.js");
+  }, []);
   return (
     <>
       <div className="humberger__menu__overlay "></div>
@@ -148,6 +154,7 @@ export default function Header() {
                   </li>
                 );
               })}
+              <li className="list-unstyled">Tra cứu đơn hàng</li>
             </ul>
           </nav>
         </div>
@@ -208,7 +215,6 @@ export default function Header() {
               </div>
               <div className="col-lg-6">
                 <div className="header__top__right">
-                 
                   <div className="header__top__right__language">
                     <img src="img/language.png" alt="" />
                     <div className=" text-white">Tùy chọn</div>
@@ -283,6 +289,16 @@ export default function Header() {
                       </li>
                     );
                   })}
+
+                  <li onClick={() => {}} className="list-unstyled">
+                    <Link
+                      onClick={() => setiIsOpenSearchOrderModal(true)}
+                      href={"#"}
+                    >
+                      {" "}
+                      Tra cứu đơn hàng
+                    </Link>
+                  </li>
                 </ul>
               </nav>
             </div>
@@ -306,6 +322,10 @@ export default function Header() {
             </div>
           </div>
         </div>
+        <SearchOrder
+          setShow={setiIsOpenSearchOrderModal}
+          show={isOpenSearchOrderModal}
+        />
       </header>
     </>
   );

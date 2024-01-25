@@ -102,9 +102,9 @@ export default function ShopPage() {
                 )}
               </div> */}
             </div>
-            <div className="col-10 row ">
+            <div className="col-10 row justify-content-center">
               {!isLoading && (
-                <div className="col-12 mb-2 w-100 d-flex justify-content-center">
+                <div className="col-12 mb-2 w-100 p-0 d-flex justify-content-center">
                   <div className="hero__search__form col-12 col-xl-4 mt-3">
                     <form
                       onSubmit={(e) => {
@@ -137,7 +137,7 @@ export default function ShopPage() {
                   </div>
                 </div>
               )}
-              <div className="row col-12 p-5 text-center">
+              <div className="row col-12 p-0 text-center">
                 {products?.data ? (
                   productList.length > 0 ? (
                     productList
@@ -147,7 +147,7 @@ export default function ShopPage() {
                       ))
                   ) : (
                     <div style={{  width: "100%" }}>
-                      <h3 className="text-center">Không tìm thấy sản phẩm </h3>
+                      <h3 className="text-center mt-5">Không tìm thấy sản phẩm </h3>
                     </div>
                   )
                 ) : (
@@ -165,15 +165,6 @@ export default function ShopPage() {
                     />
                   </div>
                 )}
-              </div>
-            </div>
-          </div>
-          <div className="row mt-3">
-            <div className="col-2"></div>
-            <div className="col-10">
-              <div className="section-title">
-                <h2>Bài viết gần đây</h2>
-                <Post />
               </div>
             </div>
           </div>

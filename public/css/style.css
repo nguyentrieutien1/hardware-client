@@ -346,6 +346,7 @@ ol {
   display: inline-block;
   color: #1c1c1c;
   margin-right: 20px;
+  cursor: pointer;
 }
 
 .header__top__right__social a:last-child {

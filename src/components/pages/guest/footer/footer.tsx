@@ -10,9 +10,9 @@ export default function Footer() {
         <div className="row">
         <div className="footer__about col-12 d-flex justify-content-center" >
               <ul className=" text-center">
-                <li>Địa chỉ: Thăng Bình, Quảng Nam</li>
-                <li>Phone: +84 983787454</li>
-                <li>Email:vanhao.0112@gmail.com</li>
+                <li>Địa chỉ: 601 Hùng Vương, TT. Nam Phước, Duy Xuyên, Quàng Nam</li>
+                <li>Hotline: 0983787454</li>
+                <li>Email: maytinhthunguyen.com@gmail.com</li>
               </ul>
             </div>
         </div>

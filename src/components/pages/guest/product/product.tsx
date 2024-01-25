@@ -28,7 +28,7 @@ export default function Product(props: ProductProps) {
   //     });
   // };
   return (
-    <div className={`col-lg-${5} col-sm-6  col-md-4 col-lg-3  col-xl-2 cursor-pointer`}>
+    <div className={`col-lg-${numberColumn} col-12 col-sm-6  col-md-4 col-lg-3  col-xl-2 cursor-pointer p-0 p-sm-2 mx-0`} style={{boxSizing: "border-box"}}>
       <div className="featured__item">
         <div className="featured__item__pic">
           <Link href={`${LINK.SHOP_DETAIL}/${id}`}>

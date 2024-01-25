@@ -6,6 +6,7 @@ export const LINK = {
     POST_DETAIL: '/post-detail',
     LOGIN: "/login",
     ORDER: "/order",
+    POST: '/post',
     REGISTER:"/register",
     DASHBOARD: "/dashboard",
     DASHBOARD_PRODUCT: "/dashboard/product",
