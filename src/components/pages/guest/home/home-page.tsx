@@ -105,7 +105,7 @@ export default function ShopPage() {
             <div className="col-10 row justify-content-center">
               {!isLoading && (
                 <div className="col-12 mb-2 w-100 p-0 d-flex justify-content-center">
-                  <div className="hero__search__form col-12 col-xl-4 mt-3">
+                  <div className="hero__search__form col-12 col-xl-4 mb-5 mt-5 mt-xl-0">
                     <form
                       onSubmit={(e) => {
                         e.preventDefault();
@@ -124,7 +124,7 @@ export default function ShopPage() {
                           }
                         }}
                         type="text"
-                        placeholder="Tìm kiếm sản phẩm theo tên"
+                        placeholder="Nhập tên sản phẩm"
                       />
                       <button
                         onClick={handleSearch}

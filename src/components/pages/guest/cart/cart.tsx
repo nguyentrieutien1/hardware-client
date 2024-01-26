@@ -19,7 +19,7 @@ import Loading from "~/components/loading/loading";
 import Link from "next/link";
 import { LINK } from "~/lib/constants";
 import { useDispatch } from "react-redux";
-import { updateQuantity } from "~/lib/features/cart";
+import { setInitCart, updateQuantity } from "~/lib/features/cart";
 function CartPage() {
   const [show, setShow] = useState<boolean>(false);
   const [showModalConfirm, setShowModalConfirm] = useState<boolean>(false);
@@ -114,6 +114,8 @@ function CartPage() {
         setShowModalConfirm(false);
         setItemToLocalStorage("cart", []);
         setCartLocal([]);
+        dispath(setInitCart([]));
+
       })
       .catch((err) => {
         toastErrorAuthen(

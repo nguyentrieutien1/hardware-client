@@ -1,15 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { AppModal } from "~/components/modal/modal";
+import { useSearchOrderMutation } from "~/mutations/order/get-search-order-mutation";
 interface SearchOrder {
   setShow: any;
   show: any;
 }
 export default function SearchOrder(props: SearchOrder) {
   const { setShow, show } = props;
+  const [orderCode, setOrderCode] = useState("");
+  const { mutateAsync } = useSearchOrderMutation();
+  const handleSearchOrder = () => {
+    mutateAsync({ orderCode }).then(() => {});
+  };
   return (
     <AppModal
       title={"Tra cứu thông tin đơn hàng"}
-      onConfirm={() => {}}
+      onConfirm={() => handleSearchOrder()}
       closeModal={() => {
         setShow(false);
       }}
@@ -30,6 +36,7 @@ export default function SearchOrder(props: SearchOrder) {
                         id="exampleInputName1"
                         placeholder="Mã đơn hàng"
                         name="name"
+                        onChange={(e) => setOrderCode(e.target.value)}
                         // value={category?.name}
                       />
                     </div>

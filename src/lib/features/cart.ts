@@ -6,7 +6,7 @@ export interface CartState {
 }
 
 const initialState: CartState = {
-  value:  getItemFromLocalStorage('cart') || [],
+  value: getItemFromLocalStorage('cart') || [],
 }
 
 export const cartSlice = createSlice({
@@ -14,15 +14,16 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     updateQuantity: (state, { payload }) => {
-      console.log(payload);
-      
       state.value = payload
-
     },
+    setInitCart: (state, { payload }) => {
+
+      state.value = payload
+    }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { updateQuantity } = cartSlice.actions
+export const { updateQuantity, setInitCart } = cartSlice.actions
 
 export default cartSlice.reducer

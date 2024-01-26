@@ -76,107 +76,110 @@ export default function OrderPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {orders.map((order) => {
-                      return (
-                        <tr className="cursor-pointer">
-                          <td>{order?.product?.name}</td>
-                          <td> {formattedDate(order?.createdAt)}</td>
-                          <td>{order?.account?.fullName}</td>
-                          <td> {order?.quantity}</td>
-                          <td>
-                            <Tippy
-                              trigger="click"
-                              placement="right-start"
-                              theme="light"
-                              interactive={true}
-                              content={
-                                order?.status?.name !==
-                                ORDER_STATUS.CANCELED ? (
-                                  <div className="d-flex flex-column">
-                                    {order?.status?.name ===
-                                    ORDER_STATUS.PENDING ? (
-                                      <div
-                                        onClick={() =>
-                                          handleAcceptOrder(order?.id, 7)
-                                        }
-                                        className="badge badge-gradient-success text-center cursor-pointer"
-                                      >
-                                        {}
-                                        Phê duyệt
-                                      </div>
-                                    ) : (
-                                      <div
-                                        onClick={() =>
-                                          handleAcceptOrder(order?.id, 1)
-                                        }
-                                        className="badge badge-gradient-info text-center cursor-pointer"
-                                      >
-                                        Thu hồi phê duyệt
-                                      </div>
-                                    )}
+                    {orders
+                      ?.slice(step * active - step, step * active)
+                      .map((order) => {
+                        return (
+                          <tr className="cursor-pointer">
+                            <td>{order?.product?.name}</td>
+                            <td> {formattedDate(order?.createdAt)}</td>
+                            <td>{order.fullName}</td>
+                            <td> {order?.quantity}</td>
+                            <td>
+                              <Tippy
+                                trigger="click"
+                                placement="right-start"
+                                theme="light"
+                                interactive={true}
+                                content={
+                                  order?.status?.name !==
+                                  ORDER_STATUS.CANCELED ? (
+                                    <div className="d-flex flex-column">
+                                      {order?.status?.name ===
+                                      ORDER_STATUS.PENDING ? (
+                                        <div
+                                          onClick={() =>
+                                            handleAcceptOrder(order?.id, 7)
+                                          }
+                                          className="badge badge-gradient-success text-center cursor-pointer"
+                                        >
+                                          {}
+                                          Phê duyệt
+                                        </div>
+                                      ) : (
+                                        <div
+                                          onClick={() =>
+                                            handleAcceptOrder(order?.id, 1)
+                                          }
+                                          className="badge badge-gradient-info text-center cursor-pointer"
+                                        >
+                                          Thu hồi phê duyệt
+                                        </div>
+                                      )}
 
-                                    {order?.status?.name !==
-                                      ORDER_STATUS.REJECT && (
-                                      <div
-                                        onClick={() =>
-                                          handleAcceptOrder(order?.id, 2)
-                                        }
-                                        className="badge badge-gradient-danger text-center cursor-pointer mt-2"
-                                      >
-                                        Từ chối
-                                      </div>
-                                    )}
-                                  </div>
-                                ) : (
-                                  <div
-                                    onClick={() =>
-                                      handleAcceptOrder(order?.id, 1)
-                                    }
-                                    className="badge badge-gradient-danger text-center cursor-pointer"
-                                  >
-                                    Kích hoạt đơn hàng
-                                  </div>
-                                )
-                              }
-                              zIndex={2}
-                              allowHTML={true}
-                              arrow={false}
-                            >
-                              <label
-                                className={`cursor-pointer badge badge-gradient-${
-                                  order?.status?.name === ORDER_STATUS.PENDING
-                                    ? "success"
+                                      {order?.status?.name !==
+                                        ORDER_STATUS.REJECT && (
+                                        <div
+                                          onClick={() =>
+                                            handleAcceptOrder(order?.id, 2)
+                                          }
+                                          className="badge badge-gradient-danger text-center cursor-pointer mt-2"
+                                        >
+                                          Từ chối
+                                        </div>
+                                      )}
+                                    </div>
+                                  ) : (
+                                    <div
+                                      onClick={() =>
+                                        handleAcceptOrder(order?.id, 1)
+                                      }
+                                      className="badge badge-gradient-danger text-center cursor-pointer"
+                                    >
+                                      Kích hoạt đơn hàng
+                                    </div>
+                                  )
+                                }
+                                zIndex={2}
+                                allowHTML={true}
+                                arrow={false}
+                              >
+                                <label
+                                  className={`cursor-pointer badge badge-gradient-${
+                                    order?.status?.name === ORDER_STATUS.PENDING
+                                      ? "success"
+                                      : order?.status?.name ===
+                                        ORDER_STATUS.CANCELED
+                                      ? "danger"
+                                      : order?.status?.name ===
+                                        ORDER_STATUS.REJECT
+                                      ? "primary"
+                                      : "warning"
+                                  }`}
+                                >
+                                  {order?.status?.name === ORDER_STATUS.PENDING
+                                    ? ORDER_MESSAGE.PENDING
                                     : order?.status?.name ===
                                       ORDER_STATUS.CANCELED
-                                    ? "danger"
+                                    ? ORDER_MESSAGE.CANCELED
                                     : order?.status?.name ===
                                       ORDER_STATUS.REJECT
-                                    ? "primary"
-                                    : "warning"
-                                }`}
-                              >
-                                {order?.status?.name === ORDER_STATUS.PENDING
-                                  ? ORDER_MESSAGE.PENDING
-                                  : order?.status?.name ===
-                                    ORDER_STATUS.CANCELED
-                                  ? ORDER_MESSAGE.CANCELED
-                                  : order?.status?.name === ORDER_STATUS.REJECT
-                                  ? ORDER_MESSAGE.REJECT
-                                  : ORDER_MESSAGE.ACCEPTED}
-                              </label>
-                            </Tippy>
-                          </td>
-                          <td>
-                            {currencyFormatterConfig(order?.product?.price)}
-                          </td>
-                          <td>
-                            {currencyFormatterConfig(
-                              order?.product?.price * order?.quantity
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
+                                    ? ORDER_MESSAGE.REJECT
+                                    : ORDER_MESSAGE.ACCEPTED}
+                                </label>
+                              </Tippy>
+                            </td>
+                            <td>
+                              {currencyFormatterConfig(order?.product?.price)}
+                            </td>
+                            <td>
+                              {currencyFormatterConfig(
+                                order?.product?.price * order?.quantity
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
                   </tbody>
                 </table>
                 <div className="d-flex justify-content-end mt-4">

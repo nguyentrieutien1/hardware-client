@@ -3,6 +3,7 @@ import React from "react";
 import {
   CiInboxOut,
   CiMedicalCross,
+  CiTempHigh,
   CiTextAlignLeft,
   CiTextAlignRight,
 } from "react-icons/ci";
@@ -82,6 +83,16 @@ export default function Sidebar() {
           >
             <span className="menu-title">Quản lý bài viết</span>
             <CiTextAlignLeft />
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link
+            className="nav-link d-flex align-items-center justify-content-between"
+            href={LINK.DASHBOARD_REPAIR}
+            prefetch
+          >
+            <span className="menu-title">Quản lý sửa chửa</span>
+            <CiTempHigh />
           </Link>
         </li>
       </ul>
