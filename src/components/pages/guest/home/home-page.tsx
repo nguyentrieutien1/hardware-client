@@ -45,9 +45,9 @@ export default function ShopPage() {
     }
   }, [products?.data]);
   useEffect(() => {
-    const cart = getItemFromLocalStorage('cart')
-    dispath(setInitCart(cart))
-  }, [])
+    const cart = getItemFromLocalStorage("cart");
+    dispath(setInitCart(cart));
+  }, []);
   const handleSliderChange = (newValue) => {
     setProductList(products?.data);
     const prices = products?.data.map((product) => product.price);
@@ -62,9 +62,9 @@ export default function ShopPage() {
     setActive(1);
   };
   const handleSearch = () => {
+    console.log(search);
+    
     const filterProducts = [...products.data].filter((product) => {
-      console.log(search);
-
       return product?.name?.toLowerCase().includes(search?.toLowerCase());
     });
     setProductList([...filterProducts]);
@@ -126,6 +126,7 @@ export default function ShopPage() {
                         className="w-100"
                         onChange={(e) => {
                           if (!e.target.value) {
+                            setSearch("")
                             setProductList(products.data);
                           } else {
                             setSearch(e.target.value);
@@ -154,8 +155,10 @@ export default function ShopPage() {
                         <Product numberColumn={2} key={i} product={product} />
                       ))
                   ) : (
-                    <div style={{  width: "100%" }}>
-                      <h3 className="text-center mt-5">Không tìm thấy sản phẩm </h3>
+                    <div style={{ width: "100%" }}>
+                      <h3 className="text-center mt-5">
+                        Không tìm thấy sản phẩm{" "}
+                      </h3>
                     </div>
                   )
                 ) : (

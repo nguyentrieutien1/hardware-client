@@ -271,7 +271,7 @@ export default function RepairPage() {
                   <thead>
                     <tr>
                       <th> Tên hàng </th>
-                      <th> Ngày tạo đơn </th>
+                      <th> Mã đặt hàng</th>
                       <th>Khách hàng</th>
                       <th>Người sửa</th>
                       <th> Thời gian bảo hành</th>
@@ -286,7 +286,7 @@ export default function RepairPage() {
                         return (
                           <tr className="cursor-pointer">
                             <td>{order?.nameRepair?.slice(0, 10)}...</td>
-                            <td> {formattedDate(order?.createdAt)}</td>
+                            <td> {order?.orderCode}</td>
                             <td>{order?.fullName}</td>
                             <td>{order?.worker?.fullName}</td>
                             <td>
