@@ -13,6 +13,9 @@ import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
 import Social from "../social/social";
+import { useDispatch } from "react-redux";
+import { getItemFromLocalStorage } from "~/lib/helpers";
+import { setInitCart } from "~/lib/features/cart";
 export default function ShopPage() {
   const { data: products, isLoading } = useGetProducts(); //[1, 2]
   const [productList, setProductList] = useState([]);
@@ -20,6 +23,7 @@ export default function ShopPage() {
   const [price, setPrice] = useState([0, 50000]);
   const [search, setSearch] = useState("");
   const [newPrice, setNewPrice] = useState([0, 0]);
+  const dispath = useDispatch();
   const step = 12;
 
   const handleJump = (number) => {
@@ -40,6 +44,10 @@ export default function ShopPage() {
       setProductList(products?.data);
     }
   }, [products?.data]);
+  useEffect(() => {
+    const cart = getItemFromLocalStorage('cart')
+    dispath(setInitCart(cart))
+  }, [])
   const handleSliderChange = (newValue) => {
     setProductList(products?.data);
     const prices = products?.data.map((product) => product.price);

@@ -1,51 +1,127 @@
 "use client";
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { ORDER_MESSAGE, ORDER_STATUS } from "~/lib/constants";
+import { REPAIR_MESSAGE, REPAIR_STATUS } from "~/lib/constants";
 import { formattedDate } from "~/lib/helpers";
-import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
 import { useGetOrders } from "~/queries/order/get-orders-query";
 import Tippy from "@tippyjs/react";
-import { useUpdateOrderMutation } from "~/mutations/order/update-order-mutation";
 import Spinner from "~/components/spinner/spinner";
 import PaginationPage from "../../guest/pagination/pagination";
 import { AppModal } from "~/components/modal/modal";
+import { useGetAccounts } from "~/queries/account/get-accounts.query";
+import { useCreateRepairMutation } from "~/mutations/repair/create-repair-mutation";
+import { toastConfig } from "~/lib";
+import { useGetRepairs } from "~/queries/repair/get-repairs-query";
+import { useUpdateRepairMutation } from "~/mutations/repair/update-repair.mutation";
 export default function RepairPage() {
-  const [orders, setOrders] = useState([]);
   const [active, setActive] = useState(1);
+  const [repair, setRepair] = useState({
+    accountId: null,
+    fullName: "",
+    nameRepair: "",
+    phone: "",
+    address: "",
+    note: "",
+    expirationDate: "",
+  });
   const step = 8;
-  const { data: res, isLoading: isGetOrdersLoading } = useGetOrders();
-  const [show, setShow] = useState(false)
-  const { mutateAsync, isLoading } = useUpdateOrderMutation();
+  const [show, setShow] = useState(false);
+  const [repairs, setRepairs] = useState([]);
+
+  const [isUpdate, setIsUpdate] = useState<boolean>(false);
+  const [repairId, setRepairId] = useState();
+  const { mutateAsync, isLoading } = useUpdateRepairMutation();
+  const { mutateAsync: createRepair, isLoading: isLoadingCreateRepair } =
+    useCreateRepairMutation();
+  const { data: repairData } = useGetRepairs();
   const handleAcceptOrder = (orderId: any, statusId: any) => {
     mutateAsync({ id: orderId, data: { statusId } });
   };
+  const { data } = useGetAccounts({ roleId: +2 });
+  const employee = data?.data;
+
   const handleJump = (number) => {
     setActive(number);
   };
   useEffect(() => {
-    if (res?.data) {
-      setOrders(res?.data);
+    if (repairData?.data) {
+      setRepairs([...repairData?.data]);
     }
-  }, [res?.data]);
-  const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const { value } = e.target;
-    if (value) {
-      setOrders(
-        [...res?.data].filter((order) => order?.status?.name === value)
-      );
+  }, [repairData?.data, repairData?.data?.length]);
+  const handleChange = (
+    e: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setRepair((prev) => {
+      return {
+        ...prev,
+        [name]: name === "accountId" ? +value : value,
+      };
+    });
+  };
+  const setInitRepair = () => {
+    setRepair({
+      accountId: null,
+      fullName: "",
+      nameRepair: "",
+      phone: "",
+      address: "",
+      note: "",
+      expirationDate: "",
+    });
+  };
+  const handleCreateRepair = () => {
+    for (const key in repair) {
+      if (!repair[key] || !repair) {
+        toastConfig(`Các trường phải đảm bảo không được trống.`, {
+          status: "warning",
+        });
+        return;
+      }
+    }
+    if (!isUpdate) {
+      createRepair(repair)
+        .then((res) => {
+          if (res?.status === 201) {
+            toastConfig("Tạo sản phẩm sửa chửa thành công !", {
+              status: "success",
+            });
+            setShow(false);
+            setInitRepair();
+          }
+        })
+        .catch(() => {
+          toastConfig("Cửa hàng đang bận, không thể thao tác ngay lúc này !", {
+            status: "error",
+          });
+        });
     } else {
-      setOrders(res?.data);
+      mutateAsync({ id: repairId, data: repair }).then(() => {
+        setShow(false);
+        setIsUpdate(false);
+        setInitRepair();
+        toastConfig("Cập nhật sản phẩm thành công !", { status: "success" });
+      });
     }
+  };
+  const calculateRemainingDays = (date) => {
+    const targetDate = new Date(date);
+    const currentDate = new Date();
+    const timeDifference = targetDate.getTime() - currentDate.getTime();
+    const remainingDays = Math.ceil(timeDifference / (1000 * 3600 * 24));
+    return remainingDays;
   };
   return (
     <div className="content-wrapper">
-       {show && (
+      {show && (
         <AppModal
           size="lg"
-          title={'Thêm sản phẩm sửa chửa'}
-          onConfirm={() => {}}
+          title={
+            !isUpdate ? "Thêm sản phẩm sửa chửa" : "Cập nhật sản phẩm sửa chửa"
+          }
+          onConfirm={() => handleCreateRepair()}
           closeModal={() => {
             setShow(false);
+            setInitRepair();
           }}
           modalIsOpen={show}
           content={
@@ -64,54 +140,103 @@ export default function RepairPage() {
                             className="form-control"
                             id="exampleInputName1"
                             placeholder="Tên sản phẩm"
-                            name="name"
+                            name="nameRepair"
+                            onChange={handleChange}
+                            value={repair.nameRepair}
                           />
                         </div>
                         <div className="form-group">
                           <label htmlFor="exampleInputEmail3">
-                            Số lượng sản phẩm
+                            Tên khách hàng
+                          </label>
+                          <input
+                            type="text"
+                            name="fullName"
+                            className="form-control"
+                            id="exampleInputEmail3"
+                            placeholder="Số lượng tên khách hàng"
+                            onChange={handleChange}
+                            value={repair.fullName}
+                          />
+                        </div>
+
+                        <div className="form-group">
+                          <label htmlFor="exampleInputEmail3">Địa chỉ</label>
+                          <input
+                            type="text"
+                            name="address"
+                            className="form-control"
+                            id="exampleInputEmail3"
+                            placeholder="Nhập địa chỉ khách hàng"
+                            onChange={handleChange}
+                            value={repair.address}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-lg-6 col-sm-12">
+                        <div className="form-group">
+                          <label htmlFor="exampleInputEmail3">
+                            Số điện thoại
                           </label>
                           <input
                             type="number"
-                            name="stock"
+                            name="phone"
                             className="form-control"
                             id="exampleInputEmail3"
-                            placeholder="Số lượng sản phẩm"
+                            placeholder="Nhập số điện thoại"
+                            onChange={handleChange}
+                            value={repair.phone}
                           />
                         </div>
                         <div className="form-group">
-                          <label htmlFor="exampleInputPassword4">Giá</label>
+                          <label htmlFor="exampleInputPassword4">
+                            Thời gian bảo hành
+                          </label>
                           <input
-                            type="number"
-                            name="price"
+                            type="date"
+                            name="expirationDate"
                             className="form-control"
                             id="exampleInputPassword4"
                             placeholder="Giá"
+                            onChange={handleChange}
+                            value={repair.expirationDate}
                           />
                         </div>
                         <div className="form-group">
                           <label htmlFor="exampleInputPassword5">
-                            Danh mục
+                            Người làm việc
                           </label>
                           <div className="mb-3">
                             <select
                               className="form-select form-group form-select-sm p-2"
-                              name="categoriesId"
+                              name="accountId"
                               id="exampleInputPassword5"
+                              onChange={handleChange}
                             >
                               <option>chọn danh mục</option>
-                              {/* {categories.data?.map((cat) => {
+                              {employee?.map((empl) => {
                                 return (
                                   <option
-                                    selected={product?.categoriesId == cat?.id}
-                                    value={cat?.id}
+                                    selected={empl?.id == repair?.accountId}
+                                    value={empl?.id}
                                   >
-                                    {cat?.name}
+                                    {empl?.fullName}
                                   </option>
                                 );
-                              })} */}
+                              })}
                             </select>
                           </div>
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="exampleInputPassword4">Ghi chú</label>
+                          <textarea
+                            rows={5}
+                            className="form-control"
+                            id="exampleFormControlTextarea5"
+                            name="note"
+                            onChange={handleChange}
+                            value={repair.note}
+                          ></textarea>
                         </div>
                       </div>
                     </div>
@@ -122,17 +247,21 @@ export default function RepairPage() {
           }
         />
       )}
-      <Spinner isLoading={isLoading || isGetOrdersLoading} />
+      <Spinner isLoading={isLoading || isLoadingCreateRepair} />
       <div className="row">
-        <div className="col-2 mb-3">
+        <div className="col-3 mb-3">
           <div className="d-grid gap-2">
-            <button onClick={() => setShow(true)} type="button" className="btn btn-success p-2">
+            <button
+              onClick={() => setShow(true)}
+              type="button"
+              className="btn btn-success p-2"
+            >
               + Thêm sản phẩm sửa chửa
             </button>
           </div>
         </div>
       </div>
-      {orders.length > 0 ? (
+      {repairs.length > 0 ? (
         <div className="col-12 grid-margin">
           <div className="card">
             <div className="card-body">
@@ -143,124 +272,172 @@ export default function RepairPage() {
                     <tr>
                       <th> Tên hàng </th>
                       <th> Ngày tạo đơn </th>
-                      <th>Tên khách hàng</th>
+                      <th>Khách hàng</th>
+                      <th>Người sửa</th>
                       <th> Thời gian bảo hành</th>
                       <th> Trạng thái</th>
                       <th>Số điện thoại</th>
-                      <th>Địa chỉ</th>
-                   
                     </tr>
                   </thead>
                   <tbody>
-                    {orders.map((order) => {
-                      return (
-                        <tr className="cursor-pointer">
-                          <td>{order?.product?.name}</td>
-                          <td> {formattedDate(order?.createdAt)}</td>
-                          <td>{order.fullName}</td>
-                          <td> {order?.quantity}</td>
-                          <td>
-                            <Tippy
-                              trigger="click"
-                              placement="right-start"
-                              theme="light"
-                              interactive={true}
-                              content={
-                                order?.status?.name !==
-                                ORDER_STATUS.CANCELED ? (
-                                  <div className="d-flex flex-column">
-                                    {order?.status?.name ===
-                                    ORDER_STATUS.PENDING ? (
-                                      <div
-                                        onClick={() =>
-                                          handleAcceptOrder(order?.id, 7)
-                                        }
-                                        className="badge badge-gradient-success text-center cursor-pointer"
-                                      >
-                                        {}
-                                        Phê duyệt
-                                      </div>
-                                    ) : (
-                                      <div
-                                        onClick={() =>
-                                          handleAcceptOrder(order?.id, 1)
-                                        }
-                                        className="badge badge-gradient-info text-center cursor-pointer"
-                                      >
-                                        Thu hồi phê duyệt
-                                      </div>
-                                    )}
-
-                                    {order?.status?.name !==
-                                      ORDER_STATUS.REJECT && (
-                                      <div
-                                        onClick={() =>
-                                          handleAcceptOrder(order?.id, 2)
-                                        }
-                                        className="badge badge-gradient-danger text-center cursor-pointer mt-2"
-                                      >
-                                        Từ chối
-                                      </div>
-                                    )}
-                                  </div>
-                                ) : (
-                                  <div
-                                    onClick={() =>
-                                      handleAcceptOrder(order?.id, 1)
-                                    }
-                                    className="badge badge-gradient-danger text-center cursor-pointer"
-                                  >
-                                    Kích hoạt đơn hàng
-                                  </div>
-                                )
-                              }
-                              zIndex={2}
-                              allowHTML={true}
-                              arrow={false}
-                            >
-                              <label
-                                className={`cursor-pointer badge badge-gradient-${
-                                  order?.status?.name === ORDER_STATUS.PENDING
-                                    ? "success"
-                                    : order?.status?.name ===
-                                      ORDER_STATUS.CANCELED
-                                    ? "danger"
-                                    : order?.status?.name ===
-                                      ORDER_STATUS.REJECT
-                                    ? "primary"
-                                    : "warning"
-                                }`}
+                    {repairs
+                      ?.slice(step * active - step, step * active)
+                      .map((order) => {
+                        return (
+                          <tr className="cursor-pointer">
+                            <td>{order?.nameRepair?.slice(0, 10)}...</td>
+                            <td> {formattedDate(order?.createdAt)}</td>
+                            <td>{order?.fullName}</td>
+                            <td>{order?.worker?.fullName}</td>
+                            <td>
+                              {calculateRemainingDays(order?.expirationDate) <=
+                              0 ? (
+                                <label
+                                  style={{ cursor: "pointer" }}
+                                  className={`cursor-pointer badge badge-gradient-danger`}
+                                >
+                                  Đã hết hạn
+                                </label>
+                              ) : calculateRemainingDays(order?.expirationDate) <
+                              7 ? (
+                                <label
+                                  style={{ cursor: "pointer" }}
+                                  className={`cursor-pointer badge badge-gradient-warning`}
+                                >
+                                  { `Còn ${calculateRemainingDays(
+                                  order?.expirationDate
+                                )} ngày`}
+                                </label>
+                              ): (
+                                `Còn ${calculateRemainingDays(
+                                  order?.expirationDate
+                                )} ngày`
+                              )}
+                            </td>
+                            <td>
+                              <Tippy
+                                trigger="click"
+                                placement="right-start"
+                                theme="light"
+                                interactive={true}
+                                content={
+                                  order?.status?.name !==
+                                  REPAIR_STATUS.CANCELED ? (
+                                    <div className="d-flex flex-column">
+                                      {order?.status?.name ===
+                                      REPAIR_STATUS.PENDING ? (
+                                        <div
+                                          style={{ cursor: "pointer" }}
+                                          onClick={() =>
+                                            handleAcceptOrder(order?.id, 7)
+                                          }
+                                          className="cursor-pointer  badge badge-gradient-success text-center cursor-pointer"
+                                        >
+                                          Phê duyệt
+                                        </div>
+                                      ) : order?.status?.name ===
+                                        REPAIR_STATUS.ACCEPTED ? (
+                                        <div
+                                          style={{ cursor: "pointer" }}
+                                          onClick={() =>
+                                            handleAcceptOrder(order?.id, 8)
+                                          }
+                                          className="cursor-pointer  badge badge-gradient-success text-center cursor-pointer"
+                                        >
+                                          Hoàn thành
+                                        </div>
+                                      ) : (
+                                        <div
+                                          style={{ cursor: "pointer" }}
+                                          onClick={() =>
+                                            handleAcceptOrder(order?.id, 1)
+                                          }
+                                          className="cursor-pointer badge badge-gradient-info text-center cursor-pointer"
+                                        >
+                                          Thu hồi phê duyệt
+                                        </div>
+                                      )}
+                                    </div>
+                                  ) : (
+                                    <div
+                                      style={{ cursor: "pointer" }}
+                                      onClick={() =>
+                                        handleAcceptOrder(order?.id, 1)
+                                      }
+                                      className="cursor-pointer badge badge-gradient-danger text-center cursor-pointer"
+                                    >
+                                      Kích hoạt đơn hàng
+                                    </div>
+                                  )
+                                }
+                                zIndex={2}
+                                allowHTML={true}
+                                arrow={false}
                               >
-                                {order?.status?.name === ORDER_STATUS.PENDING
-                                  ? ORDER_MESSAGE.PENDING
-                                  : order?.status?.name ===
-                                    ORDER_STATUS.CANCELED
-                                  ? ORDER_MESSAGE.CANCELED
-                                  : order?.status?.name === ORDER_STATUS.REJECT
-                                  ? ORDER_MESSAGE.REJECT
-                                  : ORDER_MESSAGE.ACCEPTED}
-                              </label>
-                            </Tippy>
-                          </td>
-                          <td>
-                            {currencyFormatterConfig(order?.product?.price)}
-                          </td>
-                          <td>
-                            {currencyFormatterConfig(
-                              order?.product?.price * order?.quantity
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
+                                <label
+                                  style={{ cursor: "pointer" }}
+                                  className={`cursor-pointer badge badge-gradient-${
+                                    order?.status?.name ===
+                                    REPAIR_STATUS.PENDING
+                                      ? "danger"
+                                      : order?.status?.name ===
+                                        REPAIR_STATUS.ACCEPTED
+                                      ? "warning"
+                                      : order?.status?.name ===
+                                        REPAIR_STATUS.REJECT
+                                      ? "primary"
+                                      : "success"
+                                  }`}
+                                >
+                                  <div
+                                    className="cursor-pointer z-1"
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    {order?.status?.name ===
+                                    REPAIR_STATUS.PENDING
+                                      ? REPAIR_MESSAGE.PENDING
+                                      : order?.status?.name ===
+                                        REPAIR_STATUS.ACCEPTED
+                                      ? REPAIR_MESSAGE.ACCEPTED
+                                      : REPAIR_MESSAGE.COMPLETED}
+                                  </div>
+                                </label>
+                              </Tippy>
+                            </td>
+                            <td>{order?.phone}</td>
+                            <td>
+                              <button
+                                onClick={() => {
+                                  setIsUpdate(true);
+                                  setShow(true);
+                                  setRepairId(order?.id);
+                                  setRepair({
+                                    accountId: order?.accountId,
+                                    fullName: order?.fullName,
+                                    nameRepair: order?.nameRepair,
+                                    phone: order?.phone,
+                                    address: order?.address,
+                                    note: order?.note,
+                                    expirationDate: order?.expirationDate,
+                                  });
+                                }}
+                                type="button"
+                                className="btn btn-success btn-sm m-lg-1"
+                              >
+                                Cập nhật
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
                   </tbody>
                 </table>
                 <div className="d-flex justify-content-end mt-4">
-                  {orders.length > 0 && (
+                  {repairs.length > 0 && (
                     <PaginationPage
                       active={active}
                       handleJump={handleJump}
-                      length={orders.length}
+                      length={repairs.length}
                       step={step}
                     />
                   )}
