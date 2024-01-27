@@ -12,6 +12,7 @@ import { useCreateRepairMutation } from "~/mutations/repair/create-repair-mutati
 import { toastConfig } from "~/lib";
 import { useGetRepairs } from "~/queries/repair/get-repairs-query";
 import { useUpdateRepairMutation } from "~/mutations/repair/update-repair.mutation";
+import { currencyFormatterConfig } from "~/lib/helpers/currency-formatter";
 export default function RepairPage() {
   const [active, setActive] = useState(1);
   const [repair, setRepair] = useState({
@@ -20,6 +21,7 @@ export default function RepairPage() {
     nameRepair: "",
     phone: "",
     address: "",
+    price: "",
     note: "",
     expirationDate: "",
   });
@@ -67,6 +69,7 @@ export default function RepairPage() {
       address: "",
       note: "",
       expirationDate: "",
+      price: "",
     });
   };
   const handleCreateRepair = () => {
@@ -172,7 +175,22 @@ export default function RepairPage() {
                             value={repair.address}
                           />
                         </div>
+                        <div className="form-group">
+                          <label htmlFor="exampleInputEmail3">
+                            Số tiền
+                          </label>
+                          <input
+                            type="number"
+                            name="price"
+                            className="form-control"
+                            id="exampleInputEmail3"
+                            placeholder="Nhập số tiền"
+                            onChange={handleChange}
+                            value={repair?.price}
+                          />
+                        </div>
                       </div>
+                      
                       <div className="col-lg-6 col-sm-12">
                         <div className="form-group">
                           <label htmlFor="exampleInputEmail3">
@@ -188,6 +206,7 @@ export default function RepairPage() {
                             value={repair.phone}
                           />
                         </div>
+                       
                         <div className="form-group">
                           <label htmlFor="exampleInputPassword4">
                             Thời gian bảo hành
@@ -274,6 +293,7 @@ export default function RepairPage() {
                       <th> Mã đặt hàng</th>
                       <th>Khách hàng</th>
                       <th>Người sửa</th>
+                      <th>Số tiền</th>
                       <th> Thời gian bảo hành</th>
                       <th> Trạng thái</th>
                       <th>Số điện thoại</th>
@@ -289,6 +309,7 @@ export default function RepairPage() {
                             <td> {order?.orderCode}</td>
                             <td>{order?.fullName}</td>
                             <td>{order?.worker?.fullName}</td>
+                            <td>{currencyFormatterConfig(order?.price)}</td>
                             <td>
                               {calculateRemainingDays(order?.expirationDate) <=
                               0 ? (
@@ -298,17 +319,18 @@ export default function RepairPage() {
                                 >
                                   Đã hết hạn
                                 </label>
-                              ) : calculateRemainingDays(order?.expirationDate) <
-                              7 ? (
+                              ) : calculateRemainingDays(
+                                  order?.expirationDate
+                                ) < 7 ? (
                                 <label
                                   style={{ cursor: "pointer" }}
                                   className={`cursor-pointer badge badge-gradient-warning`}
                                 >
-                                  { `Còn ${calculateRemainingDays(
-                                  order?.expirationDate
-                                )} ngày`}
+                                  {`Còn ${calculateRemainingDays(
+                                    order?.expirationDate
+                                  )} ngày`}
                                 </label>
-                              ): (
+                              ) : (
                                 `Còn ${calculateRemainingDays(
                                   order?.expirationDate
                                 )} ngày`
@@ -419,6 +441,7 @@ export default function RepairPage() {
                                     address: order?.address,
                                     note: order?.note,
                                     expirationDate: order?.expirationDate,
+                                    price: order?.price
                                   });
                                 }}
                                 type="button"
