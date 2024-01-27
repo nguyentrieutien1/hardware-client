@@ -31,7 +31,7 @@ export default function SearchOrder(props: SearchOrder) {
     });
   };
   console.log(info);
-  
+
   return (
     <>
       <AppModal
@@ -83,6 +83,7 @@ export default function SearchOrder(props: SearchOrder) {
                         <thead>
                           <tr>
                             <th scope="col">Tên đơn hàng</th>
+                            {info?.product && <th scope="col"> Số lượng</th>}
                             <th scope="col">Trạng thái</th>
                             {info?.expirationDate && (
                               <th scope="col">Ngày hết hạn</th>
@@ -93,8 +94,12 @@ export default function SearchOrder(props: SearchOrder) {
                         <tbody>
                           <tr className="">
                             <td scope="row">
-                              {info?.nameRepair || info?.product?.name}
+                              {info?.nameRepair?.slice(0, 10) ||
+                                info?.product?.name?.slice(0, 10)}
+                              ...
                             </td>
+                            {info?.quantity && <td>{info?.quantity}</td>}
+
                             <td>
                               {info?.status?.id === 1
                                 ? "Đang đợi phê duyệt"
@@ -106,15 +111,17 @@ export default function SearchOrder(props: SearchOrder) {
                                 ? " Đơn hàng đã hoàn thành"
                                 : "Không tìm thấy đơn hàng "}
                             </td>
-                            <td>
-                              {calculateRemainingDays(info?.expirationDate) <= 0
-                                ? "Đã hết hạn"
-                                : `Còn ${
-                                    calculateRemainingDays(
+                            {info?.expirationDate && (
+                              <td>
+                                {calculateRemainingDays(info?.expirationDate) <=
+                                0
+                                  ? "Đã hết hạn"
+                                  : `Còn ${calculateRemainingDays(
                                       info?.expirationDate
-                                    )
-                                  } ngày`}
-                            </td>
+                                    )} ngày`}
+                              </td>
+                            )}
+
                             <td>
                               {info?.price
                                 ? currencyFormatterConfig(info?.price)
