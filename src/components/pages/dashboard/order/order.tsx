@@ -70,6 +70,7 @@ export default function OrderPage() {
                       <th> Ngày đặt </th>
                       <th> Người đặt</th>
                       <th> Số lượng</th>
+                      <th> Mã đơn</th>
                       <th> Trạng thái đặt hàng</th>
                       <th> Giá</th>
                       <th> Tổng số tiền </th>
@@ -85,6 +86,7 @@ export default function OrderPage() {
                             <td> {formattedDate(order?.createdAt)}</td>
                             <td>{order.fullName}</td>
                             <td> {order?.quantity}</td>
+                            <td> {order?.orderCode}</td>
                             <td>
                               <Tippy
                                 trigger="click"
