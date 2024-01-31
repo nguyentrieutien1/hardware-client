@@ -215,19 +215,6 @@ export default function Header() {
               </div>
               <div className="col-lg-6">
                 <div className="header__top__right">
-                  <div className="header__top__right__language">
-                    <img src="img/language.png" alt="" />
-                    <div className=" text-white">Tùy chọn</div>
-                    <span className="arrow_carrot-down" />
-                    <ul>
-                      <li>
-                        <a href="#">Tùy chọn 1</a>
-                      </li>
-                      <li>
-                        <a href="#">Tùy chọn 2</a>
-                      </li>
-                    </ul>
-                  </div>
                   {userIsLogined ? (
                     <div className="header__top__right__auth cursor-pointer">
                       <a

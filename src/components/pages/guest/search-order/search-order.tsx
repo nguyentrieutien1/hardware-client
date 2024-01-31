@@ -22,7 +22,7 @@ export default function SearchOrder(props: SearchOrder) {
   };
   const handleSearchOrder = () => {
     mutateAsync({ orderCode }).then((res) => {
-      if (![1, 7, 8].includes(res?.data?.status.id)) {
+      if (![1, 7, 8].includes(res?.data?.status?.id)) {
         alert("Không tìm thấy đơn hàng");
       } else {
         setInfo(res.data);

@@ -89,7 +89,7 @@ function CartPage() {
     carts.splice(findIndex, 1);
     setCartLocal([...carts]);
     setItemToLocalStorage("cart", carts);
-    dispath(updateQuantity(cart));
+    dispath(updateQuantity(carts));
     setShow(false);
   };
   const handleOrder = () => {
