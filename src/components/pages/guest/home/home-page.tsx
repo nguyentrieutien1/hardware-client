@@ -133,7 +133,6 @@ export default function ShopPage() {
                           }
                         }}
                         type="text"
-                        placeholder="Nhập tên sản phẩm"
                       />
                       <button
                         onClick={handleSearch}
